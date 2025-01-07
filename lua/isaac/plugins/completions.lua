@@ -34,7 +34,7 @@ return {
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<C-e>"] = cmp.mapping.close(),
 
-					["<C-CR>"] = cmp.mapping.confirm({
+					["<CR>"] = cmp.mapping.confirm({
 						behavior = cmp.ConfirmBehavior.Insert,
 						select = true,
 					}),

@@ -25,5 +25,5 @@ end
 
 require("isaac.vim-options")
 require("isaac.autocmds")
-require("isaac.mappings")
 require("lazy").setup("isaac.plugins")
+require("isaac.mappings")
