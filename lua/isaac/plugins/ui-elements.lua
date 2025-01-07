@@ -24,6 +24,21 @@ return {
             "ibhagwan/fzf-lua",
         },
         config = function()
+            -- Configure nvim-notify with custom stages
+            require("notify").setup({
+                direction = "bottom_up",
+                stages = require("isaac.plugins.notify.customn-stage")("bottom_up"), -- Use the custom stages
+                -- render = "default",                  -- Use default rendering
+                -- timeout = 3000,
+                -- max_width = 30,
+                -- max_height = 10,
+                -- fps = 60,
+            })
+
+            -- Set `nvim-notify` as the global notification handler
+            vim.notify = require("notify")
+
+            -- The actual setup for noice
             require("noice").setup({
                 lsp = {
                     -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
