@@ -17,3 +17,4 @@ vim.keymap.set({'n', 'v'}, "'", '"_', { noremap = true, silent = true })
 -- common keyboard shortcuts
 vim.keymap.set({'n'}, "<leader>aa", "gg<S-V><S-G>", { noremap = true, silent = true })
 vim.keymap.set({'i'}, "<M-BS>", "<C-o>'db", { noremap = true, silent = true })
+vim.keymap.set({'i'}, "<S-CR>", "<C-o>o", { noremap = true, silent = true })    -- Quickly writing from the line below
