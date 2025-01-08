@@ -17,3 +17,6 @@ vim.keymap.set({ 'n', 'v' }, "'", '"_', { noremap = true, silent = true })
 
 -- common keyboard shortcuts
 vim.keymap.set({ 'n' }, "<leader>aa", "gg<S-V><S-G>", { noremap = true, silent = true })
+
+-- for quicker closing buffers
+vim.keymap.set({ 'n', 'i' }, "<leader>bd", "<Cmd>bd<CR>", { noremap = true, silent = true})
