@@ -1,4 +1,25 @@
 return {
+    -- none-ls is a tool that can do automatic installation of the linting source, but also requires lsps
+    {
+        "nvimtools/none-ls.nvim",
+        config = function()
+            local null_ls = require("null-ls")
+
+            null_ls.setup({
+                sources = {
+                    null_ls.builtins.formatting.stylua,
+                    null_ls.builtins.formatting.prettier,
+                    null_ls.builtins.formatting.isort,
+                    -- null_ls.builtins.diagnostics.pylint.with({
+                    --     pythonPath = vim.g.python3_host_prog,
+                    -- }),
+                    null_ls.builtins.completion.spell,
+                },
+            })
+
+            vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
+        end,
+    },
     {
         "williamboman/mason.nvim",
         config = function()
@@ -11,7 +32,7 @@ return {
             require("mason-lspconfig").setup({
                 ensure_installed = {
                     "lua_ls",
-                    "pylsp",
+                    "pyright",
                     "ts_ls",
                     "clangd",
                     "cmake",
@@ -38,13 +59,14 @@ return {
             lspconfig.ts_ls.setup({
                 capabilities = capabilities,
             })
-            lspconfig.pylsp.setup({
+            lspconfig.pyright.setup({
                 capabilities = capabilities,
+                cmd = { "pyright-langserver", "--stdio" },
                 settings = {
                     python = {
-                        pythonPath = vim.g.python3_host_prog, -- Use the Python Path from Neovim's setting
-                    },
-                },
+                        pythonPath = vim.g.python3_host_prog,
+                    }
+                }
             })
             lspconfig.clangd.setup({
                 capabilities = capabilities,
