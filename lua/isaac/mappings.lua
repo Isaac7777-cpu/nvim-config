@@ -3,11 +3,6 @@ vim.keymap.set({ 'n' }, '<leader>kh', '<C-w>h', { noremap = true, silent = true 
 vim.keymap.set({ 'n' }, '<leader>kj', '<C-w>j', { noremap = true, silent = true })
 vim.keymap.set({ 'n' }, '<leader>kk', '<C-w>k', { noremap = true, silent = true })
 vim.keymap.set({ 'n' }, '<leader>kl', '<C-w>l', { noremap = true, silent = true })
--- The following commands have been replaced with tmux for better support for functionalities.
--- vim.keymap.set({'n', 'i'}, '<C-k><C-h>', '<C-w>h', { noremap = true, silent = true })
--- vim.keymap.set({'n', 'i'}, '<C-k><C-j>', '<C-w>j', { noremap = true, silent = true })
--- vim.keymap.set({'n', 'i'}, '<C-k><C-k>', '<C-w>k', { noremap = true, silent = true })
--- vim.keymap.set({'n', 'i'}, '<C-k><C-l>', '<C-w>l', { noremap = true, silent = true })
 
 -- terminal
 vim.keymap.set("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
@@ -19,4 +14,4 @@ vim.keymap.set({ 'n', 'v' }, "'", '"_', { noremap = true, silent = true })
 vim.keymap.set({ 'n' }, "<leader>aa", "gg<S-V><S-G>", { noremap = true, silent = true })
 
 -- for quicker closing buffers
-vim.keymap.set({ 'n', 'i' }, "<leader>bd", "<Cmd>bd<CR>", { noremap = true, silent = true})
+vim.keymap.set({ 'n' }, "<leader>bd", "<Cmd>bd<CR>", { noremap = true, silent = true})
