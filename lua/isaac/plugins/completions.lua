@@ -26,6 +26,10 @@ return {
 					completion = cmp.config.window.bordered(),
 					documentation = cmp.config.window.bordered(),
 				},
+				preselect = "none",
+				completion = {
+					completeopt = "menu,menuone,noinsert,noselect",
+				},
 				mapping = cmp.mapping.preset.insert({
 					["<C-k>"] = cmp.mapping.select_prev_item(),
 					["<C-j>"] = cmp.mapping.select_next_item(),
@@ -36,7 +40,7 @@ return {
 
 					["<CR>"] = cmp.mapping.confirm({
 						behavior = cmp.ConfirmBehavior.Insert,
-						select = true,
+						select = false,
 					}),
 
 					["<Tab>"] = cmp.mapping(function(fallback)
