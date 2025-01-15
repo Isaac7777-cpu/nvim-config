@@ -10,6 +10,7 @@ return {
 					null_ls.builtins.formatting.stylua,
 					null_ls.builtins.formatting.prettier,
 					null_ls.builtins.formatting.isort,
+					null_ls.builtins.formatting.csharpier,
 					-- null_ls.builtins.diagnostics.pylint.with({
 					--     pythonPath = vim.g.python3_host_prog,
 					-- }),
@@ -42,6 +43,8 @@ return {
 					"html",
 					"marksman",
 					"omnisharp",
+					-- "csharpier",
+					"csharp_ls",
 				},
 			})
 		end,
@@ -90,7 +93,10 @@ return {
 			lspconfig.marksman.setup({
 				capabilities = capabilities,
 			})
-            lspconfig.omnisharp.setup({
+			lspconfig.omnisharp.setup({
+				capabilities = capabilities,
+			})
+            lspconfig.csharp_ls.setup({
                 capabilities = capabilities,
             })
 
