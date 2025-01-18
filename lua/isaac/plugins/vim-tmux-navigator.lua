@@ -5,6 +5,6 @@ return {
         vim.keymap.set("n", "<c-j>", ":TmuxNavigateDown<cr>"),
         vim.keymap.set("n", "<c-k>", ":TmuxNavigateUp<cr>"),
         vim.keymap.set("n", "<c-l>", ":TmuxNavigateRight<cr>"),
-        vim.keymap.set("n", "<c-k><c-\\>", ":TmuxNavigatePrevious<cr>"),
+        vim.keymap.set("n", "<leader><c-\\>", ":TmuxNavigatePrevious<cr>"),
     },
 }
