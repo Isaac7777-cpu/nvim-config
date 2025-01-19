@@ -8,7 +8,7 @@ vim.keymap.set({ 'n' }, '<leader>kl', '<C-w>l', { noremap = true, silent = true 
 vim.keymap.set("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
 -- delete without pasting (sending to the blackhole register)
--- vim.keymap.set({ 'n', 'v' }, "'", '"_', { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'v' }, "<leader>'", '"_', { noremap = true, silent = true })
 
 -- common keyboard shortcuts
 vim.keymap.set({ 'n' }, "<leader>aa", "gg<S-V><S-G>", { noremap = true, silent = true })
