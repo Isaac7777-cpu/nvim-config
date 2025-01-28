@@ -38,6 +38,7 @@ return {
 					"lua_ls",
 					"pyright",
 					"ts_ls",
+                    "tailwindcss",
 					"clangd",
 					"cmake",
 					"dockerls",
@@ -66,6 +67,9 @@ return {
 			lspconfig.ts_ls.setup({
 				capabilities = capabilities,
 			})
+            lspconfig.tailwindcss.setup({
+                capabilities = capabilities,
+            })
 			lspconfig.pyright.setup({
 				capabilities = capabilities,
 				cmd = { "pyright-langserver", "--stdio" },
