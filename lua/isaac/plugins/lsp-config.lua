@@ -11,15 +11,18 @@ return {
 					null_ls.builtins.formatting.prettier,
 					null_ls.builtins.formatting.isort,
 					null_ls.builtins.formatting.csharpier,
-					-- null_ls.builtins.diagnostics.pylint.with({
-					--     pythonPath = vim.g.python3_host_prog,
-					-- }),
 					null_ls.builtins.completion.spell,
 				},
 			})
 
 			vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
 		end,
+
+		opts = {
+			servers = {
+				tailwindcss = {},
+			},
+		},
 	},
 	{
 		"williamboman/mason.nvim",
@@ -96,9 +99,9 @@ return {
 			lspconfig.omnisharp.setup({
 				capabilities = capabilities,
 			})
-            lspconfig.csharp_ls.setup({
-                capabilities = capabilities,
-            })
+			lspconfig.csharp_ls.setup({
+				capabilities = capabilities,
+			})
 
 			vim.keymap.set("n", "<leader>K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, {})
