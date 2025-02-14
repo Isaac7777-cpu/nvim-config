@@ -38,7 +38,7 @@ return {
 					"lua_ls",
 					"pyright",
 					"ts_ls",
-                    "tailwindcss",
+					"tailwindcss",
 					"clangd",
 					"cmake",
 					"dockerls",
@@ -49,6 +49,7 @@ return {
 					"omnisharp",
 					-- "csharpier",
 					"csharp_ls",
+          "r-languageserver"
 				},
 			})
 		end,
@@ -67,9 +68,9 @@ return {
 			lspconfig.ts_ls.setup({
 				capabilities = capabilities,
 			})
-            lspconfig.tailwindcss.setup({
-                capabilities = capabilities,
-            })
+			lspconfig.tailwindcss.setup({
+				capabilities = capabilities,
+			})
 			lspconfig.pyright.setup({
 				capabilities = capabilities,
 				cmd = { "pyright-langserver", "--stdio" },
@@ -106,6 +107,9 @@ return {
 			lspconfig.csharp_ls.setup({
 				capabilities = capabilities,
 			})
+      lspconfig.r_language_server.setup({
+        capabilities = capabilities
+      })
 
 			vim.keymap.set("n", "<leader>K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, {})
