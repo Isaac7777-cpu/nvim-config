@@ -47,9 +47,10 @@ return {
 					"html",
 					"marksman",
 					"omnisharp",
-					-- "csharpier",
 					"csharp_ls",
-          "r-languageserver"
+					"r_language_server",
+					"yamlls",
+					"jsonls",
 				},
 			})
 		end,
@@ -58,58 +59,126 @@ return {
 		"neovim/nvim-lspconfig",
 		config = function()
 			local lspconfig = require("lspconfig")
+			local util = require("lspconfig.util")
 
 			-- Set up lspconfig.
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			-- lsp flags
+			local lsp_flags = {
+				allow_incremental_sync = true,
+				debounce_text_changes = 150,
+			}
 
 			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
+				flags = lsp_flags,
 			})
+
 			lspconfig.ts_ls.setup({
 				capabilities = capabilities,
+				flags = lsp_flags,
+				filetypes = { "js", "javascript", "typescript", "ojs" },
 			})
+
 			lspconfig.tailwindcss.setup({
 				capabilities = capabilities,
+				flags = lsp_flags,
 			})
+
+      -- See https://github.com/neovim/neovim/issues/23291
+      -- disable lsp watcher.
+      -- Too lags on linux for python projects
+      -- because pyright and nvim both create too many watchers otherwise
+      if capabilities.workspace == nil then
+        capabilities.workspace = {}
+        capabilities.workspace.didChangeWatchedFiles = {}
+      end
+      capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
+
 			lspconfig.pyright.setup({
 				capabilities = capabilities,
+				flags = lsp_flags,
 				cmd = { "pyright-langserver", "--stdio" },
 				settings = {
 					python = {
 						pythonPath = vim.g.python3_host_prog,
+						analysis = {
+							autoSearchPaths = true,
+							useLibraryCodeForTypes = true,
+							diagnosticMode = "workspace",
+						},
+					},
+				},
+				root_dir = function(fname)
+					return util.root_pattern(".git", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt")(
+						fname
+					) or util.path.dirname(fname)
+				end,
+			})
+
+			lspconfig.clangd.setup({
+				capabilities = capabilities,
+				flags = lsp_flags,
+			})
+
+			lspconfig.cmake.setup({
+				capabilities = capabilities,
+				flags = lsp_flags,
+			})
+
+			lspconfig.dockerls.setup({
+				capabilities = capabilities,
+				flags = lsp_flags,
+			})
+
+			lspconfig.jdtls.setup({
+				capabilities = capabilities,
+				flags = lsp_flags,
+			})
+
+			lspconfig.hls.setup({
+				capabilities = capabilities,
+				flags = lsp_flags,
+			})
+
+			lspconfig.html.setup({
+				capabilities = capabilities,
+				flags = lsp_flags,
+			})
+
+      lspconfig.marksman.setup {
+        capabilities = capabilities,
+        filetypes = { 'markdown', 'quarto' },
+        root_dir = util.root_pattern('.git', '.marksman.toml', '_quarto.yml'),
+      }
+
+			lspconfig.omnisharp.setup({
+				capabilities = capabilities,
+				flags = lsp_flags,
+			})
+
+			lspconfig.csharp_ls.setup({
+				capabilities = capabilities,
+				flags = lsp_flags,
+			})
+
+			lspconfig.r_language_server.setup({
+				capabilities = capabilities,
+				flags = lsp_flags,
+			})
+
+			lspconfig.yamlls.setup({
+				capabilities = capabilities,
+				flags = lsp_flags,
+				settings = {
+					yaml = {
+						schemaStore = {
+							enable = true,
+							url = "",
+						},
 					},
 				},
 			})
-			lspconfig.clangd.setup({
-				capabilities = capabilities,
-			})
-			lspconfig.cmake.setup({
-				capabilities = capabilities,
-			})
-			lspconfig.dockerls.setup({
-				capabilities = capabilities,
-			})
-			lspconfig.jdtls.setup({
-				capabilities = capabilities,
-			})
-			lspconfig.hls.setup({
-				capabilities = capabilities,
-			})
-			lspconfig.html.setup({
-				capabilities = capabilities,
-			})
-			lspconfig.marksman.setup({
-				capabilities = capabilities,
-			})
-			lspconfig.omnisharp.setup({
-				capabilities = capabilities,
-			})
-			lspconfig.csharp_ls.setup({
-				capabilities = capabilities,
-			})
-      lspconfig.r_language_server.setup({
-        capabilities = capabilities
-      })
 
 			vim.keymap.set("n", "<leader>K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, {})
