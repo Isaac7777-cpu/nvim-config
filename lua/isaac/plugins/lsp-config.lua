@@ -8,7 +8,22 @@ return {
 			null_ls.setup({
 				sources = {
 					null_ls.builtins.formatting.stylua,
-					null_ls.builtins.formatting.prettier,
+					null_ls.builtins.formatting.prettier.with({
+						filetypes = {
+							"javascript",
+							"typescript",
+							"css",
+							"scss",
+							"html",
+							"json",
+							"yaml",
+							"markdown",
+							"graphql",
+							"md",
+							"quarto",
+							"txt",
+						},
+					}),
 					null_ls.builtins.formatting.isort,
 					null_ls.builtins.formatting.csharpier,
 					null_ls.builtins.completion.spell,
@@ -51,6 +66,8 @@ return {
 					"r_language_server",
 					"yamlls",
 					"jsonls",
+					"ltex",
+					"harper_ls",
 				},
 			})
 		end,
@@ -76,8 +93,6 @@ return {
 
 			lspconfig.ts_ls.setup({
 				capabilities = capabilities,
-				flags = lsp_flags,
-				filetypes = { "js", "javascript", "typescript", "ojs" },
 			})
 
 			lspconfig.tailwindcss.setup({
@@ -85,15 +100,15 @@ return {
 				flags = lsp_flags,
 			})
 
-      -- See https://github.com/neovim/neovim/issues/23291
-      -- disable lsp watcher.
-      -- Too lags on linux for python projects
-      -- because pyright and nvim both create too many watchers otherwise
-      if capabilities.workspace == nil then
-        capabilities.workspace = {}
-        capabilities.workspace.didChangeWatchedFiles = {}
-      end
-      capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
+			-- See https://github.com/neovim/neovim/issues/23291
+			-- disable lsp watcher.
+			-- Too lags on linux for python projects
+			-- because pyright and nvim both create too many watchers otherwise
+			if capabilities.workspace == nil then
+				capabilities.workspace = {}
+				capabilities.workspace.didChangeWatchedFiles = {}
+			end
+			capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
 
 			lspconfig.pyright.setup({
 				capabilities = capabilities,
@@ -146,11 +161,11 @@ return {
 				flags = lsp_flags,
 			})
 
-      lspconfig.marksman.setup {
-        capabilities = capabilities,
-        filetypes = { 'markdown', 'quarto' },
-        root_dir = util.root_pattern('.git', '.marksman.toml', '_quarto.yml'),
-      }
+			lspconfig.marksman.setup({
+				capabilities = capabilities,
+				filetypes = { "markdown" },
+				root_dir = util.root_pattern(".git", ".marksman.toml", "_quarto.yml"),
+			})
 
 			lspconfig.omnisharp.setup({
 				capabilities = capabilities,
@@ -175,6 +190,54 @@ return {
 						schemaStore = {
 							enable = true,
 							url = "",
+						},
+					},
+				},
+			})
+
+			-- lspconfig.ltex.setup({
+			--   filetypes = { "quarto" },
+			--   settings = {
+			--     ltex = {
+			--       language = "en",
+			--       additionalRules = {
+			--         languageModel = "~/ltex-models/ngrams",
+			--       },
+			--     },
+			--   },
+			-- })
+
+			lspconfig.harper_ls.setup({
+				capabilities = capabilities,
+				filetypes = {
+					"c",
+					"cpp",
+					"cs",
+					"gitcommit",
+					"go",
+					"html",
+					"java",
+					"javascript",
+					"lua",
+					"markdown",
+					"nix",
+					"python",
+					"ruby",
+					"rust",
+					"swift",
+					"toml",
+					"typescript",
+					"typescriptreact",
+					"haskell",
+					"cmake",
+					"typst",
+					"php",
+					"dart",
+				},
+				settings = {
+					["harper-ls"] = {
+						markdown = {
+							ignore_link_title = true,
 						},
 					},
 				},

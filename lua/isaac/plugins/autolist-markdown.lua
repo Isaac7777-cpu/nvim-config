@@ -3,6 +3,7 @@ return {
         "gaoDean/autolist.nvim",
         ft = {
             "markdown",
+            "quarto",
             "text",
             "tex",
             "plaintex",
