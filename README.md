@@ -5,3 +5,6 @@ I have been struggling a while of whether to make this available publicly. One t
 # Credit
 - [Typecraft](https://www.youtube.com/@typecraft_dev)
 - Quarto and particularly the [kick-started repo](https://github.com/jmbuhr/quarto-nvim-kickstarter)
+
+# License
+MIT
