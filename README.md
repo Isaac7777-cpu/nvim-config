@@ -8,3 +8,6 @@ I have been struggling a while of whether to make this available publicly. One t
 
 # License
 MIT
+
+# Setup Instruction
+Clone the repository under the path `~/.config/nvim/`
