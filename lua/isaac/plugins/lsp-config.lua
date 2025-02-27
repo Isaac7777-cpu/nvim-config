@@ -244,6 +244,11 @@ return {
 				},
 			})
 
+      lspconfig.sqls.setup{
+        capabilities = capabilities,
+        flags = lsp_flags
+      }
+
 			vim.keymap.set("n", "<leader>K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, {})
 			vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})

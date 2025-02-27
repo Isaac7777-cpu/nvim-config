@@ -7,7 +7,7 @@ vim.keymap.set({ "n" }, "<leader>kl", "<C-w>l", { noremap = true, silent = true 
 -- terminal
 vim.keymap.set("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
--- delete without pasting (sending to the blackhole register)
+-- Delete without pasting (sending to the black hole register)
 vim.keymap.set({ "n", "v" }, "<leader>'", '"_', { noremap = true, silent = true })
 
 -- common keyboard shortcuts
@@ -45,5 +45,8 @@ end
 
 ToggleWrap()
 
--- Map <leader>w to toggle wrap
+-- Map `<leader>w` to toggle wrap
 vim.api.nvim_set_keymap("n", "<leader>ew", ":lua ToggleWrap()<CR>", { noremap = true, silent = true })
+
+-- Exiting Terminal
+vim.api.nvim_set_keymap(  't'  ,  '<Leader><ESC>'  ,  '<C-\\><C-n>'  ,  {noremap = true}  )
