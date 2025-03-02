@@ -30,11 +30,11 @@ cmap('<C-a>', '<Home>')
 imap('<C-s>', '<esc>:update<cr><esc>')
 nmap('<C-s>', '<cmd>:update<cr><esc>')
 
--- Move between windows using <ctrl> direction
-nmap('<C-j>', '<C-W>j')
-nmap('<C-k>', '<C-W>k')
-nmap('<C-h>', '<C-W>h')
-nmap('<C-l>', '<C-W>l')
+-- -- Move between windows using <ctrl> direction
+-- nmap('<C-j>', '<C-W>j')
+-- nmap('<C-k>', '<C-W>k')
+-- nmap('<C-h>', '<C-W>h')
+-- nmap('<C-l>', '<C-W>l')
 
 -- Resize window using <shift> arrow keys
 nmap('<S-Up>', '<cmd>resize +2<CR>')
