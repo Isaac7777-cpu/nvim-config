@@ -384,5 +384,16 @@ wk.add({
     { "<leader>vt", toggle_light_dark_theme, desc = "[t]oggle light/dark theme" },
     { "<leader>x", group = "e[x]ecute" },
     { "<leader>xx", ":w<cr>:source %<cr>", desc = "[x] source %" },
+    {"<C-h>", ":TmuxNavigateLeft<cr>"},
+    {"<C-j>", ":TmuxNavigateDown<cr>"},
+    {"<C-k>", ":TmuxNavigateUp<cr>"},
+    {"<C-l>", ":TmuxNavigateRight<cr>"},
+
+        --     vim.keymap.set("n", "<c-h>", ":TmuxNavigateLeft<cr>"),
+        -- vim.keymap.set("n", "<c-j>", ":TmuxNavigateDown<cr>"),
+        -- vim.keymap.set("n", "<c-k>", ":TmuxNavigateUp<cr>"),
+        -- vim.keymap.set("n", "<c-l>", ":TmuxNavigateRight<cr>"),
+        -- vim.keymap.set("n", "<leader><c-\\>", ":TmuxNavigatePrevious<cr>"),
+
   }
 }, { mode = 'n'})
