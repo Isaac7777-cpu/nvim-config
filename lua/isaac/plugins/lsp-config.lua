@@ -104,7 +104,6 @@ return {
           "jsonls",
           "ltex",
           "harper_ls",
-          "vale_ls",
         },
       })
     end,
@@ -282,11 +281,6 @@ return {
       })
 
       lspconfig.sqls.setup({
-        capabilities = capabilities,
-        flags = lsp_flags,
-      })
-
-      lspconfig.vale.setup({
         capabilities = capabilities,
         flags = lsp_flags,
       })
