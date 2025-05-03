@@ -1,7 +1,7 @@
 return {
 	{
 
-		-- for lsp features in code cells / embedded code
+		-- For lsp features in code cells / embedded code
 		"jmbuhr/otter.nvim",
 		dev = false,
 		dependencies = {
@@ -119,8 +119,9 @@ return {
 					"r_language_server",
 					"yamlls",
 					"jsonls",
-					"ltex",
 					"harper_ls",
+					"ltex-ls-plus",
+					"texlab",
 				},
 			})
 		end,
@@ -248,12 +249,32 @@ return {
 				},
 			})
 
-			lspconfig.ltex.setup({
-				filetypes = { "quarto" },
+			lspconfig.ltex_plus.setup({
+				cmd = { "ltex-ls-plus" },
+				filetypes = {
+					"bib",
+					"context",
+					"gitcommit",
+					"html",
+					"markdown",
+					"org",
+					"pandoc",
+					"plaintex",
+					"quarto",
+					"mail",
+					"mdx",
+					"rmd",
+					"rnoweb",
+					"rst",
+					"tex",
+					"text",
+					"typst",
+					"xhtml",
+				},
 				settings = {
 					ltex = {
 						checkFrequency = "save",
-						language = "en",
+						language = "en-GB",
 						additionalRules = {
 							languageModel = "~/ltex-models/ngrams",
 						},
@@ -302,10 +323,11 @@ return {
 				flags = lsp_flags,
 			})
 
-			vim.keymap.set("n", "<leader>K", vim.lsp.buf.hover, {})
-			vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, {})
-			vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
-			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
+			-- Deprecated: Use Lspsaga instead
+			-- vim.keymap.set("n", "<leader>K", vim.lsp.buf.hover, {})
+			-- vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, {})
+			-- vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
+			-- vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
 		end,
 		servers = {
 			ltex = {
@@ -345,6 +367,67 @@ return {
 			verbose = {
 				no_code_found = false,
 			},
+		},
+	},
+	{
+		"folke/trouble.nvim",
+		opts = {}, -- For default options, refer to the configuration section for custom setup.
+		cmd = "Trouble",
+		keys = {
+			{
+				"<leader>xx",
+				"<cmd>Trouble diagnostics toggle<cr>",
+				desc = "Diagnostics (Trouble)",
+			},
+			{
+				"<leader>xX",
+				"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+				desc = "Buffer Diagnostics (Trouble)",
+			},
+			{
+				"<leader>cs",
+				"<cmd>Trouble symbols toggle focus=false<cr>",
+				desc = "Symbols (Trouble)",
+			},
+			{
+				"<leader>cl",
+				"<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+				desc = "LSP Definitions / references / ... (Trouble)",
+			},
+			{
+				"<leader>xL",
+				"<cmd>Trouble loclist toggle<cr>",
+				desc = "Location List (Trouble)",
+			},
+			{
+				"<leader>xQ",
+				"<cmd>Trouble qflist toggle<cr>",
+				desc = "Quickfix List (Trouble)",
+			},
+		},
+	},
+	{
+		"nvimdev/lspsaga.nvim",
+		config = function()
+			require("lspsaga").setup({})
+
+			definition = {
+				edit = "<CR>", -- default jump behavior
+			}
+			vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", { desc = "Lspsaga Hover Documentation" })
+			vim.keymap.set(
+				"n",
+				"<leader>gD",
+				"<cmd>lua vim.lsp.buf.declaration()<CR>",
+				{ desc = "LSP Go to Declaration" }
+			)
+			vim.keymap.set("n", "<leader>gd", "<cmd>Lspsaga goto_definition<CR>", { desc = "Lspsaga Go to Definition" })
+			vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "Lspsaga Code Action" })
+			vim.keymap.set("n", "<leader>gp", "<cmd>Lspsaga peek_definition<CR>", { desc = "Peek Definition" })
+		end,
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter", -- optional
+			"nvim-tree/nvim-web-devicons", -- optional
 		},
 	},
 }

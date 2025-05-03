@@ -3,6 +3,9 @@ return {
 	{
 		"mikavilpas/yazi.nvim",
 		event = "VeryLazy",
+		dependencies = {
+			"folke/snacks.nvim",
+		},
 		keys = {
 			-- 👇 in this section, choose your own keymappings!
 			{
@@ -31,5 +34,8 @@ return {
 				show_help = "<f1>",
 			},
 		},
+		init = function()
+			vim.g.loaded_netrwPlugin = 1
+		end,
 	},
 }
