@@ -109,7 +109,7 @@ return {
 					"tailwindcss",
 					"clangd",
 					"cmake",
-					"dockerls",
+					-- "dockerls",
 					"jdtls",
 					"hls",
 					"html",
@@ -120,54 +120,34 @@ return {
 					"yamlls",
 					"jsonls",
 					"harper_ls",
-					"ltex-ls-plus",
-					"texlab",
+					-- "texlab",
 				},
 			})
 		end,
 	},
 	{
 		"neovim/nvim-lspconfig",
+		lazy = true,
 		config = function()
-			local lspconfig = require("lspconfig")
-			local util = require("lspconfig.util")
+			-- This file only contains the list of lsp supported.
+			--
+			-- The definition of the required plugins are stated in lsp-config.lua
+			--
+			-- -- Migrate to Neovim 0.11+ using native `vim.lsp.config` and `vim.lsp.enable`
 
-			-- Set up lspconfig.
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
-			-- lsp flags
-			local lsp_flags = {
-				allow_incremental_sync = true,
-				debounce_text_changes = 150,
-			}
-
-			lspconfig.lua_ls.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
+			-- Common capabilities for all servers
+			vim.lsp.config("*", {
+				capabilities = require("cmp_nvim_lsp").default_capabilities(),
+				on_attach = function(_, bufnr)
+					local opts = { buffer = bufnr, noremap = true, silent = true }
+					vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, opts)
+				end,
 			})
 
-			lspconfig.ts_ls.setup({
-				capabilities = capabilities,
-			})
-
-			lspconfig.tailwindcss.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
-			})
-
-			-- See https://github.com/neovim/neovim/issues/23291
-			-- disable lsp watcher.
-			-- Too lags on linux for python projects
-			-- because pyright and nvim both create too many watchers otherwise
-			if capabilities.workspace == nil then
-				capabilities.workspace = {}
-				capabilities.workspace.didChangeWatchedFiles = {}
-			end
-			capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
-
-			lspconfig.pyright.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
+			-- Example configuration for pyright
+			vim.lsp.config("pyright", {
 				cmd = { "pyright-langserver", "--stdio" },
+				root_dir = vim.fs.root(0, { ".git", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt" }),
 				settings = {
 					python = {
 						pythonPath = vim.g.python3_host_prog,
@@ -178,67 +158,26 @@ return {
 						},
 					},
 				},
-				root_dir = function(fname)
-					return util.root_pattern(".git", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt")(
-						fname
-					) or util.path.dirname(fname)
-				end,
 			})
 
-			lspconfig.clangd.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
-			})
-
-			lspconfig.cmake.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
-			})
-
-			lspconfig.dockerls.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
-			})
-
-			lspconfig.jdtls.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
-			})
-
-			lspconfig.hls.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
-			})
-
-			lspconfig.html.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
-			})
-
-			lspconfig.marksman.setup({
-				capabilities = capabilities,
+			-- Add other servers similarly
+			vim.lsp.config("lua_ls", {})
+			vim.lsp.config("tsserver", {})
+			vim.lsp.config("tailwindcss", {})
+			vim.lsp.config("clangd", {})
+			vim.lsp.config("cmake", {})
+			vim.lsp.config("dockerls", {})
+			vim.lsp.config("jdtls", {})
+			vim.lsp.config("hls", {})
+			vim.lsp.config("html", {})
+			vim.lsp.config("marksman", {
 				filetypes = { "markdown", "quarto" },
-				root_dir = util.root_pattern(".git", ".marksman.toml", "_quarto.yml"),
+				root_dir = vim.fs.root(0, { ".git", ".marksman.toml", "_quarto.yml" }),
 			})
-
-			lspconfig.omnisharp.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
-			})
-
-			lspconfig.csharp_ls.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
-			})
-
-			lspconfig.r_language_server.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
-			})
-
-			lspconfig.yamlls.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
+			vim.lsp.config("omnisharp", {})
+			vim.lsp.config("csharp_ls", {})
+			vim.lsp.config("r_language_server", {})
+			vim.lsp.config("yamlls", {
 				settings = {
 					yaml = {
 						schemaStore = {
@@ -248,42 +187,25 @@ return {
 					},
 				},
 			})
-
-			lspconfig.ltex_plus.setup({
-				cmd = { "ltex-ls-plus" },
-				filetypes = {
-					"bib",
-					"context",
-					"gitcommit",
-					"html",
-					"markdown",
-					"org",
-					"pandoc",
-					"plaintex",
-					"quarto",
-					"mail",
-					"mdx",
-					"rmd",
-					"rnoweb",
-					"rst",
-					"tex",
-					"text",
-					"typst",
-					"xhtml",
-				},
+			vim.lsp.config("ltex", {
+				autostart = false,
 				settings = {
 					ltex = {
 						checkFrequency = "save",
-						language = "en-GB",
+						language = "en-US",
 						additionalRules = {
-							languageModel = "~/ltex-models/ngrams",
+							languageModel = "~/.local/share/ngrams/",
+						},
+						disabledRules = {
+							["en"] = { "MORFOLOGIK_RULE_EN" },
+							["en-GB"] = { "MORFOLOGIK_RULE_EN_GB" },
+							["en-US"] = { "MORFOLOGIK_RULE_EN_US" },
+							["de"] = { "MORFOLOGIK_RULE_DE_DE" },
 						},
 					},
 				},
 			})
-
-			lspconfig.harper_ls.setup({
-				capabilities = capabilities,
+			vim.lsp.config("harper_ls", {
 				filetypes = {
 					"c",
 					"cpp",
@@ -317,41 +239,256 @@ return {
 					},
 				},
 			})
+			vim.lsp.config("sqls", {})
 
-			lspconfig.sqls.setup({
-				capabilities = capabilities,
-				flags = lsp_flags,
+			-- Enable all configured servers
+			vim.lsp.enable({
+				"pyright",
+				"lua_ls",
+				"tsserver",
+				"tailwindcss",
+				"clangd",
+				"cmake",
+				"dockerls",
+				"jdtls",
+				"hls",
+				"html",
+				"marksman",
+				"omnisharp",
+				"csharp_ls",
+				"r_language_server",
+				"yamlls",
+				"ltex",
+				"harper_ls",
+				"sqls",
 			})
-
-			-- Deprecated: Use Lspsaga instead
-			-- vim.keymap.set("n", "<leader>K", vim.lsp.buf.hover, {})
-			-- vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, {})
-			-- vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
-			-- vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
 		end,
-		servers = {
-			ltex = {
-				autostart = false,
-				filetypes = {},
-				settings = {
-					ltex = {
-						checkFrequency = "save",
-						language = "en-US",
-						additionalRules = {
-							languageModel = "~/.local/share/ngrams/",
-							-- enablePickyRules = true,
-							-- motherTongue = "de",
-						},
-						disabledRules = {
-							["en"] = { "MORFOLOGIK_RULE_EN" },
-							["en-GB"] = { "MORFOLOGIK_RULE_EN_GB" },
-							["en-US"] = { "MORFOLOGIK_RULE_EN_US" },
-							["de"] = { "MORFOLOGIK_RULE_DE_DE" },
-						},
-					},
-				},
-			},
-		},
+
+		-- Deprecated config as per nvim 0.11 update
+		-- config = function()
+		-- 	local lspconfig = require("lspconfig")
+		-- 	local util = require("lspconfig.util")
+		--
+		-- 	-- Set up lspconfig.
+		-- 	local capabilities = require("cmp_nvim_lsp").default_capabilities()
+		-- 	-- lsp flags
+		-- 	local lsp_flags = {
+		-- 		allow_incremental_sync = true,
+		-- 		debounce_text_changes = 150,
+		-- 	}
+		--
+		-- 	lspconfig.lua_ls.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 	})
+		--
+		-- 	lspconfig.ts_ls.setup({
+		-- 		capabilities = capabilities,
+		-- 	})
+		--
+		-- 	lspconfig.tailwindcss.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 	})
+		--
+		-- 	-- See https://github.com/neovim/neovim/issues/23291
+		-- 	-- disable lsp watcher.
+		-- 	-- Too lags on linux for python projects
+		-- 	-- because pyright and nvim both create too many watchers otherwise
+		-- 	if capabilities.workspace == nil then
+		-- 		capabilities.workspace = {}
+		-- 		capabilities.workspace.didChangeWatchedFiles = {}
+		-- 	end
+		-- 	capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
+		--
+		-- 	vim.lsp.config('pyright',{
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 		cmd = { "pyright-langserver", "--stdio" },
+		-- 		settings = {
+		-- 			python = {
+		-- 				pythonPath = vim.g.python3_host_prog,
+		-- 				analysis = {
+		-- 					autoSearchPaths = true,
+		-- 					useLibraryCodeForTypes = true,
+		-- 					diagnosticMode = "workspace",
+		-- 				},
+		-- 			},
+		-- 		},
+		-- 		root_dir = function(fname)
+		-- 			return util.root_pattern(".git", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt")(
+		-- 				fname
+		-- 			) or util.path.dirname(fname)
+		-- 		end,
+		-- 	})
+		--
+		-- 	lspconfig.clangd.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 	})
+		--
+		-- 	lspconfig.cmake.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 	})
+		--
+		-- 	lspconfig.dockerls.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 	})
+		--
+		-- 	lspconfig.jdtls.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 	})
+		--
+		-- 	lspconfig.hls.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 	})
+		--
+		-- 	lspconfig.html.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 	})
+		--
+		-- 	lspconfig.marksman.setup({
+		-- 		capabilities = capabilities,
+		-- 		filetypes = { "markdown", "quarto" },
+		-- 		root_dir = util.root_pattern(".git", ".marksman.toml", "_quarto.yml"),
+		-- 	})
+		--
+		-- 	lspconfig.omnisharp.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 	})
+		--
+		-- 	lspconfig.csharp_ls.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 	})
+		--
+		-- 	lspconfig.r_language_server.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 	})
+		--
+		-- 	lspconfig.yamlls.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 		settings = {
+		-- 			yaml = {
+		-- 				schemaStore = {
+		-- 					enable = true,
+		-- 					url = "",
+		-- 				},
+		-- 			},
+		-- 		},
+		-- 	})
+		--
+		-- 	lspconfig.ltex_plus.setup({
+		-- 		cmd = { "ltex-ls-plus" },
+		-- 		filetypes = {
+		-- 			"bib",
+		-- 			"context",
+		-- 			"gitcommit",
+		-- 			"html",
+		-- 			"markdown",
+		-- 			"org",
+		-- 			"pandoc",
+		-- 			"plaintex",
+		-- 			"quarto",
+		-- 			"mail",
+		-- 			"mdx",
+		-- 			"rmd",
+		-- 			"rnoweb",
+		-- 			"rst",
+		-- 			"tex",
+		-- 			"text",
+		-- 			"typst",
+		-- 			"xhtml",
+		-- 		},
+		-- 		settings = {
+		-- 			ltex = {
+		-- 				checkFrequency = "save",
+		-- 				language = "en-GB",
+		-- 				additionalRules = {
+		-- 					languageModel = "~/ltex-models/ngrams",
+		-- 				},
+		-- 			},
+		-- 		},
+		-- 	})
+		--
+		-- 	lspconfig.harper_ls.setup({
+		-- 		capabilities = capabilities,
+		-- 		filetypes = {
+		-- 			"c",
+		-- 			"cpp",
+		-- 			"cs",
+		-- 			"gitcommit",
+		-- 			"go",
+		-- 			"html",
+		-- 			"java",
+		-- 			"javascript",
+		-- 			"lua",
+		-- 			"markdown",
+		-- 			"nix",
+		-- 			"python",
+		-- 			"ruby",
+		-- 			"rust",
+		-- 			"swift",
+		-- 			"toml",
+		-- 			"typescript",
+		-- 			"typescriptreact",
+		-- 			"haskell",
+		-- 			"cmake",
+		-- 			"typst",
+		-- 			"php",
+		-- 			"dart",
+		-- 		},
+		-- 		settings = {
+		-- 			["harper-ls"] = {
+		-- 				markdown = {
+		-- 					ignore_link_title = true,
+		-- 				},
+		-- 			},
+		-- 		},
+		-- 	})
+		--
+		-- 	lspconfig.sqls.setup({
+		-- 		capabilities = capabilities,
+		-- 		flags = lsp_flags,
+		-- 	})
+		--
+		-- 	-- Deprecated: Use Lspsaga instead
+		-- 	-- vim.keymap.set("n", "<leader>K", vim.lsp.buf.hover, {})
+		-- 	-- vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, {})
+		-- 	-- vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
+		-- 	-- vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
+		-- end,
+		-- servers = {
+		-- 	ltex = {
+		-- 		autostart = false,
+		-- 		filetypes = {},
+		-- 		settings = {
+		-- 			ltex = {
+		-- 				checkFrequency = "save",
+		-- 				language = "en-US",
+		-- 				additionalRules = {
+		-- 					languageModel = "~/.local/share/ngrams/",
+		-- 					-- enablePickyRules = true,
+		-- 					-- motherTongue = "de",
+		-- 				},
+		-- 				disabledRules = {
+		-- 					["en"] = { "MORFOLOGIK_RULE_EN" },
+		-- 					["en-GB"] = { "MORFOLOGIK_RULE_EN_GB" },
+		-- 					["en-US"] = { "MORFOLOGIK_RULE_EN_US" },
+		-- 					["de"] = { "MORFOLOGIK_RULE_DE_DE" },
+		-- 				},
+		-- 			},
+		-- 		},
+		-- 	},
+		-- },
 	},
 	{
 		-- For lsp features in code cells / embedded code
