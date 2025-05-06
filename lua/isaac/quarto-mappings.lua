@@ -26,16 +26,6 @@ end
 -- move in command line
 cmap('<C-a>', '<Home>')
 
--- save with ctrl+s
-imap('<C-s>', '<esc>:update<cr><esc>')
-nmap('<C-s>', '<cmd>:update<cr><esc>')
-
--- -- Move between windows using <ctrl> direction
--- nmap('<C-j>', '<C-W>j')
--- nmap('<C-k>', '<C-W>k')
--- nmap('<C-h>', '<C-W>h')
--- nmap('<C-l>', '<C-W>l')
-
 -- Resize window using <shift> arrow keys
 nmap('<S-Up>', '<cmd>resize +2<CR>')
 nmap('<S-Down>', '<cmd>resize -2<CR>')
@@ -388,12 +378,5 @@ wk.add({
     {"<C-j>", ":TmuxNavigateDown<cr>"},
     {"<C-k>", ":TmuxNavigateUp<cr>"},
     {"<C-l>", ":TmuxNavigateRight<cr>"},
-
-        --     vim.keymap.set("n", "<c-h>", ":TmuxNavigateLeft<cr>"),
-        -- vim.keymap.set("n", "<c-j>", ":TmuxNavigateDown<cr>"),
-        -- vim.keymap.set("n", "<c-k>", ":TmuxNavigateUp<cr>"),
-        -- vim.keymap.set("n", "<c-l>", ":TmuxNavigateRight<cr>"),
-        -- vim.keymap.set("n", "<leader><c-\\>", ":TmuxNavigatePrevious<cr>"),
-
   }
 }, { mode = 'n'})
