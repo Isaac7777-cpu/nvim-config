@@ -98,6 +98,7 @@ return {
 							calc = "[calc]",
 							latex_symbols = "[tex]",
 							emoji = "[emoji]",
+							render_markdown = "[MD]",
 						},
 					}),
 				},
@@ -114,6 +115,7 @@ return {
 					{ name = "calc" },
 					{ name = "latex_symbols" },
 					{ name = "emoji" },
+					{ name = "render_markdown" },
 				},
 				view = {
 					docs = {
