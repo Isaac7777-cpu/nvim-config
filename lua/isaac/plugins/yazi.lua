@@ -1,8 +1,8 @@
 return {
-	---@type LazySpec
 	{
 		"mikavilpas/yazi.nvim",
-		event = "VeryLazy",
+		priority = 1000,
+		lazy = false,
 		dependencies = {
 			"folke/snacks.nvim",
 		},
@@ -33,6 +33,18 @@ return {
 			keymaps = {
 				show_help = "<f1>",
 			},
+			bigfile = { enabled = true },
+			dashboard = { enabled = true },
+			explorer = { enabled = true },
+			indent = { enabled = true },
+			input = { enabled = true },
+			picker = { enabled = true },
+			notifier = { enabled = true },
+			quickfile = { enabled = true },
+			scope = { enabled = true },
+			scroll = { enabled = true },
+			statuscolumn = { enabled = true },
+			words = { enabled = true },
 		},
 		init = function()
 			vim.g.loaded_netrwPlugin = 1
