@@ -121,8 +121,6 @@ vmap('<', '<gv')
 
 -- center after search and jumps
 nmap('n', 'nzz')
-nmap('<c-d>', '<c-d>zz')
-nmap('<c-u>', '<c-u>zz')
 
 -- move between splits and tabs
 nmap('<c-h>', '<c-w>h')
@@ -210,36 +208,37 @@ wk.add({
     { "zl", ":Telescope spell_suggest<cr>", desc = "[l]ist spelling suggestions" },
 }, { mode = 'n', silent = true })
 
--- visual mode
-wk.add({
-    {
-      mode = { "v" },
-      { ".", ":norm .<cr>", desc = "repat last normal mode command" },
-      { "<M-j>", ":m'>+<cr>`<my`>mzgv`yo`z", desc = "move line down" },
-      { "<M-k>", ":m'<-2<cr>`>my`<mzgv`yo`z", desc = "move line up" },
-      { "<cr>", send_region, desc = "run code region" },
-      { "q", ":norm @q<cr>", desc = "repat q macro" },
-    },
-})
-
--- visual with <leader>
-wk.add({
-    { "<leader>d", '"_d', desc = "delete without overwriting reg", mode = "v" },
-    { "<leader>p", '"_dP', desc = "replace without overwriting reg", mode = "v" },
-}, { mode = 'v' })
-
--- insert mode
-wk.add({
-    {
-      mode = { "i" },
-      { "<c-x><c-x>", "<c-x><c-o>", desc = "omnifunc completion" },
-      { "<cm-i>", insert_py_chunk, desc = "python code chunk" },
-      { "<m-->", " <- ", desc = "assign" },
-      { "<m-I>", insert_py_chunk, desc = "python code chunk" },
-      { "<m-i>", insert_r_chunk, desc = "r code chunk" },
-      { "<m-m>", " |>", desc = "pipe" },
-    },
-}, { mode = 'i' })
+-- I found that too many keybinding here makes it really hard to use. Therefore, I have removed some of the keybinding.
+-- -- visual mode
+-- wk.add({
+--     {
+--       mode = { "v" },
+--       { ".", ":norm .<cr>", desc = "repat last normal mode command" },
+--       { "<M-j>", ":m'>+<cr>`<my`>mzgv`yo`z", desc = "move line down" },
+--       { "<M-k>", ":m'<-2<cr>`>my`<mzgv`yo`z", desc = "move line up" },
+--       { "<cr>", send_region, desc = "run code region" },
+--       { "q", ":norm @q<cr>", desc = "repat q macro" },
+--     },
+-- })
+--
+-- -- visual with <leader>
+-- wk.add({
+--     { "<leader>d", '"_d', desc = "delete without overwriting reg", mode = "v" },
+--     { "<leader>p", '"_dP', desc = "replace without overwriting reg", mode = "v" },
+-- }, { mode = 'v' })
+--
+-- -- insert mode
+-- wk.add({
+--     {
+--       mode = { "i" },
+--       { "<c-x><c-x>", "<c-x><c-o>", desc = "omnifunc completion" },
+--       { "<cm-i>", insert_py_chunk, desc = "python code chunk" },
+--       { "<m-->", " <- ", desc = "assign" },
+--       { "<m-I>", insert_py_chunk, desc = "python code chunk" },
+--       { "<m-i>", insert_r_chunk, desc = "r code chunk" },
+--       { "<m-m>", " |>", desc = "pipe" },
+--     },
+-- }, { mode = 'i' })
 
 --- I have changed the split of the terminal to be in the bottom
 local function new_terminal(lang)
