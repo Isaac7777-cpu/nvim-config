@@ -312,7 +312,7 @@ wk.add({
     { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "[h]elp" },
     { "<leader>fj", "<cmd>Telescope jumplist<cr>", desc = "[j]umplist" },
     { "<leader>fk", "<cmd>Telescope keymaps<cr>", desc = "[k]eymaps" },
-    { "<leader>fl", "<cmd>Telescope loclist<cr>", desc = "[l]oclist" },
+    -- { "<leader>fl", "<cmd>Telescope loclist<cr>", desc = "[l]oclist" },
     { "<leader>fm", "<cmd>Telescope marks<cr>", desc = "[m]arks" },
     { "<leader>fq", "<cmd>Telescope quickfix<cr>", desc = "[q]uickfix" },
     { "<leader>g", group = "[g]it" },
