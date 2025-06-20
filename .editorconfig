@@ -1,0 +1,11 @@
+[*.lua]
+indent_stype=space
+indent_size=2
+
+[*.py]
+indent_stype=space
+indent_size=4
+
+[*.rs]
+indent_stype=space
+indent_size=4

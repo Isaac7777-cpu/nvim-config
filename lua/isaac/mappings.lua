@@ -16,6 +16,8 @@ vim.keymap.set({ "i" }, "<S-CR>", "<C-o>o", { noremap = true, silent = true })
 
 -- for quicker closing buffers
 vim.keymap.set({ "n" }, "<leader>bd", "<Cmd>bd<CR>", { noremap = true, silent = true })
+vim.keymap.set({ "n" }, "<leader>bad", "<Cmd>%bd<CR>", { noremap = true, silent = true })
+vim.keymap.set({ "n" }, "<leader>bod", "<Cmd>BufferLineCloseOthers<CR>", { noremap = true, silent = false })
 
 -- for wrapping the texts
 local wrapenabled = 0
@@ -43,10 +45,14 @@ function ToggleWrap()
 	end
 end
 
-ToggleWrap()
+-- -- Do not wrap in default
+-- ToggleWrap()
 
 -- Map `<leader>w` to toggle wrap
 vim.api.nvim_set_keymap("n", "<leader>ew", ":lua ToggleWrap()<CR>", { noremap = true, silent = true })
 
 -- Exiting Terminal
-vim.api.nvim_set_keymap(  't'  ,  '<Leader><ESC>'  ,  '<C-\\><C-n>'  ,  {noremap = true}  )
+vim.api.nvim_set_keymap("t", "<Leader><ESC>", "<C-\\><C-n>", { noremap = true })
+
+-- Set rename symbol.
+vim.keymap.set("n", "<leader>cn", vim.lsp.buf.rename, { desc = "Rename symbol" })

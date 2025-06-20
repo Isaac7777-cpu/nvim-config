@@ -17,7 +17,7 @@ return {
 		},
 		opts = {
 			-- add any options here
-      skip = true,
+			skip = true,
 		},
 		dependencies = {
 			-- If you lazy-load any plugin below, make sure to add proper `module="..."` entries

@@ -78,11 +78,11 @@ return {
 			-- 获取 Neovim 版本
 			local version = vim.version()
 			local nvim_version =
-				string.format("	  🧪 Neovim           v%d.%d.%d", version.major, version.minor, version.patch)
+				string.format("🧪 Neovim	                   v%d.%d.%d", version.major, version.minor, version.patch)
 
 			-- Lazy 插件统计
 			local lazy_plugins = require("lazy").stats()
-			local lazy_info = string.format("	  📦 Lazy Plugins     %d", lazy_plugins.count)
+			local lazy_info = string.format("📦 Lazy Plugins        	          %d", lazy_plugins.count)
 
 			-- Mason LSP 统计
 			local mason_path = vim.fn.stdpath("data") .. "/mason/packages"
@@ -91,7 +91,7 @@ return {
 			if handle then
 				handle:close()
 			end
-			local mason_info = string.format("	  🔧 Mason LSPs       %d", lsp_count)
+			local mason_info = string.format("🔧 Mason LSPs           	          %d", lsp_count)
 
 			return {
 				"",
