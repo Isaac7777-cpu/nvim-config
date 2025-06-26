@@ -60,4 +60,6 @@ M.setup = function()
 	vim.keymap.set("n", "<leader>fg", live_multigrep, {desc = "multi [g]rep"})
 end
 
+M.multigrep = live_multigrep
+
 return M
