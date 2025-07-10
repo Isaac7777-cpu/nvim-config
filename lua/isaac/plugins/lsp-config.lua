@@ -179,6 +179,9 @@ return {
       vim.lsp.config("html", {})
       require("isaac.plugins.lsp.vue")
 
+      -- Setup for php
+      vim.lsp.config("intelephense", {})
+      vim.lsp.config("blade-formatter", {})
 
       -- Setup C and C++
       vim.lsp.config("clangd", {})
