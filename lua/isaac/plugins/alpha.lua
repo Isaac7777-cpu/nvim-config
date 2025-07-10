@@ -78,7 +78,8 @@ return {
 
 			-- Get Neovim version
 			local version = vim.version()
-			local nvim_version = string.format("🧪 Neovim\t\tv%d.%d.%d", version.major, version.minor, version.patch)
+			-- local nvim_version = string.format("🧪 Neovim\t\tv%d.%d.%d", version.major, version.minor, version.patch)
+			local nvim_version = string.format("🚧 Neovim\t\tv%d.%d.%d", version.major, version.minor, version.patch)
 
 			-- Lazy plugin stats
 			local lazy_plugins = require("lazy").stats()
