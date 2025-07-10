@@ -43,6 +43,15 @@ vim.api.nvim_create_autocmd("BufDelete", {
   end,
 })
 
+-- Disable Line Number in Alpha
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "alpha",
+  callback = function()
+    vim.wo.number = false
+    vim.wo.relativenumber = false
+  end,
+})
+
 -- Layout Preserved `BufferDelete`
 vim.api.nvim_create_user_command("BufferDelete", function()
   ---@diagnostic disable-next-line: missing-parameter
