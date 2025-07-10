@@ -67,6 +67,11 @@ return {
           null_ls.builtins.formatting.csharpier,
           null_ls.builtins.completion.spell,
 
+          null_ls.builtins.diagnostics.pylint.with({
+            diagnostic_config = { underline = false, virtual_text = false, signs = false },
+            method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+          }),
+
           -- referenced from http://github.com/milanglacier/nvim/blob/db850bbe400766932c1290c11d1e17672c324cbb/lua/conf/lsp_tools.lua#L135
           source_wrapper({
             null_ls.builtins.formatting.prettierd,
@@ -146,7 +151,7 @@ return {
         end,
       })
 
-      -- Example configuration for pyright
+      -- Setup for Python
       vim.lsp.config("pyright", {
         cmd = { "pyright-langserver", "--stdio" },
         root_dir = vim.fs.root(0, { ".git", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt" }),
@@ -161,25 +166,40 @@ return {
           },
         },
       })
+      vim.lsp.config("pylint", {})
 
-      -- Add other servers similarly
+      -- Setup for Lua
       vim.lsp.config("lua_ls", {})
+
+      -- Setup webdev things
       vim.lsp.config("ts_ls", {
         root_dir = vim.fs.root(".git", "tsconfig.json"),
       })
       vim.lsp.config("tailwindcss", {})
+      vim.lsp.config("html", {})
+      require("isaac.plugins.lsp.vue")
+
+
+      -- Setup C and C++
       vim.lsp.config("clangd", {})
       vim.lsp.config("cmake", {})
+
+      -- Setup Dockers
       vim.lsp.config("dockerls", {})
+
+      -- Setup json server
       vim.lsp.config("jdtls", {})
+
+      -- Setup for Haskell
       vim.lsp.config("hls", {})
-      vim.lsp.config("html", {})
-      vim.lsp.config("marksman", {
-        filetypes = { "markdown", "quarto" },
-        root_dir = vim.fs.root(0, { ".git", ".marksman.toml", "_quarto.yml" }),
-      })
+
+      -- Setup for C#
       vim.lsp.config("omnisharp", {})
+
+      -- Setup for R
       vim.lsp.config("r_language_server", {})
+
+      -- Setup for YAML
       vim.lsp.config("yamlls", {
         settings = {
           yaml = {
@@ -189,6 +209,12 @@ return {
             },
           },
         },
+      })
+
+      -- Text Editing Support
+      vim.lsp.config("marksman", {
+        filetypes = { "markdown", "quarto" },
+        root_dir = vim.fs.root(0, { ".git", ".marksman.toml", "_quarto.yml" }),
       })
       vim.lsp.config("ltex", {
         autostart = false,
@@ -281,6 +307,7 @@ return {
         "sqls",
         "rust_analyzer",
         "taplo",
+        "intelephense",
         -- "sqls",
       })
     end,
@@ -358,6 +385,7 @@ return {
       vim.keymap.set("n", "<leader>gd", "<cmd>Lspsaga goto_definition<CR>", { desc = "Lspsaga Go to Definition" })
       vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "Lspsaga Code Action" })
       vim.keymap.set("n", "<leader>gp", "<cmd>Lspsaga peek_definition<CR>", { desc = "Peek Definition" })
+      vim.keymap.set("n", "grpn", "<cmd>Lspsaga project_replace<CR>", { desc = "Lspsaga Project Wise Rename" })
     end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter", -- optional
