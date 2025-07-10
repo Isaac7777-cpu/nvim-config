@@ -22,12 +22,11 @@ return {
 			vim.keymap.set(
 				"n",
 				"<leader><leader>",
-				"<cmd>lua require('telescope.builtin').find_files{ find_command = {'rg', '--files', '--hidden', '-g', '!.git' }}<cr>"
+				"<cmd>lua require('telescope.builtin').find_files{ find_command = {'rg', '--files', '--hidden', '-g', '!.git' }, layout_config = { height = 0.3 }}<cr>"
 			)
 			-- vim.keymap.set("n", "<leader>fg", builtin.live_grep, {}) -- use the multigrep instead.
 			require("isaac.plugins.telescope.multigrep").setup()
 			vim.keymap.set("n", "<leader>fx", builtin.diagnostics, { desc = "Show all diagnostics (errors/warnings)" })
-
 		end,
 	},
 	{
