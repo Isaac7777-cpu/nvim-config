@@ -16,6 +16,7 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-nvim-lsp-signature-help",
 			"hrsh7th/cmp-buffer",
+			"octaltree/cmp-look",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-calc",
 			"hrsh7th/cmp-emoji",
@@ -126,17 +127,23 @@ return {
 							nvim_lsp_signature_help = "[sig]",
 							luasnip = "[snip]",
 							buffer = "[buf]",
+							look = "[Dict]",
 							path = "[path]",
 							spell = "[spell]",
 							pandoc_references = "[ref]",
 							tags = "[tag]",
 							treesitter = "[TS]",
 							calc = "[calc]",
-							latex_symbols = "[tex]",
+							latex_symbols = "[TeX]",
 							emoji = "[emoji]",
-							render_markdown = "[md]",
+							render_markdown = "[MD]",
 							["blade-nav"] = "[blade]",
 						})[entry.source.name]
+
+						-- You may like to have the symbol at the end,
+						-- but I find it very weird...
+						--
+						-- vim_item.menu, vim_item.kind = vim_item.kind, vim_item.menu
 
 						return vim_item
 					end,
@@ -182,6 +189,15 @@ return {
 					{ name = "emoji" },
 					{ name = "render_markdown" },
 					{ name = "BladeNav" },
+					{
+						name = "look",
+						keyword_length = 2,
+						max_item_count = 10,
+						optiion = {
+							convert_case = true,
+							loud = true,
+						},
+					},
 				},
 				view = {
 					docs = {

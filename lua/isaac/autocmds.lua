@@ -73,3 +73,12 @@ end, { desc = "Delete the current Buffer while maintaining the window layout" })
 
 -- Terminal and Some Custom Terminal Using Commands Settings
 require('isaac.custom-scripts.terminal')
+
+-- Activate spelling when a any text like buffer is entered
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "text", "tex", "quarto" },
+  callback = function()
+    vim.opt_local.spell = true
+    vim.opt_local.spelllang = { "en_au" }
+  end,
+})

@@ -14,3 +14,6 @@ vim.cmd("set guicursor=i:block-blinkwait1000-blinkon300-blinkoff300")
 vim.opt.signcolumn="yes:1"
 
 vim.opt.foldenable = false
+
+-- This is already set in the completions and I actually forgot!
+-- vim.cmd("set completeopt=menu,noinsert,noselect")
