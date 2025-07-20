@@ -26,7 +26,41 @@ return {
 			"jmbuhr/cmp-pandoc-references",
 			"L3MON4D3/LuaSnip",
 			"rafamadriz/friendly-snippets",
-			"onsails/lspkind-nvim",
+			{
+				"onsails/lspkind-nvim",
+				config = function()
+					require("lspkind").init({
+						symbol_map = {
+							Text = "󰉿",
+							Method = "󰆧",
+							Function = "󰊕",
+							Constructor = "",
+							Field = "󰜢",
+							Variable = "󰀫",
+							Class = "󰠱",
+							Interface = "",
+							Module = "",
+							Property = "󰜢",
+							Unit = "󰑭",
+							Value = "󰎠",
+							Enum = "",
+							Keyword = "󰌋",
+							Snippet = "",
+							Color = "󰏘",
+							File = "󰈙",
+							Reference = "󰈇",
+							Folder = "󰉋",
+							EnumMember = "",
+							Constant = "󰏿",
+							Struct = "󰙅",
+							Event = "",
+							Operator = "󰆕",
+							TypeParameter = "",
+							BladeNav = "",
+						},
+					})
+				end,
+			},
 			"jmbuhr/otter.nvim",
 		},
 		config = function()
@@ -50,6 +84,7 @@ return {
 					-- ["<C-j>"] = cmp.mapping.select_next_item(),
 					["<C-d>"] = cmp.mapping.scroll_docs(-4),
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
+					["<C-o>"] = cmp.mapping.complete(),
 					["<C-e>"] = cmp.mapping.close(),
 
 					["<CR>"] = cmp.mapping.confirm({
@@ -79,11 +114,13 @@ return {
 				},
 				autocomplete = false,
 
-				---@diagnostic disable-next-line: missing-fields
 				formatting = {
-					format = lspkind.cmp_format({
-						mode = "symbol",
-						menu = {
+					format = function(entry, vim_item)
+						vim_item.kind = lspkind.presets.default[vim_item.kind]
+						if entry.source.name == "blade-nav" then
+							vim_item.kind = " "
+						end
+						vim_item.menu = ({
 							otter = "[🦦]",
 							nvim_lsp = "[LSP]",
 							nvim_lsp_signature_help = "[sig]",
@@ -97,9 +134,38 @@ return {
 							calc = "[calc]",
 							latex_symbols = "[tex]",
 							emoji = "[emoji]",
-							render_markdown = "[MD]",
-						},
-					}),
+							render_markdown = "[md]",
+							["blade-nav"] = "[blade]",
+						})[entry.source.name]
+
+						return vim_item
+					end,
+
+					-- This is the deprecated way with using lspkind.cmp_format
+					-- which provides less customization possible.
+					--
+					-- ```lua
+					-- format = lspkind.cmp_format({
+					-- 	mode = "symbol_text",
+					-- 	menu = {
+					-- 		otter = "[🦦]",
+					-- 		nvim_lsp = "[LSP]",
+					-- 		nvim_lsp_signature_help = "[sig]",
+					-- 		luasnip = "[snip]",
+					-- 		buffer = "[buf]",
+					-- 		path = "[path]",
+					-- 		spell = "[spell]",
+					-- 		pandoc_references = "[ref]",
+					-- 		tags = "[tag]",
+					-- 		treesitter = "[TS]",
+					-- 		calc = "[calc]",
+					-- 		latex_symbols = "[tex]",
+					-- 		emoji = "[emoji]",
+					-- 		render_markdown = "[MD]",
+					-- 		BladeNav = "[Blade]",
+					-- 	},
+					-- }),
+					-- ```
 				},
 				sources = {
 					{ name = "otter" }, -- for code chunks in quarto
@@ -108,13 +174,14 @@ return {
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
 					{ name = "pandoc_references" },
-					{ name = "buffer", keyword_length = 3, max_item_count = 20 },
+					{ name = "buffer", keyword_length = 3, max_item_count = 10 },
 					{ name = "spell" },
 					{ name = "treesitter", keyword_length = 3, max_item_count = 10 },
 					{ name = "calc" },
 					{ name = "latex_symbols" },
 					{ name = "emoji" },
 					{ name = "render_markdown" },
+					{ name = "BladeNav" },
 				},
 				view = {
 					docs = {
