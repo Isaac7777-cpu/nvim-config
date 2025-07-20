@@ -68,6 +68,7 @@ return {
 			local cmp = require("cmp")
 			local luasnip = require("luasnip")
 			local lspkind = require("lspkind")
+      local compare = require("cmp.config.compare")
 
 			cmp.setup({
 				snippet = {
@@ -80,7 +81,7 @@ return {
 					completeopt = "menu,menuone,noinsert,noselect",
 				},
 				mapping = {
-					-- Disable for keeping the tmux navigator
+					-- Disable for reserving the bindings for the tmux navigator
 					-- ["<C-k>"] = cmp.mapping.select_prev_item(),
 					-- ["<C-j>"] = cmp.mapping.select_next_item(),
 					["<C-d>"] = cmp.mapping.scroll_docs(-4),
@@ -114,7 +115,6 @@ return {
 					end, { "i", "s" }),
 				},
 				autocomplete = false,
-
 				formatting = {
 					format = function(entry, vim_item)
 						vim_item.kind = lspkind.presets.default[vim_item.kind]
@@ -199,6 +199,14 @@ return {
 						},
 					},
 				},
+        sorting = {
+          comparators = {
+            compare.exact,
+            compare.recently_used,
+            compare.score,
+            compare.length,
+          },
+        },
 				view = {
 					docs = {
 						auto_open = true,
