@@ -68,7 +68,23 @@ return {
 			local cmp = require("cmp")
 			local luasnip = require("luasnip")
 			local lspkind = require("lspkind")
-      local compare = require("cmp.config.compare")
+			local compare = require("cmp.config.compare")
+			local kind_mapper = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 }
+			local kind_mapper = require("cmp.types").lsp.CompletionItemKind
+
+			local kind_score = {
+				-- Variable = 1,
+				-- Class = 2,
+				-- Method = 3,
+				-- Keyword = 4,
+				Text = 100,
+			}
+			local kind_comparator = function(entry1, entry2)
+				local kind1 = kind_score[kind_mapper[entry1:get_kind()]] or entry1:get_kind()
+				local kind2 = kind_score[kind_mapper[entry2:get_kind()]] or entry2:get_kind()
+
+				return kind1 < kind2
+			end
 
 			cmp.setup({
 				snippet = {
@@ -86,7 +102,7 @@ return {
 					-- ["<C-j>"] = cmp.mapping.select_next_item(),
 					["<C-d>"] = cmp.mapping.scroll_docs(-4),
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
-					["<C-o>"] = cmp.mapping.complete(),
+					-- ["<C-o>"] = cmp.mapping.complete(),
 					["<C-e>"] = cmp.mapping.close(),
 
 					["<CR>"] = cmp.mapping.confirm({
@@ -199,14 +215,14 @@ return {
 						},
 					},
 				},
-        sorting = {
-          comparators = {
-            compare.exact,
-            compare.recently_used,
-            compare.score,
-            compare.length,
-          },
-        },
+				sorting = {
+					comparators = {
+						compare.recently_used,
+						kind_comparator,
+						compare.exact,
+						compare.length,
+					},
+				},
 				view = {
 					docs = {
 						auto_open = true,
