@@ -41,3 +41,6 @@ luac.out
 *.hex
 
 .DS_Store
+
+# The spell directory should be more or less personal.
+spell/
