@@ -16,6 +16,89 @@ return {
 		},
 	},
 	{
+		"stevearc/conform.nvim",
+		config = function()
+			require("conform").setup({
+				-- 🔧 Formatter setup per filetype
+				formatters_by_ft = {
+					lua = { "stylua" },
+					python = function(bufnr)
+						if require("conform").get_formatter_info("ruff_format", bufnr).available then
+							return { "ruff_format" }
+						else
+							return { "isort", "black", stop_after_first = true }
+						end
+					end,
+					javascript = { "prettier" },
+					typescript = { "prettier" },
+					css = { "prettier" },
+					scss = { "prettier" },
+					html = { "prettier" },
+					json = { "prettier" },
+					yaml = { "prettier" },
+					markdown = { "prettier" },
+					md = { "prettier" },
+					quarto = { "prettier" },
+					txt = { "prettier" },
+					blade = { "blade-formatter" },
+					php = { "blade-formatter" },
+					sql = { "sql_formatter" },
+					tex = { "tex-fmt", "latexindent", stop_after_first = true },
+					rust = { "rustfmt", lsp_format = "fallback" },
+				},
+
+				-- Optional: set formatter options (you can add more)
+				formatters = {
+					sql_formatter = {
+						prepend_args = {
+							"--config",
+							vim.fn.expand("~/.config/sql_formatter/sql_formatter.json"),
+						},
+					},
+				},
+			})
+			-- Customize the "injected" formatter
+			require("conform").formatters.injected = {
+				-- Set the options field
+				options = {
+					-- Set to true to ignore errors
+					ignore_errors = false,
+					-- Map of treesitter language to filetype
+					lang_to_ft = {
+						bash = "sh",
+					},
+					lang_to_formatters = {
+						json = { "jq" },
+						bash = "sh",
+						javascript = "js",
+						latex = "tex",
+						markdown = "md",
+						python = "py",
+						rust = "rs",
+						typescript = "ts",
+					},
+				},
+			}
+
+			require("conform").formatters["tex-fmt"] = {
+				prepend_args = { "--nowrap" },
+			}
+
+			-- Format command
+			vim.api.nvim_create_user_command("Format", function(args)
+				local range = nil
+				if args.count ~= -1 then
+					local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
+					range = {
+						start = { args.line1, 0 },
+						["end"] = { args.line2, end_line:len() },
+					}
+				end
+				require("conform").format({ async = true, lsp_format = "fallback", range = range })
+			end, { range = true })
+		end,
+	},
+	{
 		-- none-ls is a tool that can do automatic installation of the linting source, but also requires lsps
 		"nvimtools/none-ls.nvim",
 		config = function()
@@ -44,46 +127,46 @@ return {
 			local sql_formatter_config_file = os.getenv("HOME") .. "/.config/sql_formatter/sql_formatter.json"
 
 			null_ls.setup({
+				on_attach = function(client)
+					-- 🛑 Disable formatting in null-ls
+					client.server_capabilities.documentFormattingProvider = false
+					client.server_capabilities.documentRangeFormattingProvider = false
+				end,
 				sources = {
-					null_ls.builtins.formatting.stylua,
-					null_ls.builtins.formatting.prettier.with({
-						filetypes = {
-							"javascript",
-							"typescript",
-							"css",
-							"scss",
-							"html",
-							"json",
-							"yaml",
-							"markdown",
-							"graphql",
-							"md",
-							"quarto",
-							"txt",
-							"blade",
-							"php",
-							"vue",
-						},
-					}),
-					null_ls.builtins.formatting.isort,
-					null_ls.builtins.formatting.csharpier,
-					null_ls.builtins.formatting.blade_formatter,
-					null_ls.builtins.formatting.sql_formatter,
-          null_ls.builtins.formatting.latexindent,
-
-					null_ls.builtins.completion.spell,
-
-					null_ls.builtins.diagnostics.pylint.with({
-						diagnostic_config = { underline = false, virtual_text = false, signs = false },
-						method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
-					}),
-
-					-- referenced from http://github.com/milanglacier/nvim/blob/db850bbe400766932c1290c11d1e17672c324cbb/lua/conf/lsp_tools.lua#L135
-					source_wrapper({
-						null_ls.builtins.formatting.prettierd,
-						{ ".prettirrc", ".prettirrc.json", ".prettirrc.yaml" },
-						filetypes = { "markdown.pandoc", "json", "markdown", "rmd", "yaml", "quarto" },
-					}),
+					-- I want to migrate to conform for formatting
+					-- formatting
+					-- null_ls.builtins.formatting.stylua,
+					-- null_ls.builtins.formatting.prettier.with({
+					-- 	filetypes = {
+					-- 		"javascript",
+					-- 		"typescript",
+					-- 		"css",
+					-- 		"scss",
+					-- 		"html",
+					-- 		"json",
+					-- 		"yaml",
+					-- 		"markdown",
+					-- 		"graphql",
+					-- 		"md",
+					-- 		"quarto",
+					-- 		"txt",
+					-- 		"blade",
+					-- 		"php",
+					-- 		"vue",
+					-- 	},
+					-- }),
+					-- null_ls.builtins.formatting.isort,
+					-- null_ls.builtins.formatting.csharpier,
+					-- null_ls.builtins.formatting.blade_formatter,
+					-- null_ls.builtins.formatting.sql_formatter,
+					-- null_ls.builtins.formatting.codespell,
+					--
+					-- -- referenced from http://github.com/milanglacier/nvim/blob/db850bbe400766932c1290c11d1e17672c324cbb/lua/conf/lsp_tools.lua#L135
+					-- source_wrapper({
+					-- 	null_ls.builtins.formatting.prettierd,
+					-- 	{ ".prettirrc", ".prettirrc.json", ".prettirrc.yaml" },
+					-- 	filetypes = { "markdown.pandoc", "json", "markdown", "rmd", "yaml", "quarto" },
+					-- }),
 					-- source_wrapper({
 					-- 	null_ls.builtins.formatting.sql_formatter,
 					-- 	args = vim.fn.empty(vim.fn.glob(sql_formatter_config_file)) == 0
@@ -91,10 +174,15 @@ return {
 					-- 		or nil,
 					-- 	-- This expression = 0 means this file exists.
 					-- }),
+
+					null_ls.builtins.completion.spell,
+
+					null_ls.builtins.diagnostics.pylint.with({
+						diagnostic_config = { underline = false, virtual_text = true, signs = true },
+						method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+					}),
 				},
 			})
-
-			vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
 		end,
 
 		opts = {
@@ -144,20 +232,50 @@ return {
 			-- The definition of the required plugins are stated in lsp-config.lua
 			--
 			-- -- Migrate to Neovim 0.11+ using native `vim.lsp.config` and `vim.lsp.enable`
+			-- vim.diagnostic.config({
+			-- 	virtual_text = { current_line = true },
+			--      virtual_lines = { current_line = true }
+			-- })
 			vim.diagnostic.config({
-				virtual_text = { current_line = true },
+				virtual_text = {
+					severity = {
+						min = "WARN",
+					},
+				},
+				virtual_lines = {
+					only_current_line = true,
+					severity = {
+						min = "ERROR",
+					},
+				},
+				signs = true,
+				underline = true,
+				update_in_insert = true,
 			})
+
+			vim.keymap.set("n", "gK", function()
+				local new_config = not vim.diagnostic.config().virtual_lines
+				vim.diagnostic.config({ virtual_lines = new_config })
+			end, { desc = "Toggle diagnostic virtual_lines" })
 
 			-- Common capabilities for all servers
 			vim.lsp.config("*", {
 				capabilities = require("cmp_nvim_lsp").default_capabilities(),
-				on_attach = function(_, bufnr)
-					local opts = { buffer = bufnr, noremap = true, silent = true }
-					vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, opts)
+				on_attach = function(client, bufnr)
+					local excluded_filetypes = {
+						tex = true,
+					}
+					local ft = vim.bo[bufnr].filetype
+					if not excluded_filetypes[ft] then
+						print("LSP attached:", client.name)
+						local opts = { buffer = bufnr, noremap = false, silent = true, desc = "nvim.lsp.buf.format" }
+						-- vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, opts)
+					end
 				end,
 			})
 
 			-- Setup for Python
+			vim.lsp.config("ruff", {})
 			vim.lsp.config("pyright", {
 				cmd = { "pyright-langserver", "--stdio" },
 				root_dir = vim.fs.root(0, { ".git", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt" }),
@@ -176,6 +294,8 @@ return {
 
 			-- Setup for Lua
 			vim.lsp.config("lua_ls", {})
+			-- We will also setup the LazyDev package below for better lua lsp
+			-- when writing this config which uses lazy to install packages
 
 			-- Setup webdev things
 			vim.lsp.config("ts_ls", {
@@ -229,6 +349,31 @@ return {
 						},
 					},
 				},
+			})
+
+			-- Setup for Latex
+			vim.lsp.config("texlab", {
+				on_attach = function(_, bufnr)
+					local opts = { buffer = bufnr, noremap = false, silent = true, desc = "Longer format for LaTeX" }
+					-- vim.keymap.set("n", "<leader>gf", function()
+					-- 	vim.lsp.buf.format({ timeout_ms = 5000 })
+					-- end, opts)
+
+					-- vim.keymap.set("n", "<leader>fr", function()
+					-- 	local buf = vim.api.nvim_get_current_buf()
+					-- 	local row = vim.api.nvim_win_get_cursor(0)[1] -- 1‑based line number
+					-- 	local start_line = math.max(1, row - 50)
+					-- 	local end_line = row + 50
+					--
+					-- 	vim.lsp.buf.format({
+					-- 		timeout_ms = 5000,
+					-- 		range = {
+					-- 			["start"] = { row = start_line, col = 0 },
+					-- 			["end"] = { row = end_line, col = 0 },
+					-- 		},
+					-- 	})
+					-- end, { desc = "LSP format ~100 lines around cursor" })
+				end,
 			})
 
 			-- Text Editing Support
@@ -301,6 +446,9 @@ return {
 			-- Setup for Rust
 			vim.lsp.config("rust_analyzer", {})
 			vim.lsp.config("taplo", {})
+
+			-- Setup for Zig
+			vim.lsp.config("zls", {})
 
 			-- Setup for shell script
 			vim.lsp.config("bashls", {})
@@ -400,6 +548,11 @@ return {
 				desc = "Quickfix List (Trouble)",
 			},
 		},
+	},
+	{
+		"folke/lazydev.nvim",
+		ft = "lua", -- only load on lua files
+		opts = {},
 	},
 	{
 		"nvimdev/lspsaga.nvim",

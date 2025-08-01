@@ -26,7 +26,7 @@ return {
 			"kdheepak/cmp-latex-symbols",
 			"jmbuhr/cmp-pandoc-references",
 			"L3MON4D3/LuaSnip",
-			"rafamadriz/friendly-snippets",
+			"Isaac7777-cpu/friendly-snippets",
 			{
 				"onsails/lspkind-nvim",
 				config = function()
@@ -69,19 +69,22 @@ return {
 			local luasnip = require("luasnip")
 			local lspkind = require("lspkind")
 			local compare = require("cmp.config.compare")
-			local kind_mapper = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 }
 			local kind_mapper = require("cmp.types").lsp.CompletionItemKind
 
 			local kind_score = {
+				-- -- You can add these in so that these will come up on top of the list.
+				-- -- But I like it better with not explictly having these on top.
 				-- Variable = 1,
 				-- Class = 2,
 				-- Method = 3,
 				-- Keyword = 4,
-				Text = 100,
+				Text = 200,
 			}
-			local kind_comparator = function(entry1, entry2)
-				local kind1 = kind_score[kind_mapper[entry1:get_kind()]] or entry1:get_kind()
-				local kind2 = kind_score[kind_mapper[entry2:get_kind()]] or entry2:get_kind()
+
+			-- This comparator will explictly give the score to one defined above otherwise all equals at 100
+			local kind_discriminative_comparator = function(entry1, entry2)
+				local kind1 = kind_score[kind_mapper[entry1:get_kind()]] or 100
+				local kind2 = kind_score[kind_mapper[entry2:get_kind()]] or 100
 
 				return kind1 < kind2
 			end
@@ -153,7 +156,8 @@ return {
 							latex_symbols = "[TeX]",
 							emoji = "[emoji]",
 							render_markdown = "[MD]",
-							["blade-nav"] = "[blade]",
+							["blade-nav"] = "[Blade]",
+							lazydev = "[LazyDev]",
 						})[entry.source.name]
 
 						-- You may like to have the symbol at the end,
@@ -214,12 +218,17 @@ return {
 							loud = true,
 						},
 					},
+					{
+						name = "lazydev",
+						group_index = 0,
+					},
 				},
 				sorting = {
+					priority_weight = 1,
 					comparators = {
-						compare.recently_used,
-						kind_comparator,
 						compare.exact,
+						-- compare.recently_used,
+						kind_discriminative_comparator,
 						compare.length,
 					},
 				},
@@ -235,9 +244,12 @@ return {
 			})
 
 			-- for friendly snippets
-			require("luasnip.loaders.from_vscode").lazy_load()
-			-- for custom snippets
+			require("luasnip.loaders.from_vscode").lazy_load({ exclude = { "latex" } })
+			-- for custom vscode snippets
 			require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snips" } })
+			-- for custom lua snippets
+			require("luasnip.loaders.from_lua").load({ paths = vim.fn.stdpath("config") .. "/lua/isaac/snippets" })
+
 			-- Link quarto and rmarkdown to markdown snippets
 			luasnip.filetype_extend("quarto", { "markdown" })
 			luasnip.filetype_extend("rmarkdown", { "markdown" })

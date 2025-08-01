@@ -56,3 +56,8 @@ vim.api.nvim_set_keymap("t", "<Leader><ESC>", "<C-\\><C-n>", { noremap = true })
 
 -- Set rename symbol.
 vim.keymap.set("n", "<leader>cn", vim.lsp.buf.rename, { desc = "Rename symbol" })
+
+-- Set <leader>gf to use conform.nvim to format
+vim.keymap.set("n", "<leader>gf", function()
+	require("conform").format({ lsp_fallback = true })
+end, { desc = "Format buffer with conform.nvim" })

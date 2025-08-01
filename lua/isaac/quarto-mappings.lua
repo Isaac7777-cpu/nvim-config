@@ -201,7 +201,6 @@ wk.add({
     { "[q", ":silent cprev<cr>", desc = "[q]uickfix prev" },
     { "]q", ":silent cnext<cr>", desc = "[q]uickfix next" },
     { "gN", "Nzzzv", desc = "center search" },
-    { "gf", ":e <cfile><CR>", desc = "edit file" },
     { "gl", "<c-]>", desc = "open help link" },
     { "n", "nzzzv", desc = "center search" },
     { "z?", ":setlocal spell!<cr>", desc = "toggle [z]pellcheck" },
