@@ -45,6 +45,7 @@ return {
 					sql = { "sql_formatter" },
 					tex = { "tex-fmt", "latexindent", stop_after_first = true },
 					rust = { "rustfmt", lsp_format = "fallback" },
+					zig = { "zigfmt", lsp_format = "fallback" },
 				},
 
 				-- Optional: set formatter options (you can add more)
@@ -97,99 +98,6 @@ return {
 				require("conform").format({ async = true, lsp_format = "fallback", range = range })
 			end, { range = true })
 		end,
-	},
-	{
-		-- none-ls is a tool that can do automatic installation of the linting source, but also requires lsps
-		"nvimtools/none-ls.nvim",
-		config = function()
-			local null_ls = require("null-ls")
-			-- referenced from http://github.com/milanglacier/nvim/blob/db850bbe400766932c1290c11d1e17672c324cbb/lua/conf/lsp_tools.lua#L135
-			local util = require("null-ls.utils")
-			local helper = require("null-ls.helpers")
-
-			local function root_pattern_wrapper(patterns)
-				-- referenced from
-				-- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/diagnostics/flake8.lua
-				return helper.cache.by_bufnr(function(params)
-					return util.root_pattern(".git", unpack(patterns or {}))(params.bufname)
-				end)
-			end
-
-			local function source_wrapper(args)
-				local source = args[1]
-				local patterns = args[2]
-				args[1] = nil
-				args[2] = nil
-				args.cwd = args.cwd or root_pattern_wrapper(patterns)
-				return source.with(args)
-			end
-
-			local sql_formatter_config_file = os.getenv("HOME") .. "/.config/sql_formatter/sql_formatter.json"
-
-			null_ls.setup({
-				on_attach = function(client)
-					-- 🛑 Disable formatting in null-ls
-					client.server_capabilities.documentFormattingProvider = false
-					client.server_capabilities.documentRangeFormattingProvider = false
-				end,
-				sources = {
-					-- I want to migrate to conform for formatting
-					-- formatting
-					-- null_ls.builtins.formatting.stylua,
-					-- null_ls.builtins.formatting.prettier.with({
-					-- 	filetypes = {
-					-- 		"javascript",
-					-- 		"typescript",
-					-- 		"css",
-					-- 		"scss",
-					-- 		"html",
-					-- 		"json",
-					-- 		"yaml",
-					-- 		"markdown",
-					-- 		"graphql",
-					-- 		"md",
-					-- 		"quarto",
-					-- 		"txt",
-					-- 		"blade",
-					-- 		"php",
-					-- 		"vue",
-					-- 	},
-					-- }),
-					-- null_ls.builtins.formatting.isort,
-					-- null_ls.builtins.formatting.csharpier,
-					-- null_ls.builtins.formatting.blade_formatter,
-					-- null_ls.builtins.formatting.sql_formatter,
-					-- null_ls.builtins.formatting.codespell,
-					--
-					-- -- referenced from http://github.com/milanglacier/nvim/blob/db850bbe400766932c1290c11d1e17672c324cbb/lua/conf/lsp_tools.lua#L135
-					-- source_wrapper({
-					-- 	null_ls.builtins.formatting.prettierd,
-					-- 	{ ".prettirrc", ".prettirrc.json", ".prettirrc.yaml" },
-					-- 	filetypes = { "markdown.pandoc", "json", "markdown", "rmd", "yaml", "quarto" },
-					-- }),
-					-- source_wrapper({
-					-- 	null_ls.builtins.formatting.sql_formatter,
-					-- 	args = vim.fn.empty(vim.fn.glob(sql_formatter_config_file)) == 0
-					-- 			and { "--config", sql_formatter_config_file }
-					-- 		or nil,
-					-- 	-- This expression = 0 means this file exists.
-					-- }),
-
-					null_ls.builtins.completion.spell,
-
-					null_ls.builtins.diagnostics.pylint.with({
-						diagnostic_config = { underline = false, virtual_text = true, signs = true },
-						method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
-					}),
-				},
-			})
-		end,
-
-		opts = {
-			servers = {
-				tailwindcss = {},
-			},
-		},
 	},
 	{
 		"williamboman/mason.nvim",
@@ -575,6 +483,8 @@ return {
 			vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "Lspsaga Code Action" })
 			vim.keymap.set("n", "<leader>gp", "<cmd>Lspsaga peek_definition<CR>", { desc = "Peek Definition" })
 			vim.keymap.set("n", "grpn", "<cmd>Lspsaga project_replace<CR>", { desc = "Lspsaga Project Wise Rename" })
+			vim.keymap.set("n", "gsi", "<cmd>Lspsaga incoming_calls<CR>", { desc = "Lspsaga Show Incoming Call Stacks" })
+			vim.keymap.set("n", "gso", "<cmd>Lspsaga outgoing_calls<CR>", { desc = "Lspsaga Show Outgoing Call Stacks" })
 		end,
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter", -- optional
