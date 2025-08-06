@@ -192,10 +192,10 @@ return {
 				i(2, "f"),
 				i(3, "x"),
 				rep(2),
-        rep(3),
-        rep(2),
-        rep(3),
-        i(4, "n"),
+				rep(3),
+				rep(2),
+				rep(3),
+				i(4, "n"),
 				rep(1),
 			}
 		)
@@ -259,7 +259,7 @@ return {
 		)
 	),
 
-  -- ML
+	-- ML
 	s(
 		"optstat",
 		fmt(
@@ -274,6 +274,119 @@ return {
 				i(2, "exp"),
 				i(3, "constraints"),
 			}
+		)
+	),
+
+	s(
+		"starter",
+		fmt(
+			[[
+      \documentclass[11pt, answers]{{exam}}  % Change to 'noanswers' to hide solutions
+      \usepackage{{amssymb, amsmath, mathabx}} % For maths support
+      \usepackage{{hyperref}}
+      % \usepackage[authoryear]{{natbib}}
+      \usepackage[square, numbers]{{natbib}}
+      \usepackage[nameinlink]{{cleveref}}
+      \usepackage{{bbm}}
+      \usepackage{{listings, xcolor}} % `listings` for including code, `xcolor`  for syntax highlighting
+      \usepackage{{minted}}
+      \usepackage{{tikz}}
+      % \usepackage{{physics}} % This package have some very using macros, but I don't like it.
+      
+      % Some useful definition for Exam environment and cleveref package
+      \crefname{{question}}{{question}}{{questions}}
+      \Crefname{{question}}{{Question}}{{Questions}}
+      \crefname{{part}}{{part}}{{parts}}
+      \Crefname{{part}}{{Part}}{{Parts}}
+      
+      % Useful custom command
+      \newcommand{{\abs}}[1]{{\left\lvert #1 \right\rvert}}
+      \newcommand{{\size}}[1]{{\left\lVert #1 \right\rVert}}
+      \newcommand{{\set}}[2]{{\left\{{ #1 \; \middle\vert \; #2 \right\}}}}
+      \newcommand{{\diag}}{{\mathrm{{diag}}}}
+      \newcommand{{\inner}}[2]{{\left\langle #1, #2 \right\rangle}}
+      \newcommand{{\vtr}}[1]{{\mathbf{{#1}}}}
+      \newcommand{{\algomin}}[1]{{\text{{minimize}} \quad #1}}
+      \newcommand{{\gradvec}}[1]{{\nabla_{{\vtr{{#1}}}}}}
+      \newcommand{{\prob}}[1]{{\mathbb{{P}}\!\left(#1\right)}}
+      \newcommand{{\expect}}[1]{{\mathbb{{E}}\!\left(#1\right)}}
+      \newcommand{{\pdv}}[2]{{\frac{{\partial #1}}{{\partial#2}}}}
+      \newcommand{{\pdvexp}}[2]{{\frac{{\partial}}{{\partial#2}}\!\left(#1\right)}}
+      \newcommand{{\tr}}[1]{{\mathchoice
+        {{\text{{tr}}\!\left(#1\right)}}     % displaystyle
+        {{\text{{tr}}\!\left(#1\right)}}     % textstyle
+        {{\text{{tr}}\left(#1\right)}}       % scriptstyle
+        {{\text{{tr}}\left(#1\right)}}       % scriptscriptstyleleft(#1\right)
+      }}
+      
+      % Typeset listing format
+      \lstset{{
+        basicstyle=\ttfamily\footnotesize,
+        keywordstyle=\color{{blue}},
+        commentstyle=\color{{gray}},
+        stringstyle=\color{{red}},
+        showstringspaces=false,
+        breaklines=true
+      }}
+
+      % Define colors (optional)
+      \definecolor{{bg}}{{rgb}}{{0.95,0.95,0.95}}
+      \definecolor{{mygreen}}{{rgb}}{{0,0.6,0}}
+      \definecolor{{mygray}}{{rgb}}{{0.5,0.5,0.5}}
+      \definecolor{{myblue}}{{rgb}}{{0.2,0.2,0.6}}
+
+      % Set minted default style
+      \usemintedstyle{{default}}
+
+      % Global minted config
+      \setminted{{
+        bgcolor=bg,
+        linenos=true,
+        numbersep=10pt,
+        frame=lines,
+        framesep=2mm,
+        baselinestretch=1.1,
+        fontsize=\footnotesize,
+        tabsize=2,
+        breaklines=true,
+        breakautoindent=true,
+        style=colorful
+      }}
+
+      \begin{{document}}
+
+      \title{}
+      \author{{Isaac Leong}}
+      \date{{\today}}
+      \maketitle
+
+      \begin{{questions}}
+
+      \question {}
+      \end{{questions}}
+
+      \bibliographystyle{{abbrvnat}}
+      \bibliography{{reference}}
+
+      \end{{document}}
+      ]],
+			{
+				i(1, "Title"),
+        i(2, "\\textbf{{Question Briefs... }} First Question...")
+			}
+		)
+	),
+
+	s(
+		"snippet",
+		fmt(
+			[[
+            \begin{{minted}}[fontsize=\small, bgcolor=gray!10]{{text}}
+              Some code...
+            \end{{minted}}
+
+      ]],
+			{}
 		)
 	),
 }

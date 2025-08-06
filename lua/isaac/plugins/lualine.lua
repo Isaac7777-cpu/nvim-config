@@ -1,3 +1,23 @@
+local function lsp_clients()
+	local clients = vim.lsp.get_clients({ bufnr = 0 })
+	if next(clients) == nil then
+		return "No LSP"
+	end
+	local names = {}
+	for _, client in ipairs(clients) do
+		table.insert(names, client.name)
+	end
+	return table.concat(names, ", ")
+end
+
+local function word_count()
+	if vim.bo.filetype ~= "markdown" and vim.bo.filetype ~= "text" and vim.bo.filetype ~= "tex" then
+		return ""
+	end
+	local wc = vim.fn.wordcount()
+	return wc.words .. " words"
+end
+
 return {
 	"nvim-lualine/lualine.nvim",
 	dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -9,13 +29,38 @@ return {
 			options = {
 				theme = custom_palenight,
 				component_separators = { left = "|", right = "|" },
-				section_separators = { left = "", right = ""  },
+				section_separators = { left = "", right = "" },
 			},
 			sections = {
 				lualine_c = {
 					"filename",
 					"filesize",
-					"search_count",
+					word_count,
+				},
+				lualine_x = {
+					-- {
+					-- 	require("noice").api.status.message.get_hl,
+					-- 	cond = require("noice").api.status.message.has,
+					-- },
+					{
+						lsp_clients,
+					},
+					{
+						require("noice").api.status.command.get,
+						cond = require("noice").api.status.command.has,
+						color = { fg = "#ff9e64" },
+					},
+					{
+						require("noice").api.status.mode.get,
+						cond = require("noice").api.status.mode.has,
+						-- color = { fg = "#ff9e64" },
+					},
+					{
+						require("noice").api.status.search.get,
+						cond = require("noice").api.status.search.has,
+						-- color = { fg = "#ff9e64" },
+					},
+					"filetype",
 				},
 			},
 			inactive_sections = {

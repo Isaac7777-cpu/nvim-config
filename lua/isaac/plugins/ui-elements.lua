@@ -31,8 +31,10 @@ return {
 		config = function()
 			-- Configure nvim-notify with custom stages
 			require("notify").setup({
+				merge_duplicates = true,
 				direction = "bottom_up",
 				stages = require("isaac.plugins.notify.customn-stage")("bottom_up"), -- Use the custom stages
+				timeout = 5,
 			})
 
 			-- Set `nvim-notify` as the global notification handler
@@ -55,6 +57,9 @@ return {
 					long_message_to_split = true, -- long messages will be sent to a split
 					inc_rename = false, -- enables an input dialog for inc-rename.nvim
 					lsp_doc_border = false, -- add a border to hover docs and signature help
+				},
+				messages = {
+					view_search = "virtualtext",
 				},
 			})
 		end,

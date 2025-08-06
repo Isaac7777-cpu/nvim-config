@@ -228,7 +228,7 @@ return {
 					comparators = {
 						compare.exact,
 						-- compare.recently_used,
-						kind_discriminative_comparator,
+						-- kind_discriminative_comparator,
 						compare.length,
 					},
 				},

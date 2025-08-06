@@ -189,6 +189,7 @@ return {
 				root_dir = vim.fs.root(0, { ".git", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt" }),
 				settings = {
 					python = {
+						checkFrequency = "save",
 						pythonPath = vim.g.python3_host_prog,
 						analysis = {
 							autoSearchPaths = true,
