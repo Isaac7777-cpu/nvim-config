@@ -94,14 +94,6 @@ return {
 			end
 			local mason_info = string.format("🔧 Mason LSPs\t\t%d", lsp_count)
 
-			-- Combine all lines for alignment
-			local footer_lines = {
-				datetime,
-				nvim_version,
-				lazy_info,
-				mason_info,
-			}
-
 			-- Collect lines and calculate column widths
 			local footer_lines = { datetime, nvim_version, lazy_info, mason_info }
 			local left_parts = {}
@@ -132,7 +124,7 @@ return {
 			end
 
 			-- Generate aligned lines with right-aligned second column
-      const_paddig = "                        "
+			const_paddig = "                        "
 			local aligned_lines = {}
 			for i = 1, #footer_lines do
 				local padding = string.rep(" ", max_left_width - vim.fn.strdisplaywidth(left_parts[i]))
@@ -143,8 +135,12 @@ return {
 				table.insert(aligned_lines, left_padded .. right_padded)
 			end
 
-			-- Now use aligned_lines instead of the original footer lines
+			-- -- Boot up times
+			-- local stats = require("lazy").stats()
+			-- local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+			-- local load_time = "Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms"
 
+			-- Now use aligned_lines instead of the original footer lines
 			return {
 				"",
 				aligned_lines[1],
@@ -155,6 +151,7 @@ return {
 				"",
 				aligned_lines[4],
 				"",
+				-- load_time,
 			}
 		end
 
@@ -167,8 +164,27 @@ return {
 		require("alpha").setup(dashboard.config)
 		alpha.setup(dashboard.opts)
 
-		vim.cmd([[
-            autocmd FileType alpha setlocal nofoldenable
-        ]])
+		vim.cmd([[autocmd FileType alpha setlocal nofoldenable]])
+
+		vim.api.nvim_create_autocmd("User", {
+			once = true,
+			pattern = "LazyVimStarted",
+			callback = function()
+				local stats = require("lazy").stats()
+				local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+				local existing_footer = dashboard.section.footer.val or {}
+				-- Make sure it's a list of lines (table of strings)
+				if type(existing_footer) == "string" then
+					existing_footer = { existing_footer }
+				end
+				table.insert(
+					existing_footer,
+					"\t\t\tNeovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms"
+				)
+				dashboard.section.footer.val = existing_footer
+				require("alpha.themes.dashboard").opts.opts.position = "center"
+				pcall(vim.cmd.AlphaRedraw)
+			end,
+		})
 	end,
 }

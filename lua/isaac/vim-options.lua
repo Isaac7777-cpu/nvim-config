@@ -4,6 +4,9 @@ vim.cmd("set softtabstop=2")
 vim.cmd("set shiftwidth=2")
 vim.cmd("set nowrap")
 vim.cmd(":filetype on")
+vim.cmd("set nohlsearch")
+
+-- vim.o.hlsearch = false
 
 vim.opt.scrolloff = 5
 
