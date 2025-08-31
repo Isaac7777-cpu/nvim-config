@@ -226,9 +226,9 @@ return {
 				sorting = {
 					priority_weight = 1,
 					comparators = {
+						kind_discriminative_comparator,
 						compare.exact,
 						-- compare.recently_used,
-						-- kind_discriminative_comparator,
 						compare.length,
 					},
 				},
