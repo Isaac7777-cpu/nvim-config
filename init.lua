@@ -31,5 +31,5 @@ require("isaac.mappings")
 --- If you don't want to also use quarto kick starter mappings, disable the following line.
 require("isaac.quarto-mappings")
 
---- Do NOT FOLD!!!
+--- Do NOT FOLD ON START!!!
 vim.opt.foldenable = false

@@ -291,7 +291,7 @@ return {
       \usepackage{{listings, xcolor}} % `listings` for including code, `xcolor`  for syntax highlighting
       \usepackage{{minted}}
       \usepackage{{tikz}}
-      % \usepackage{{physics}} % This package have some very using macros, but I don't like it.
+      % \usepackage{{physics}} % This package have some very useful macros, but I don't like it.
       
       % Some useful definition for Exam environment and cleveref package
       \crefname{{question}}{{question}}{{questions}}

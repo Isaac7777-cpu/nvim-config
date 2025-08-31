@@ -1,7 +1,5 @@
-local autocmd = vim.api.nvim_create_autocmd
-
 -- Enable Line Numbers
-autocmd({ "UIEnter", "BufReadPost", "BufNewFile" }, {
+vim.api.nvim_create_autocmd({ "UIEnter", "BufReadPost", "BufNewFile" }, {
 	callback = function(args)
 		-- Check if the filetype is not "alpha"
 		local ft = vim.api.nvim_buf_get_option(args.buf, "filetype")
@@ -101,32 +99,3 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     ]])
 	end,
 })
-
--- -- No sign columns for alpha
--- local acmd = vim.api.nvim_create_autocmd
--- local agrp = vim.api.nvim_create_augroup
---
--- agrp("alpha_tabline", { clear = true })
---
--- acmd("FileType", {
--- 	group = "alpha_tabline",
--- 	pattern = { "alpha" },
--- 	-- command = "set signcolumn=no",
--- 	callback = function()
--- 		print("Remove number column...")
--- 		vim.wo.relativenumber = false
--- 		-- vim.cmd("set norelativenumber")
--- 	end,
--- })
---
--- acmd("FileType", {
--- 	group = "alpha_tabline",
--- 	pattern = { "alpha" },
--- 	callback = function()
--- 		acmd("BufUnload", {
--- 			group = "alpha_tabline",
--- 			buffer = 0,
--- 			command = "set showtabline=2 ruler laststatus=3",
--- 		})
--- 	end,
--- })
