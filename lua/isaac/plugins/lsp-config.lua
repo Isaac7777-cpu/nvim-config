@@ -46,6 +46,8 @@ return {
 					tex = { "tex-fmt", "latexindent", stop_after_first = true },
 					rust = { "rustfmt", lsp_format = "fallback" },
 					zig = { "zigfmt", lsp_format = "fallback" },
+					sh = { "shfmt" },
+					zsh = { "shfmt" },
 				},
 
 				-- Optional: set formatter options (you can add more)
@@ -127,6 +129,8 @@ return {
 					"jsonls",
 					"harper_ls",
 					"ltex",
+					"texlab",
+					"bashls",
 				},
 			})
 		end,
@@ -199,7 +203,7 @@ return {
 					},
 				},
 			})
-			vim.lsp.config("pylint", {})
+			-- vim.lsp.config("pylint", {})
 
 			-- Setup for Lua
 			vim.lsp.config("lua_ls", {})
@@ -262,27 +266,7 @@ return {
 
 			-- Setup for Latex
 			vim.lsp.config("texlab", {
-				on_attach = function(_, bufnr)
-					local opts = { buffer = bufnr, noremap = false, silent = true, desc = "Longer format for LaTeX" }
-					-- vim.keymap.set("n", "<leader>gf", function()
-					-- 	vim.lsp.buf.format({ timeout_ms = 5000 })
-					-- end, opts)
-
-					-- vim.keymap.set("n", "<leader>fr", function()
-					-- 	local buf = vim.api.nvim_get_current_buf()
-					-- 	local row = vim.api.nvim_win_get_cursor(0)[1] -- 1‑based line number
-					-- 	local start_line = math.max(1, row - 50)
-					-- 	local end_line = row + 50
-					--
-					-- 	vim.lsp.buf.format({
-					-- 		timeout_ms = 5000,
-					-- 		range = {
-					-- 			["start"] = { row = start_line, col = 0 },
-					-- 			["end"] = { row = end_line, col = 0 },
-					-- 		},
-					-- 	})
-					-- end, { desc = "LSP format ~100 lines around cursor" })
-				end,
+				filetype = { "tex" },
 			})
 
 			-- Text Editing Support
@@ -340,6 +324,7 @@ return {
 						markdown = {
 							ignore_link_title = true,
 						},
+						dialect = "Australian",
 					},
 				},
 			})
@@ -386,6 +371,9 @@ return {
 				"taplo",
 				"intelephense",
 				"sqls",
+				"texlab",
+				"shfmt",
+				"bashls",
 			})
 		end,
 
