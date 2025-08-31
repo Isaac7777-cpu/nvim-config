@@ -1,8 +1,10 @@
--- Use Control of Leader + h/j/k/l to move between panes
-vim.keymap.set({ "n" }, "<leader>kh", "<C-w>h", { noremap = true, silent = true })
-vim.keymap.set({ "n" }, "<leader>kj", "<C-w>j", { noremap = true, silent = true })
-vim.keymap.set({ "n" }, "<leader>kk", "<C-w>k", { noremap = true, silent = true })
-vim.keymap.set({ "n" }, "<leader>kl", "<C-w>l", { noremap = true, silent = true })
+-- -- Use Control of Leader + h/j/k/l to move between panes
+-- -- If you use the tmux-nvim plugin https://github.com/christoomey/vim-tmux-navigator
+-- -- Then you would just use the c-h, c-k, c-j, c-l to move around.
+-- vim.keymap.set({ "n" }, "<leader>kh", "<C-w>h", { noremap = true, silent = true })
+-- vim.keymap.set({ "n" }, "<leader>kj", "<C-w>j", { noremap = true, silent = true })
+-- vim.keymap.set({ "n" }, "<leader>kk", "<C-w>k", { noremap = true, silent = true })
+-- vim.keymap.set({ "n" }, "<leader>kl", "<C-w>l", { noremap = true, silent = true })
 
 -- terminal
 vim.keymap.set("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
