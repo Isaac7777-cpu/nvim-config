@@ -14,7 +14,7 @@ local function on()
 	vim.keymap.set("n", "0", "g0", { noremap = true, silent = true })
 	vim.keymap.set("n", "^", "g^", { noremap = true, silent = true })
 	vim.keymap.set("n", "$", "g$", { noremap = true, silent = true })
-	vim.keymap.set("n", "A", "g$i", { noremap = true, silent = true })
+	vim.keymap.set("n", "A", "g$a", { noremap = true, silent = true })
 end
 
 local function off()
