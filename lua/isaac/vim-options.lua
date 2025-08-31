@@ -19,5 +19,5 @@ vim.opt.signcolumn = "yes:1"
 
 vim.opt.foldenable = false
 
--- This is already set in the completions and I actually forgot!
--- vim.cmd("set completeopt=menu,noinsert,noselect")
+-- hide the ~ at end of buffer
+vim.opt.fillchars:append({ eob = " " })
