@@ -1,53 +1,6 @@
 -- lua/mywrap.lua
 local M = {}
 
--- Simple list marker detector: returns marker text and hanging indent size
-local function detect_list_marker(s)
-	-- bullets: -, *, +
-	local indent, bullet = s:match("^(%s*)([-*+])%s+")
-	if indent and bullet then
-		local marker = indent .. bullet .. " "
-		return marker, #marker
-	end
-	-- numbered: 1.  a)  i)
-	local indent2, num = s:match("^(%s*)([%divx]+[.)])%s+")
-	if indent2 and num then
-		local marker = indent2 .. num .. " "
-		return marker, #marker
-	end
-	return nil, 0
-end
-
-local function wrap_text(text, width, indent, hanging)
-	local out = {}
-	local line = indent or ""
-	local linelen = #line
-	local first = true
-	for word in text:gmatch("%S+") do
-		local add = (linelen > (first and #line or 0) and 1 or 0) + #word
-		if linelen + add <= width then
-			if linelen > 0 then
-				line = line .. " " .. word
-			else
-				line = word
-			end
-			linelen = #line
-		else
-			table.insert(out, line)
-			-- after first line of a list item, apply hanging indent
-			if hanging and hanging > 0 then
-				line = string.rep(" ", hanging) .. word
-			else
-				line = (indent or "") .. word
-			end
-			linelen = #line
-			first = false
-		end
-	end
-	table.insert(out, line)
-	return out
-end
-
 local function wrap_paragraphs(lines, width)
   local out, i = {}, 1
 
