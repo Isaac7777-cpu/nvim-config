@@ -19,37 +19,14 @@ vim.keymap.set({ "n" }, "<leader>bd", "<Cmd>BufferDelete<CR>", { noremap = true,
 vim.keymap.set({ "n" }, "<leader>bad", "<Cmd>%bd<CR>", { noremap = true, silent = true })
 vim.keymap.set({ "n" }, "<leader>bod", "<Cmd>BufferLineCloseOthers<CR>", { noremap = true, silent = false })
 
--- for wrapping the texts
-local wrapenabled = 0
-
-function ToggleWrap()
-	vim.opt.wrap = true
-	vim.opt.list = false
-
-	if wrapenabled == 1 then
-		vim.opt.linebreak = false
-		vim.api.nvim_del_keymap("n", "j")
-		vim.api.nvim_del_keymap("n", "k")
-		vim.api.nvim_del_keymap("n", "0")
-		vim.api.nvim_del_keymap("n", "^")
-		vim.api.nvim_del_keymap("n", "$")
-		wrapenabled = 0
-	else
-		vim.opt.linebreak = true
-		vim.api.nvim_set_keymap("n", "j", "gj", { noremap = true, silent = true })
-		vim.api.nvim_set_keymap("n", "k", "gk", { noremap = true, silent = true })
-		vim.api.nvim_set_keymap("n", "0", "g0", { noremap = true, silent = true })
-		vim.api.nvim_set_keymap("n", "^", "g^", { noremap = true, silent = true })
-		vim.api.nvim_set_keymap("n", "$", "g$", { noremap = true, silent = true })
-		wrapenabled = 1
-	end
-end
-
--- -- Do not wrap in default
--- ToggleWrap()
-
 -- Map `<leader>w` to toggle wrap
-vim.api.nvim_set_keymap("n", "<leader>ew", ":lua ToggleWrap()<CR>", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("n", "<leader>ew", ":lua ToggleWrap()<CR>", { noremap = true, silent = true })
+vim.keymap.set(
+	"n",
+	"<leader>ew",
+	require("isaac.custom-scripts.smart-vim-wrap").smart_wrap,
+	{ noremap = true, silent = true }
+)
 
 -- Exiting Terminal
 vim.api.nvim_set_keymap("t", "<Leader><ESC>", "<C-\\><C-n>", { noremap = true })
