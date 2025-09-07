@@ -95,7 +95,7 @@ return {
 						luasnip.lsp_expand(args.body)
 					end,
 				},
-				preselect = "none",
+				preselect = "None",
 				completion = {
 					completeopt = "menu,menuone,noinsert,noselect",
 				},
@@ -198,7 +198,7 @@ return {
 					{ name = "otter" }, -- for code chunks in quarto
 					{ name = "path" },
 					{ name = "nvim_lsp_signature_help" },
-					{ name = "nvim_lsp" },
+					{ name = "nvim_lsp", max_item_count = 20 },
 					{ name = "luasnip" },
 					{ name = "pandoc_references" },
 					{ name = "buffer", keyword_length = 3, max_item_count = 10 },
@@ -226,8 +226,8 @@ return {
 				sorting = {
 					priority_weight = 1,
 					comparators = {
-						kind_discriminative_comparator,
 						compare.exact,
+						kind_discriminative_comparator,
 						-- compare.recently_used,
 						compare.length,
 					},

@@ -355,7 +355,7 @@ return {
 
       \begin{{document}}
 
-      \title{}
+      \title{{{}}}
       \author{{Isaac Leong}}
       \date{{\today}}
       \maketitle
@@ -372,7 +372,7 @@ return {
       ]],
 			{
 				i(1, "Title"),
-        i(2, "\\textbf{{Question Briefs... }} First Question...")
+				i(2, "\\textbf{{Question Briefs... }} First Question..."),
 			}
 		)
 	),

@@ -47,7 +47,6 @@ return {
 					rust = { "rustfmt", lsp_format = "fallback" },
 					zig = { "zigfmt", lsp_format = "fallback" },
 					sh = { "shfmt" },
-					zsh = { "shfmt" },
 				},
 
 				-- Optional: set formatter options (you can add more)
@@ -69,6 +68,7 @@ return {
 					-- Map of treesitter language to filetype
 					lang_to_ft = {
 						bash = "sh",
+						zsh = "sh",
 					},
 					lang_to_formatters = {
 						json = { "jq" },
@@ -112,25 +112,41 @@ return {
 		config = function()
 			require("mason-lspconfig").setup({
 				ensure_installed = {
+					-- Lua
 					"lua_ls",
+					-- Python
 					"pyright",
+					"ruff",
+					-- R
+					"r_language_server",
+					"air",
+					-- Rust
+					"rust_analyzer",
+					-- Shell Scripts
+					"bashls",
+					-- Web dev
 					"ts_ls",
 					"tailwindcss",
+					"html",
+					-- System
 					"clangd",
 					"cmake",
+					-- Java
 					"jdtls",
+					-- Haskell
 					"hls",
-					"html",
-					"marksman",
+					-- C#
 					"omnisharp",
 					"csharp_ls",
-					"r_language_server",
-					"yamlls",
-					"jsonls",
+					-- General Writing
+					"marksman",
 					"harper_ls",
 					"ltex",
+					-- Latex
 					"texlab",
-					"bashls",
+					-- Data File
+					"yamlls",
+					"jsonls",
 				},
 			})
 		end,
@@ -274,6 +290,8 @@ return {
 				filetypes = { "markdown", "quarto" },
 				root_dir = vim.fs.root(0, { ".git", ".marksman.toml", "_quarto.yml" }),
 			})
+
+			-- General Writing
 			vim.lsp.config("ltex", {
 				autostart = false,
 				settings = {
@@ -318,6 +336,7 @@ return {
 					"php",
 					"dart",
 					"bashls",
+					"tex",
 				},
 				settings = {
 					["harper-ls"] = {
@@ -345,7 +364,12 @@ return {
 			vim.lsp.config("zls", {})
 
 			-- Setup for shell script
-			vim.lsp.config("bashls", {})
+			vim.lsp.config("bashls", {
+				filetypes = { "sh", "zsh", "bash" },
+			})
+			vim.lsp.config("shfmt", {
+				filetypes = { "sh", "zsh", "bash" },
+			})
 
 			-- Enable all configured servers
 			vim.lsp.enable({

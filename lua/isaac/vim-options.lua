@@ -12,8 +12,9 @@ vim.opt.scrolloff = 5
 
 vim.g.mapleader = " "
 
-vim.cmd("set guicursor=n-v-c:block")
-vim.cmd("set guicursor=i:block-blinkwait1000-blinkon300-blinkoff300")
+-- I would like to just use block for everything
+vim.cmd("set guicursor=n-v-c-i:block")
+-- vim.cmd("set guicursor=i:block")
 
 vim.opt.signcolumn = "yes:1"
 
