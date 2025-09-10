@@ -16,18 +16,18 @@ return {
 			vim.opt.spelllang = { "en", "programming" }
 		end,
 	},
-	{
-		"ravibrock/spellwarn.nvim",
-		-- event = "VeryLazy",
-		config = function()
-			require("spellwarn").setup({
-				severity = { -- severity for each spelling error type (false to disable diagnostics for that type)
-					spellbad = "WARN",
-					spellcap = "WARN",
-					spelllocal = "WARN",
-					spellrare = "WARN",
-				},
-			})
-		end,
-	},
+	-- {
+	-- 	"ravibrock/spellwarn.nvim",
+	-- 	-- event = "VeryLazy",
+	-- 	config = function()
+	-- 		require("spellwarn").setup({
+	-- 			severity = { -- severity for each spelling error type (false to disable diagnostics for that type)
+	-- 				spellbad = "WARN",
+	-- 				spellcap = "WARN",
+	-- 				spelllocal = "WARN",
+	-- 				spellrare = "WARN",
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- },
 }
