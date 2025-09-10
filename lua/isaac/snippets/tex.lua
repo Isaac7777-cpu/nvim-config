@@ -282,7 +282,7 @@ return {
 		fmt(
 			[[
       \documentclass[11pt, answers]{{exam}}  % Change to 'noanswers' to hide solutions
-      \usepackage{{amssymb, amsmath, mathabx}} % For maths support
+      \usepackage{{amssymb, amsmath}} % For maths support
       \usepackage{{hyperref}}
       % \usepackage[authoryear]{{natbib}}
       \usepackage[square, numbers]{{natbib}}
@@ -290,14 +290,25 @@ return {
       \usepackage{{bbm}}
       \usepackage{{listings, xcolor}} % `listings` for including code, `xcolor`  for syntax highlighting
       \usepackage{{minted}}
-      \usepackage{{tikz}}
+      \usepackage{{booktabs}}
+      \usepackage{{footnote}}
+      \usepackage{{bm}}
+      %\usepackage{{tikz}} % tikz library is famous for slowing down compilation, uncomment if needed
+      \usepackage{{standalone}}
       % \usepackage{{physics}} % This package have some very useful macros, but I don't like it.
       
       % Some useful definition for Exam environment and cleveref package
       \crefname{{question}}{{question}}{{questions}}
       \Crefname{{question}}{{Question}}{{Questions}}
-      \crefname{{part}}{{part}}{{parts}}
-      \Crefname{{part}}{{Part}}{{Parts}}
+      \crefname{{partno}}{{part}}{{parts}}
+      \Crefname{{partno}}{{Part}}{{Parts}}
+      \crefname{{subpartno}}{{subpart}}{{subparts}}
+      \Crefname{{subpartno}}{{Subpart}}{{Subparts}}
+
+      % Allow hyperref to break links into two lines
+      \hypersetup{{breaklinks=true}}
+      % Allow for footnote in solution
+      \makesavenoteenv{{solution}}
       
       % Useful custom command
       \newcommand{{\abs}}[1]{{\left\lvert #1 \right\rvert}}
