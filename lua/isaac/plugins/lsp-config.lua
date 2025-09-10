@@ -47,6 +47,7 @@ return {
 					rust = { "rustfmt", lsp_format = "fallback" },
 					zig = { "zigfmt", lsp_format = "fallback" },
 					sh = { "shfmt" },
+					java = { "google-java-format", lsp_format = "fallback" },
 				},
 
 				-- Optional: set formatter options (you can add more)
@@ -256,8 +257,50 @@ return {
 			-- Setup Dockers
 			vim.lsp.config("dockerls", {})
 
-			-- Setup json server
-			vim.lsp.config("jdtls", {})
+			-- Setup Java
+			-- Configure jdtls
+			vim.lsp.config("jdtls", {
+				cmd = {
+					vim.fn.expand("$HOME/.local/share/nvim/mason/bin/jdtls"),
+					"--jvm-arg=-Djava.home=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home",
+				},
+				settings = {
+					java = {
+						configuration = {
+							runtimes = {
+								{
+									name = "JavaSE-17",
+									path = "/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home",
+									default = true,
+								},
+								{
+									name = "JavaSE-21",
+									path = "/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home",
+								},
+								{
+									name = "JavaSE-11",
+									path = "/opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home",
+								},
+							},
+						},
+						signatureHelp = { enabled = true },
+						completion = {
+							favoriteStaticMembers = {
+								"org.junit.Assert.*",
+								"org.junit.Assume.*",
+								"org.junit.jupiter.api.Assertions.*",
+								"org.junit.jupiter.api.Assumptions.*",
+								"org.junit.jupiter.api.DynamicContainer.*",
+								"org.junit.jupiter.api.DynamicTest.*",
+								"org.mockito.Mockito.*",
+								"org.mockito.ArgumentMatchers.*",
+								"org.mockito.Answers.*",
+							},
+						},
+					},
+				},
+			})
+			vim.lsp.config("google-java-format", {})
 
 			-- Setup for Haskell
 			vim.lsp.config("hls", {})
@@ -503,5 +546,8 @@ return {
 			"nvim-treesitter/nvim-treesitter", -- optional
 			"nvim-tree/nvim-web-devicons", -- optional
 		},
+	},
+	{
+		"mfussenegger/nvim-jdtls",
 	},
 }
