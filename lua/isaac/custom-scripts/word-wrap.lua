@@ -2,70 +2,97 @@
 local M = {}
 
 local function wrap_paragraphs(lines, width)
-  local out, i = {}, 1
+	local out = {}
+	local i = 1
 
-  local function ulen(s)
-    if utf8 and utf8.len then
-      return select(2, pcall(utf8.len, s)) or #s
-    else
-      return #s
-    end
-  end
+	-- Helper function to get string length (handles UTF-8 if available)
+	local function ulen(s)
+		if utf8 and utf8.len then
+			local ok, len = pcall(utf8.len, s)
+			return ok and len or #s
+		end
+		return #s
+	end
 
-  while i <= #lines do
-    -- collect one paragraph (stop at blank/whitespace-only line)
-    local para = {}
-    while i <= #lines and lines[i]:match("%S") do
-      table.insert(para, lines[i])
-      i = i + 1
-    end
+	while i <= #lines do
+		-- Skip empty/whitespace lines
+		if not lines[i]:match("%S") then
+			-- Only add one blank line between paragraphs
+			if #out == 0 or out[#out] ~= "" then
+				table.insert(out, "")
+			end
+			i = i + 1
+		else
+			-- Collect a paragraph (non-empty consecutive lines)
+			local para = {}
+			while i <= #lines and lines[i]:match("%S") do
+				table.insert(para, lines[i])
+				i = i + 1
+			end
 
-    if #para == 0 then
-      -- preserve a single blank between paragraphs
-      if #out == 0 or out[#out] ~= "" then table.insert(out, "") end
-      i = i + 1
-    else
-      -- indentation from first non-empty line
-      local indent = (para[1]:match("^%s*")) or ""
-      -- flatten lines -> single spaced text
-      local text = table.concat(para, " ")
-      text = text:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+			-- Get indentation from first line
+			local indent = para[1]:match("^%s*") or ""
+			local indent_len = ulen(indent)
 
-      local line = indent
-      local linelen = ulen(line)
+			-- Join paragraph into single string and normalize whitespace
+			local text = table.concat(para, " ")
+			text = text:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
 
-      for word in text:gmatch("%S+") do
-        local add = (linelen > ulen(indent) and 1 or 0) + ulen(word)
-        if linelen + add <= width then
-          if linelen > ulen(indent) then
-            line = line .. " " .. word
-          else
-            line = line .. word
-          end
-          linelen = ulen(line)
-        else
-          -- if current line only has indent, still place the long word
-          if linelen == ulen(indent) then
-            table.insert(out, indent .. word)
-            line = indent
-            linelen = ulen(line)
-          else
-            table.insert(out, line)
-            line = indent .. word
-            linelen = ulen(line)
-          end
-        end
-      end
-      table.insert(out, line)
-    end
-  end
+			-- If the entire paragraph fits within the width, just add it
+			if ulen(text) + indent_len <= width then
+				table.insert(out, indent .. text)
+			else
+				-- Split text into words
+				local words = {}
+				for word in text:gmatch("%S+") do
+					table.insert(words, word)
+				end
 
-  -- trim trailing blank lines to at most one
-  while #out > 1 and out[#out] == "" and out[#out-1] == "" do
-    table.remove(out)
-  end
+				-- Wrap the paragraph
+				local current_line = indent
+				local current_length = indent_len
 
-  return out
+				for j, word in ipairs(words) do
+					local word_len = ulen(word)
+					local space_needed = current_length > indent_len and 1 or 0
+
+					-- Check if we need to start a new line
+					if current_length + space_needed + word_len > width then
+						-- Add current line to output
+						table.insert(out, current_line)
+
+						-- Start new line with indent
+						current_line = indent
+						current_length = indent_len
+					end
+
+					-- Add space if not the first word in line
+					if current_length > indent_len then
+						current_line = current_line .. " " .. word
+						current_length = current_length + 1 + word_len
+					else
+						current_line = current_line .. word
+						current_length = current_length + word_len
+					end
+				end
+
+				-- Add the last line of the paragraph
+				if current_length > indent_len then
+					table.insert(out, current_line)
+				end
+			end
+		end
+	end
+
+	-- Remove trailing blank lines (keep at most one)
+	while #out > 0 and out[#out] == "" do
+		if #out == 1 or out[#out - 1] ~= "" then
+			break
+		end
+		table.remove(out)
+	end
+
+	return out
 end
 
 function M.wrap_range(start_line, end_line, width)

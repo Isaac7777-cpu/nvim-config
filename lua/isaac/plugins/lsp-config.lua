@@ -26,7 +26,7 @@ return {
 						if require("conform").get_formatter_info("ruff_format", bufnr).available then
 							return { "ruff_format" }
 						else
-							return { "isort", "black", stop_after_first = true }
+							return { "isort", "black" }
 						end
 					end,
 					javascript = { "prettier" },
@@ -48,6 +48,7 @@ return {
 					zig = { "zigfmt", lsp_format = "fallback" },
 					sh = { "shfmt" },
 					java = { "google-java-format", lsp_format = "fallback" },
+					groovy = { "npm-groovy-lint" },
 				},
 
 				-- Optional: set formatter options (you can add more)
@@ -284,23 +285,16 @@ return {
 							},
 						},
 						signatureHelp = { enabled = true },
-						completion = {
-							favoriteStaticMembers = {
-								"org.junit.Assert.*",
-								"org.junit.Assume.*",
-								"org.junit.jupiter.api.Assertions.*",
-								"org.junit.jupiter.api.Assumptions.*",
-								"org.junit.jupiter.api.DynamicContainer.*",
-								"org.junit.jupiter.api.DynamicTest.*",
-								"org.mockito.Mockito.*",
-								"org.mockito.ArgumentMatchers.*",
-								"org.mockito.Answers.*",
-							},
-						},
 					},
 				},
 			})
 			vim.lsp.config("google-java-format", {})
+
+			-- Groovy (for gradle)
+			vim.lsp.config("groovyls", {
+				filetypes = { "groovy" },
+			})
+			vim.lsp.config("npm-groovy-lint", {})
 
 			-- Setup for Haskell
 			vim.lsp.config("hls", {})
@@ -424,6 +418,7 @@ return {
 				"cmake",
 				"dockerls",
 				"jdtls",
+				"groovyls",
 				"hls",
 				"html",
 				"marksman",
