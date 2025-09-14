@@ -45,13 +45,13 @@ end, { desc = "Format buffer with conform.nvim" })
 vim.api.nvim_create_user_command("Wrap", function(opts)
 	local start_line = opts.line1 - 1
 	local end_line = opts.line2 - 1
-	local width = tonumber(opts.fargs[1])
+	local width = tonumber(opts.fargs[1]) or 90
 	require("isaac.custom-scripts.word-wrap").wrap_range(start_line, end_line, width)
 end, {
 	range = true,
 	nargs = "?",
-	desc = "Join paragraphs (blank-line separated) and rewrap to width (default: &textwidth or 80)",
+	desc = "Join paragraphs (blank-line separated) and rewrap to width (default: &textwidth or 90)",
 })
 
 -- Visual mode: select a block then <leader>w to wrap
-vim.keymap.set("x", "<leader>gwr", ":<C-u>Wrap<CR>", { silent = true, desc = "Wrap selection" })
+vim.keymap.set("x", "<leader>gwr", ":Wrap<CR>", { silent = true, desc = "Wrap selection" })
