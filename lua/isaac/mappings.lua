@@ -41,10 +41,13 @@ vim.keymap.set("n", "<leader>gf", function()
 	require("conform").format({ lsp_fallback = true })
 end, { desc = "Format buffer with conform.nvim" })
 
+-- Custom setup for wrapping. I have to write a lot of latex and hence find
+-- it would be useful if it can automatically wrap the text for me.
+-- This is only for plain text and not for code documentation.
 -- Set <leader>gwr to use word wrap
 vim.api.nvim_create_user_command("Wrap", function(opts)
-	local start_line = opts.line1 - 1
-	local end_line = opts.line2 - 1
+	local start_line = opts.line1
+	local end_line = opts.line2
 	local width = tonumber(opts.fargs[1]) or 90
 	require("isaac.custom-scripts.word-wrap").wrap_range(start_line, end_line, width)
 end, {
@@ -55,3 +58,9 @@ end, {
 
 -- Visual mode: select a block then <leader>w to wrap
 vim.keymap.set("x", "<leader>gwr", ":Wrap<CR>", { silent = true, desc = "Wrap selection" })
+vim.keymap.set(
+	"n",
+	"<leader>gwr",
+	require("isaac.custom-scripts.word-wrap").auto_wrap_para,
+	{ silent = true, desc = "Auto Wrap with Detected Para." }
+)

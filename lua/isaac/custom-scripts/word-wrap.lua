@@ -95,20 +95,115 @@ local function wrap_paragraphs(lines, width)
 	return out
 end
 
+---Wrap a range of lines to a specified width
+---@param start_line number The starting line number (As shown in the buffer, inclusive)
+---@param end_line number the ending line number (As shown in the buffer, inclusive)
+---@param width? number|nil The widht to wrap to. If nil, use textwidth if set, otherwise defaults to 90
 function M.wrap_range(start_line, end_line, width)
 	local bufnr = 0
 	local tw = vim.bo.textwidth
-	local w = width or (tw > 0 and tw or 80)
+	local w = width or (tw > 0 and tw or 90)
 
 	-- get lines (0-indexed; end exclusive -> +1)
-	local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line + 1, false)
+	local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line, false)
 	if #lines == 0 then
-		return
+		return 0
 	end
 
 	local wrapped = wrap_paragraphs(lines, w)
 
-	vim.api.nvim_buf_set_lines(bufnr, start_line, end_line + 1, false, wrapped)
+	vim.api.nvim_buf_set_lines(bufnr, start_line, end_line, false, wrapped)
+
+	return #wrapped
+end
+
+local function get_paragraph_boundaries()
+	local cursor_line = vim.api.nvim_win_get_cursor(0)[1] -- 0-indexed
+	local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+	local n_lines = #lines
+
+	print("Test test")
+
+	-- If current line is empty, no paragraph found
+	-- if lines[cursor_line + 1]:match("^%s*$") then
+	-- 	return nil, nil
+	-- end
+	if lines[cursor_line]:match("^%s*$") then
+		return nil, nil
+	end
+
+	-- Find paragraph start
+	local start_line = cursor_line
+	while start_line > 0 do
+		if lines[start_line]:match("^%s*$") then -- Empty line
+			break
+		end
+		-- Check if indentation changes
+		local current_indent = lines[start_line]:match("^%s*")
+		local prev_indent = lines[start_line - 1]:match("^%s*")
+		if current_indent ~= prev_indent then
+			break
+		end
+		start_line = start_line - 1
+	end
+
+	-- Find paragraph end
+	local end_line = cursor_line
+	while end_line < n_lines - 1 do
+		if lines[end_line + 1]:match("^%s*$") then -- Empty line
+			break
+		end
+		-- Check if indentation changes
+		local current_indent = lines[end_line]:match("^%s*")
+		local next_indent = lines[end_line + 1]:match("^%s*")
+		if current_indent ~= next_indent then
+			break
+		end
+		end_line = end_line + 1
+	end
+
+	-- -- Verify we found a valid paragraph (not just a single line with different indentation)
+	-- if start_line == end_line then
+	-- 	return nil, nil
+	-- end
+
+	return start_line, end_line
+end
+
+---Wrap the paragraph at the current cursor position
+---Automatically detects paragraph boundaries based on indentation and empty lines
+---Uses textwidth if set, otherwise defaults to 85 characters
+---Shows a warning message if no paragraph is found at the cursor position
+---
+---@param width? number|nil The widht to wrap to. If nil, use textwidth if set, otherwise defaults to 90
+function M.auto_wrap_para(width)
+	local start_line, end_line = get_paragraph_boundaries()
+
+	print(start_line, end_line)
+
+	if not start_line or not end_line then
+		require("noice").notify("word-wrap.lua:auto_wrap_para (line 177)\nNo paragraph found at cursor position", "warn", {
+			title = "Text Wrap Error",
+		})
+		return
+	end
+
+	-- Record the position before wrapping
+	local pos_before_wrap = vim.api.nvim_win_get_cursor(0)[1]
+	-- Use the marker for whether to put the cursor after wrapping
+	local mark = (start_line + end_line) / 2
+
+	local linecount = M.wrap_range(start_line - 1, end_line, width)
+
+	-- Restore cursor to the start
+	if pos_before_wrap < mark then
+		vim.api.nvim_win_set_cursor(0, { start_line, 0 })
+	else
+		local wrapped_end = start_line + linecount - 1
+		local end_line_content = vim.api.nvim_buf_get_lines(0, wrapped_end - 1, wrapped_end, false)[1]
+		local end_line_length = #end_line_content
+		vim.api.nvim_win_set_cursor(0, { wrapped_end, end_line_length })
+	end
 end
 
 return M
