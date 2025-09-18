@@ -179,7 +179,8 @@ end
 function M.auto_wrap_para(width)
 	local start_line, end_line = get_paragraph_boundaries()
 
-	print(start_line, end_line)
+	-- Debug Purpose
+	-- print(start_line, end_line)
 
 	if not start_line or not end_line then
 		require("noice").notify("word-wrap.lua:auto_wrap_para (line 177)\nNo paragraph found at cursor position", "warn", {
