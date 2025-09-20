@@ -9,6 +9,24 @@ return {
 	-- inline math
 	s("inline", fmt("\\( {} \\)", { i(1) })),
 
+	-- Piecewise functions expanded
+	s(
+		"piecewise",
+		fmt(
+			[[
+      \begin{{cases}}
+        {}, & {}, \\
+        {}, & \text{{otherwise}}.
+      \end{{cases}}
+      ]],
+			{
+				i(1, "exp1"),
+				i(2, "cond"),
+				i(3, "exp2"),
+			}
+		)
+	),
+
 	-- Matrices and Vectors
 	s(
 		"mat2",
@@ -383,7 +401,7 @@ return {
       ]],
 			{
 				i(1, "Title"),
-				i(2, "\\textbf{{Question Briefs... }} First Question..."),
+				i(2, "\\textbf{Question Briefs... } First Question..."),
 			}
 		)
 	),
