@@ -1,6 +1,10 @@
 -- lua/mywrap.lua
 local M = {}
 
+---Taken an array of lines to wrap and wrap it to specify width.
+---@param lines string[] The array of lines. Commonly returned by `vim.api.nvim_get_buf_line`
+---@param width integer The width to wrap to.
+---@return table
 local function wrap_paragraphs(lines, width)
 	local out = {}
 	local i = 1
@@ -37,6 +41,8 @@ local function wrap_paragraphs(lines, width)
 			-- Join paragraph into single string and normalize whitespace
 			local text = table.concat(para, " ")
 			text = text:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+
+			-- print(text)
 
 			-- If the entire paragraph fits within the width, just add it
 			if ulen(text) + indent_len <= width then
@@ -96,38 +102,42 @@ local function wrap_paragraphs(lines, width)
 end
 
 ---Wrap a range of lines to a specified width
----@param start_line number The starting line number (As shown in the buffer, inclusive)
----@param end_line number the ending line number (As shown in the buffer, inclusive)
+---@param start_line number The starting line number (1-indexed, as shown in display)
+---@param end_line number the ending line number (1-indexed, as shown in display)
 ---@param width? number|nil The widht to wrap to. If nil, use textwidth if set, otherwise defaults to 90
 function M.wrap_range(start_line, end_line, width)
 	local bufnr = 0
 	local tw = vim.bo.textwidth
 	local w = width or (tw > 0 and tw or 90)
 
+	-- Convert to zero-indexing of lines
+	-- The end line should also be exclusive
+	local start_at_0 = start_line - 1
+	local end_at_0 = end_line
+
 	-- get lines (0-indexed; end exclusive -> +1)
-	local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line, false)
+	local lines = vim.api.nvim_buf_get_lines(bufnr, start_at_0, end_at_0, true)
 	if #lines == 0 then
 		return 0
 	end
 
 	local wrapped = wrap_paragraphs(lines, w)
 
-	vim.api.nvim_buf_set_lines(bufnr, start_line, end_line, false, wrapped)
+	vim.api.nvim_buf_set_lines(bufnr, start_at_0, end_at_0, true, wrapped)
 
 	return #wrapped
 end
 
+---Returns the boundaries of a visual paragraphs. This is characterised by 
+---having the different indentation of an empty barrier line.
+---
+---@return integer?, integer?
 local function get_paragraph_boundaries()
 	local cursor_line = vim.api.nvim_win_get_cursor(0)[1] -- 0-indexed
 	local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
 	local n_lines = #lines
 
-	print("Test test")
-
 	-- If current line is empty, no paragraph found
-	-- if lines[cursor_line + 1]:match("^%s*$") then
-	-- 	return nil, nil
-	-- end
 	if lines[cursor_line]:match("^%s*$") then
 		return nil, nil
 	end
@@ -179,7 +189,7 @@ end
 function M.auto_wrap_para(width)
 	local start_line, end_line = get_paragraph_boundaries()
 
-	-- Debug Purpose
+	-- -- Debug Purpose
 	-- print(start_line, end_line)
 
 	if not start_line or not end_line then
@@ -194,7 +204,7 @@ function M.auto_wrap_para(width)
 	-- Use the marker for whether to put the cursor after wrapping
 	local mark = (start_line + end_line) / 2
 
-	local linecount = M.wrap_range(start_line - 1, end_line, width)
+	local linecount = M.wrap_range(start_line, end_line, width)
 
 	-- Restore cursor to the start
 	if pos_before_wrap < mark then

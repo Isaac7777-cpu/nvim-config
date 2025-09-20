@@ -49,6 +49,7 @@ vim.api.nvim_create_user_command("Wrap", function(opts)
 	local start_line = opts.line1
 	local end_line = opts.line2
 	local width = tonumber(opts.fargs[1]) or 90
+  -- print(start_line, end_line)
 	require("isaac.custom-scripts.word-wrap").wrap_range(start_line, end_line, width)
 end, {
 	range = true,
