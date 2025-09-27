@@ -1,6 +1,7 @@
 {
   "Comment.nvim": { "branch": "master", "commit": "e30b7f2008e52442154b66f7c519bfd2f1e32acb" },
   "LuaSnip": { "branch": "master", "commit": "458560534a73f7f8d7a11a146c801db00b081df0" },
+  "R.nvim": { "branch": "main", "commit": "1edfc9cab9519a520144573e1f3a3c06740953d1" },
   "academic.nvim": { "branch": "main", "commit": "d22b713fee63f7ca92d4772872c0f2ce7e79176e" },
   "alpha-nvim": { "branch": "main", "commit": "2b3cbcdd980cae1e022409289245053f62fb50f6" },
   "auto-session": { "branch": "main", "commit": "3b5d8947cf16ac582ef00443ede4cdd3dfa23af9" },
@@ -16,6 +17,7 @@
   "cmp-nvim-lsp-signature-help": { "branch": "main", "commit": "031e6ba70b0ad5eee49fd2120ff7a2e325b17fa7" },
   "cmp-pandoc-references": { "branch": "master", "commit": "dd86d3a8acc52a6d0503c3a45ba1bb93f39a3d31" },
   "cmp-path": { "branch": "main", "commit": "c642487086dbd9a93160e1679a1327be111cbc25" },
+  "cmp-r": { "branch": "main", "commit": "3b03cba13976b3ec5fcf7736bde02dacf89254b1" },
   "cmp-spell": { "branch": "master", "commit": "694a4e50809d6d645c1ea29015dad0c293f019d6" },
   "cmp-treesitter": { "branch": "master", "commit": "958fcfa0d8ce46d215e19cc3992c542f576c4123" },
   "cmp_luasnip": { "branch": "master", "commit": "98d9cb5c2c38532bd9bdb481067b20fea8f32e90" },

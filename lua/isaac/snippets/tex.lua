@@ -314,6 +314,17 @@ return {
       %\usepackage{{tikz}} % tikz library is famous for slowing down compilation, uncomment if needed
       \usepackage{{standalone}}
       % \usepackage{{physics}} % This package have some very useful macros, but I don't like it.
+
+      \hypersetup{{
+        colorlinks=true,
+        linkcolor=blue,
+        filecolor=magenta,      
+        urlcolor=cyan,
+        pdftitle={{Overleaf Example}},
+        pdfpagemode=FullScreen,
+      }}
+      \urlstyle{{same}}
+
       
       % Some useful definition for Exam environment and cleveref package
       \crefname{{question}}{{question}}{{questions}}

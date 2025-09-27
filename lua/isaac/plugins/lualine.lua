@@ -25,6 +25,32 @@ return {
 		local custom_palenight = require("lualine.themes.palenight")
 		custom_palenight.normal.c.bg = "NONE"
 
+		local rstt = {
+			{ "-", "#aaaaaa" }, -- 1: ftplugin/* sourced, but nclientserver not started yet.
+			{ "S", "#757755" }, -- 2: nclientserver started, but not ready yet.
+			{ "S", "#117711" }, -- 3: nclientserver is ready.
+			{ "S", "#ff8833" }, -- 4: nclientserver started the TCP server
+			{ "S", "#3388ff" }, -- 5: TCP server is ready
+			{ "R", "#ff8833" }, -- 6: R started, but nvimcom was not loaded yet.
+			{ "R", "#3388ff" }, -- 7: nvimcom is loaded.
+		}
+
+		local rstatus = function()
+			if not vim.g.R_Nvim_status or vim.g.R_Nvim_status == 0 then
+				-- No R file type (R, Quarto, Rmd, Rhelp) opened yet
+				return ""
+			end
+			return rstt[vim.g.R_Nvim_status][1]
+		end
+
+		local rsttcolor = function()
+			if not vim.g.R_Nvim_status or vim.g.R_Nvim_status == 0 then
+				-- No R file type (R, Quarto, Rmd, Rhelp) opened yet
+				return { fg = "#000000" }
+			end
+			return { fg = rstt[vim.g.R_Nvim_status][2] }
+		end
+
 		require("lualine").setup({
 			options = {
 				theme = custom_palenight,
@@ -62,6 +88,10 @@ return {
 					},
 					"filetype",
 				},
+				lualine_y = {
+					"progress",
+					{ rstatus, color = rsttcolor },
+				},
 			},
 			inactive_sections = {
 				lualine_a = {
@@ -90,12 +120,6 @@ return {
 
 						-- Automatically updates active buffer color to match color of other components (will be overidden if buffers_color is set)
 						use_mode_colors = false,
-
-						-- buffers_color = {
-						-- 	-- Same values as the general color option can be used here.
-						-- 	active = "lualine_{section}_normal", -- Color for active buffer.
-						-- 	inactive = "lualine_{section}_inactive", -- Color for inactive buffer.
-						-- },
 
 						symbols = {
 							modified = " ●", -- Text to show when the buffer is modified

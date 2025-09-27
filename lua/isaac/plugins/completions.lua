@@ -23,6 +23,7 @@ return {
 			"saadparwaiz1/cmp_luasnip",
 			"f3fora/cmp-spell",
 			"ray-x/cmp-treesitter",
+			"R-nvim/cmp-r",
 			"kdheepak/cmp-latex-symbols",
 			"jmbuhr/cmp-pandoc-references",
 			"L3MON4D3/LuaSnip",
@@ -158,6 +159,7 @@ return {
 							render_markdown = "[MD]",
 							["blade-nav"] = "[Blade]",
 							lazydev = "[LazyDev]",
+							cmp_r = "[CMP-R]",
 						})[entry.source.name]
 
 						-- You may like to have the symbol at the end,
@@ -167,32 +169,6 @@ return {
 
 						return vim_item
 					end,
-
-					-- This is the deprecated way with using lspkind.cmp_format
-					-- which provides less customization possible.
-					--
-					-- ```lua
-					-- format = lspkind.cmp_format({
-					-- 	mode = "symbol_text",
-					-- 	menu = {
-					-- 		otter = "[🦦]",
-					-- 		nvim_lsp = "[LSP]",
-					-- 		nvim_lsp_signature_help = "[sig]",
-					-- 		luasnip = "[snip]",
-					-- 		buffer = "[buf]",
-					-- 		path = "[path]",
-					-- 		spell = "[spell]",
-					-- 		pandoc_references = "[ref]",
-					-- 		tags = "[tag]",
-					-- 		treesitter = "[TS]",
-					-- 		calc = "[calc]",
-					-- 		latex_symbols = "[tex]",
-					-- 		emoji = "[emoji]",
-					-- 		render_markdown = "[MD]",
-					-- 		BladeNav = "[Blade]",
-					-- 	},
-					-- }),
-					-- ```
 				},
 				sources = {
 					{ name = "otter" }, -- for code chunks in quarto
@@ -221,6 +197,9 @@ return {
 					{
 						name = "lazydev",
 						group_index = 0,
+					},
+					{
+						name = "cmp_r",
 					},
 				},
 				sorting = {
@@ -260,6 +239,14 @@ return {
 				sources = {
 					{ name = "buffer" },
 				},
+			})
+		end,
+	},
+	{
+		"R-nvim/cmp-r",
+		config = function()
+			require("cmp_r").setup({
+				quarto_intel = "~/.config/nvim/resources/quarto-yaml-intellegence.json",
 			})
 		end,
 	},
