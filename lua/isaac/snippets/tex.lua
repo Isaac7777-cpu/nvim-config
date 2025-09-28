@@ -283,8 +283,8 @@ return {
 		fmt(
 			[[
       \begin{{align*}}
-        \text{{{}}} \quad & {} \\
-        \text{{subject to}} \quad & {}
+        \mathrm{{{}}} \quad & {} \\
+        \mathrm{{subject\ to}} \quad & {}
       \end{{align*}}
       ]],
 			{
@@ -305,7 +305,6 @@ return {
       % \usepackage[authoryear]{{natbib}}
       \usepackage[square, numbers]{{natbib}}
       \usepackage[nameinlink]{{cleveref}}
-      \usepackage{{bbm}}
       \usepackage{{listings, xcolor}} % `listings` for including code, `xcolor`  for syntax highlighting
       \usepackage{{minted}}
       \usepackage{{booktabs}}
@@ -314,6 +313,13 @@ return {
       %\usepackage{{tikz}} % tikz library is famous for slowing down compilation, uncomment if needed
       \usepackage{{standalone}}
       % \usepackage{{physics}} % This package have some very useful macros, but I don't like it.
+
+      \newtheorem{{lemma}}{{Lemma}}
+
+      \DeclareMathOperator{{\sign}}{{sign}}
+      \DeclareMathOperator{{\interior}}{{int}}
+      \DeclareMathOperator{{\LSE}}{{LSE}}
+      \DeclareMathOperator{{\minimise}}{{minimise}}
 
       \hypersetup{{
         colorlinks=true,
@@ -324,7 +330,6 @@ return {
         pdfpagemode=FullScreen,
       }}
       \urlstyle{{same}}
-
       
       % Some useful definition for Exam environment and cleveref package
       \crefname{{question}}{{question}}{{questions}}
