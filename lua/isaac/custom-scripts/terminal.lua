@@ -64,9 +64,34 @@ function TestCmd()
 	return 'cd "' .. project_root .. '" && ' .. test_command .. "\r"
 end
 
+-- Heuristic: character width/height ratio (tweak if your font looks wider/narrower)
+-- e.g., 0.55 means one cell is 0.55 as wide as it is tall.
+local CELL_WH_RATIO = vim.g.char_cell_wh_ratio or 0.56
+
 -- Open terminal in bottom split
-vim.keymap.set("n", "<space>st", function()
-	vim.cmd("botright 12split | terminal")
+vim.keymap.set("n", "<leader>st", function()
+	local ui = vim.api.nvim_list_uis()[1]
+	-- Fallback if UI info is missing
+	local cols = (ui and ui.width) or vim.o.columns
+	local rows = (ui and ui.height) or vim.o.lines
+	-- Approximate physical width/height:
+	-- physical_width  ~ cols * (cell_width)
+	-- physical_height ~ rows * (cell_height)
+	-- Let cell_height = 1, cell_width = CELL_WH_RATIO.
+	local approx_phys_width = cols * CELL_WH_RATIO
+	local approx_phys_height = rows * 1.0
+
+	local cmd
+	if approx_phys_width > approx_phys_height then
+		-- Prefer a right vsplit (~33% of total columns)
+		local target = math.floor(cols * 0.33)
+		cmd = string.format("botright vsplit | vertical resize %d | terminal", target)
+	else
+		-- Prefer a bottom split (12 lines)
+		cmd = "botright 12split | terminal"
+	end
+	vim.cmd(cmd)
+
 	terminal_bufnr = vim.api.nvim_get_current_buf()
 	terminal_job_id = vim.b.terminal_job_id
 
