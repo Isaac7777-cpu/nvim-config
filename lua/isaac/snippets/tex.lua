@@ -296,31 +296,39 @@ return {
 	),
 
 	s(
-		"starter",
+		"starterassign",
 		fmt(
 			[[
       \documentclass[11pt, answers]{{exam}}  % Change to 'noanswers' to hide solutions
       \usepackage{{amssymb, amsmath}} % For maths support
-      \usepackage{{hyperref}}
+      \usepackage[
+        pdfpagelabels=true,
+        bookmarks
+      ]{{hyperref}}
+      \usepackage{{bookmark}}
       % \usepackage[authoryear]{{natbib}}
       \usepackage[square, numbers]{{natbib}}
       \usepackage[nameinlink]{{cleveref}}
       \usepackage{{listings, xcolor}} % `listings` for including code, `xcolor`  for syntax highlighting
       \usepackage{{minted}}
       \usepackage{{booktabs}}
+      \usepackage{{tcolorbox}}
       \usepackage{{footnote}}
       \usepackage{{bm}}
       %\usepackage{{tikz}} % tikz library is famous for slowing down compilation, uncomment if needed
       \usepackage{{standalone}}
       % \usepackage{{physics}} % This package have some very useful macros, but I don't like it.
 
+      %%%% Setup lemman as a theorem
       \newtheorem{{lemma}}{{Lemma}}
-
+      
+      %%%% Declare math operator
       \DeclareMathOperator{{\sign}}{{sign}}
       \DeclareMathOperator{{\interior}}{{int}}
       \DeclareMathOperator{{\LSE}}{{LSE}}
       \DeclareMathOperator{{\minimise}}{{minimise}}
 
+      %%%% Setup how the link looks
       \hypersetup{{
         colorlinks=true,
         linkcolor=blue,
@@ -331,20 +339,21 @@ return {
       }}
       \urlstyle{{same}}
       
-      % Some useful definition for Exam environment and cleveref package
+      %%%% Some useful definition for Exam environment and cleveref package
       \crefname{{question}}{{question}}{{questions}}
       \Crefname{{question}}{{Question}}{{Questions}}
       \crefname{{partno}}{{part}}{{parts}}
       \Crefname{{partno}}{{Part}}{{Parts}}
+      \crefalias{{subpart}}{{subpartno}}
       \crefname{{subpartno}}{{subpart}}{{subparts}}
       \Crefname{{subpartno}}{{Subpart}}{{Subparts}}
 
-      % Allow hyperref to break links into two lines
+      %%%% Allow hyperref to break links into two lines
       \hypersetup{{breaklinks=true}}
       % Allow for footnote in solution
       \makesavenoteenv{{solution}}
       
-      % Useful custom command
+      %%%% Useful custom command
       \newcommand{{\abs}}[1]{{\left\lvert #1 \right\rvert}}
       \newcommand{{\size}}[1]{{\left\lVert #1 \right\rVert}}
       \newcommand{{\set}}[2]{{\left\{{ #1 \; \middle\vert \; #2 \right\}}}}
@@ -364,7 +373,7 @@ return {
         {{\text{{tr}}\left(#1\right)}}       % scriptscriptstyleleft(#1\right)
       }}
       
-      % Typeset listing format
+      %%%% Typeset listing format
       \lstset{{
         basicstyle=\ttfamily\footnotesize,
         keywordstyle=\color{{blue}},
@@ -373,17 +382,26 @@ return {
         showstringspaces=false,
         breaklines=true
       }}
+      
+      %%%% Typeset proofbox environemtn
+      \tcbuselibrary{{breakable}}
+      \newtcolorbox{{proofbox}}{{
+        breakable,
+        colback=white, colframe=black,
+        boxrule=0.8pt, arc=3pt,
+        left=8pt, right=8pt, top=6pt, bottom=6pt
+      }}
 
-      % Define colors (optional)
+      %%%% Define colors (optional)
       \definecolor{{bg}}{{rgb}}{{0.95,0.95,0.95}}
       \definecolor{{mygreen}}{{rgb}}{{0,0.6,0}}
       \definecolor{{mygray}}{{rgb}}{{0.5,0.5,0.5}}
       \definecolor{{myblue}}{{rgb}}{{0.2,0.2,0.6}}
 
-      % Set minted default style
+      %%%% Set minted default style
       \usemintedstyle{{default}}
 
-      % Global minted config
+      %%%% Global minted config
       \setminted{{
         bgcolor=bg,
         linenos=true,
@@ -396,6 +414,26 @@ return {
         breaklines=true,
         breakautoindent=true,
         style=colorful
+      }}
+
+      %%%% Bookmared Questions
+      \NewDocumentCommand{{\markedquestion}}{{ o }}{{%
+        \IfValueTF{{#1}}{{\question[#1]}}{{\question}}%
+        % Title and destination:
+        \pdfbookmark[1]{{Q\arabic{{question}}}}{{q:\arabic{{question}}}}%
+      }}
+      \NewDocumentCommand{{\markedpart}}{{ o }}{{%
+        \IfValueTF{{#1}}{{\part[#1]}}{{\part}}%
+        % Title shows (a); destination uses only safe chars:
+        \pdfbookmark[2]{{Q\arabic{{question}}(\thepartno)}}%
+        {{q:\arabic{{question}}:part:\alph{{partno}}}}%
+      }}
+      \NewDocumentCommand{{\markedsubpart}}{{ o }}{{%
+        \IfValueTF{{#1}}{{\subpart[#1]}}{{\subpart}}%
+        % Title shows (a.i); destination uses safe chars (no dots/parens/macros):
+        \edef\bmTitle{{Q\arabic{{question}}(\thepartno.\roman{{subpart}})}}%
+        \pdfbookmark[3]{{\bmTitle}}%
+        {{q:\arabic{{question}}:part:\alph{{partno}}:sub:\roman{{subpart}}}}%
       }}
 
       \begin{{document}}
