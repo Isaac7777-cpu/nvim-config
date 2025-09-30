@@ -310,7 +310,7 @@ return {
       \usepackage[square, numbers]{{natbib}}
       \usepackage[nameinlink]{{cleveref}}
       \usepackage{{listings, xcolor}} % `listings` for including code, `xcolor`  for syntax highlighting
-      \usepackage{{minted}}
+      \usepackage{{minted, bbm}}
       \usepackage{{booktabs}}
       \usepackage{{tcolorbox}}
       \usepackage{{footnote}}
@@ -372,6 +372,9 @@ return {
         {{\text{{tr}}\left(#1\right)}}       % scriptstyle
         {{\text{{tr}}\left(#1\right)}}       % scriptscriptstyleleft(#1\right)
       }}
+      \newcommand\pcref[1]{{(\cref{{#1}})}}
+      \newcommand\pCref[1]{{(\Cref{{#1}})}}
+
       
       %%%% Typeset listing format
       \lstset{{

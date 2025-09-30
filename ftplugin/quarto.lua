@@ -1,3 +1,11 @@
+-- ##### Custom Plugins ####
+vim.keymap.set("n", "<enter>", function()
+	runner.run_line()
+	vim.cmd("normal! j") -- move cursor down one line
+end, { desc = "run cell", silent = true })
+vim.keymap.set("x", "<enter>", runner.run_range)
+
+-- #### Highlight Logic ####
 local api = vim.api
 local ts = vim.treesitter
 

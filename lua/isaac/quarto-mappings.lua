@@ -1,6 +1,7 @@
 -- required in which-key plugin spec in plugins/ui.lua as `require 'config.keymap'`
 local wk = require("which-key")
 local ms = vim.lsp.protocol.Methods
+local terminal = require("isaac.custom-scripts.terminal")
 
 P = vim.print
 
@@ -46,74 +47,74 @@ nmap("Q", "<Nop>")
 --- TODO: incorpoarate this into quarto-nvim plugin
 --- such that QuartoRun functions get the same capabilities
 --- TODO: figure out bracketed paste for reticulate python repl.
-local function send_cell()
-	if vim.b["quarto_is_r_mode"] == nil then
-		vim.fn["slime#send_cell"]()
-		return
-	end
-	if vim.b["quarto_is_r_mode"] == true then
-		vim.g.slime_python_ipython = 0
-		local is_python = require("otter.tools.functions").is_otter_language_context("python")
-		if is_python and not vim.b["reticulate_running"] then
-			vim.fn["slime#send"]("reticulate::repl_python()" .. "\r")
-			vim.b["reticulate_running"] = true
-		end
-		if not is_python and vim.b["reticulate_running"] then
-			vim.fn["slime#send"]("exit" .. "\r")
-			vim.b["reticulate_running"] = false
-		end
-		vim.fn["slime#send_cell"]()
-	end
-end
+-- local function send_cell()
+-- 	if vim.b["quarto_is_r_mode"] == nil then
+-- 		vim.fn["slime#send_cell"]()
+-- 		return
+-- 	end
+-- 	if vim.b["quarto_is_r_mode"] == true then
+-- 		vim.g.slime_python_ipython = 0
+-- 		local is_python = require("otter.tools.functions").is_otter_language_context("python")
+-- 		if is_python and not vim.b["reticulate_running"] then
+-- 			vim.fn["slime#send"]("reticulate::repl_python()" .. "\r")
+-- 			vim.b["reticulate_running"] = true
+-- 		end
+-- 		if not is_python and vim.b["reticulate_running"] then
+-- 			vim.fn["slime#send"]("exit" .. "\r")
+-- 			vim.b["reticulate_running"] = false
+-- 		end
+-- 		vim.fn["slime#send_cell"]()
+-- 	end
+-- end
 
 --- Send code to terminal with vim-slime
 --- If an R terminal has been opend, this is in r_mode
 --- and will handle python code via reticulate when sent
 --- from a python chunk.
-local slime_send_region_cmd = ":<C-u>call slime#send_op(visualmode(), 1)<CR>"
-slime_send_region_cmd = vim.api.nvim_replace_termcodes(slime_send_region_cmd, true, false, true)
-local function send_region()
-	-- if filetyps is not quarto, just send_region
-	if vim.bo.filetype ~= "quarto" or vim.b["quarto_is_r_mode"] == nil then
-		vim.cmd("normal" .. slime_send_region_cmd)
-		return
-	end
-	if vim.b["quarto_is_r_mode"] == true then
-		vim.g.slime_python_ipython = 0
-		local is_python = require("otter.tools.functions").is_otter_language_context("python")
-		if is_python and not vim.b["reticulate_running"] then
-			vim.fn["slime#send"]("reticulate::repl_python()" .. "\r")
-			vim.b["reticulate_running"] = true
-		end
-		if not is_python and vim.b["reticulate_running"] then
-			vim.fn["slime#send"]("exit" .. "\r")
-			vim.b["reticulate_running"] = false
-		end
-		vim.cmd("normal" .. slime_send_region_cmd)
-	end
-end
+-- local slime_send_region_cmd = ":<C-u>call slime#send_op(visualmode(), 1)<CR>"
+-- slime_send_region_cmd = vim.api.nvim_replace_termcodes(slime_send_region_cmd, true, false, true)
+-- local function send_region()
+-- 	-- if filetyps is not quarto, just send_region
+-- 	if vim.bo.filetype ~= "quarto" or vim.b["quarto_is_r_mode"] == nil then
+-- 		vim.cmd("normal" .. slime_send_region_cmd)
+-- 		return
+-- 	end
+-- 	if vim.b["quarto_is_r_mode"] == true then
+-- 		vim.g.slime_python_ipython = 0
+-- 		local is_python = require("otter.tools.functions").is_otter_language_context("python")
+-- 		if is_python and not vim.b["reticulate_running"] then
+-- 			vim.fn["slime#send"]("reticulate::repl_python()" .. "\r")
+-- 			vim.b["reticulate_running"] = true
+-- 		end
+-- 		if not is_python and vim.b["reticulate_running"] then
+-- 			vim.fn["slime#send"]("exit" .. "\r")
+-- 			vim.b["reticulate_running"] = false
+-- 		end
+-- 		vim.cmd("normal" .. slime_send_region_cmd)
+-- 	end
+-- end
 
 -- send code with ctrl+Enter
 -- just like in e.g. RStudio
 -- needs kitty (or other terminal) config:
 -- map shift+enter send_text all \x1b[13;2u
 -- map ctrl+enter send_text all \x1b[13;5u
-nmap("<c-cr>", send_cell)
-nmap("<s-cr>", send_cell)
-imap("<c-cr>", send_cell)
-imap("<s-cr>", send_cell)
+-- nmap("<c-cr>", quarto_runner.run_cell(true))
+-- nmap("<s-cr>", quarto_runner.run_cell(true))
+-- imap("<c-cr>", quarto_runner.run_cell(true))
+-- imap("<s-cr>", quarto_runner.run_cell(true))
 
 --- Show R dataframe in the browser
 -- might not use what you think should be your default web browser
 -- because it is a plain html file, not a link
 -- see https://askubuntu.com/a/864698 for places to look for
-local function show_r_table()
-	local node = vim.treesitter.get_node({ ignore_injections = false })
-	assert(node, "no symbol found under cursor")
-	local text = vim.treesitter.get_node_text(node, 0)
-	local cmd = [[call slime#send("DT::datatable(]] .. text .. [[)" . "\r")]]
-	vim.cmd(cmd)
-end
+-- local function show_r_table()
+-- 	local node = vim.treesitter.get_node({ ignore_injections = false })
+-- 	assert(node, "no symbol found under cursor")
+-- 	local text = vim.treesitter.get_node_text(node, 0)
+-- 	local cmd = [[call slime#send("DT::datatable(]] .. text .. [[)" . "\r")]]
+-- 	vim.cmd(cmd)
+-- end
 
 -- keep selection after indent/dedent
 vmap(">", ">gv")
@@ -245,7 +246,8 @@ local function new_terminal(lang)
 end
 
 local function new_terminal_python()
-	new_terminal("python")
+	-- new_terminal("python")
+	terminal.smart_open_term("python")
 end
 
 local function new_terminal_r()
@@ -291,11 +293,11 @@ wk.add({
 	{
 		{ "<leader><cr>", send_cell, desc = "run code cell" },
 		{ "<leader>c", group = "[c]ode / [c]ell / [c]hunk" },
-		{ "<leader>ci", new_terminal_ipython, desc = "new [i]python terminal" },
-		-- { "<leader>cj", new_terminal_julia, desc = "new [j]ulia terminal" },
+		{ "<leader>sit", new_terminal_ipython, desc = "new [i]python terminal" },
+		{ "<leader>sjt", new_terminal_julia, desc = "new [j]ulia terminal" },
 		-- { "<leader>cn", new_terminal_shell, desc = "[n]ew terminal with shell" },
-		{ "<leader>cp", new_terminal_python, desc = "new [p]ython terminal" },
-		{ "<leader>cr", new_terminal_r, desc = "new [R] terminal" },
+		{ "<leader>spt", new_terminal_python, desc = "new [p]ython terminal" },
+		{ "<leader>srt", new_terminal_r, desc = "new [R] terminal" },
 		{ "<leader>d", group = "[d]ebug" },
 		{ "<leader>dt", group = "[t]est" },
 		{ "<leader>e", group = "[e]dit" },

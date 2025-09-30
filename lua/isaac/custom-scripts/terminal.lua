@@ -1,3 +1,5 @@
+local M = {}
+
 local terminal_job_id = nil
 local terminal_bufnr = nil
 
@@ -68,16 +70,13 @@ end
 -- e.g., 0.55 means one cell is 0.55 as wide as it is tall.
 local CELL_WH_RATIO = vim.g.char_cell_wh_ratio or 0.56
 
--- Open terminal in bottom split
-vim.keymap.set("n", "<leader>st", function()
+---@param shell_entry string?
+function M.smart_open_term(shell_entry)
 	local ui = vim.api.nvim_list_uis()[1]
 	-- Fallback if UI info is missing
 	local cols = (ui and ui.width) or vim.o.columns
 	local rows = (ui and ui.height) or vim.o.lines
 	-- Approximate physical width/height:
-	-- physical_width  ~ cols * (cell_width)
-	-- physical_height ~ rows * (cell_height)
-	-- Let cell_height = 1, cell_width = CELL_WH_RATIO.
 	local approx_phys_width = cols * CELL_WH_RATIO
 	local approx_phys_height = rows * 1.0
 
@@ -90,6 +89,11 @@ vim.keymap.set("n", "<leader>st", function()
 		-- Prefer a bottom split (12 lines)
 		cmd = "botright 12split | terminal"
 	end
+
+	if shell_entry ~= nil then
+		cmd = cmd .. " " .. shell_entry
+	end
+
 	vim.cmd(cmd)
 
 	terminal_bufnr = vim.api.nvim_get_current_buf()
@@ -105,7 +109,10 @@ vim.keymap.set("n", "<leader>st", function()
 			terminal_bufnr = nil
 		end,
 	})
-end, { desc = "Open terminal in bottom split" })
+end
+
+-- Open terminal in bottom split
+vim.keymap.set("n", "<leader>st", M.smart_open_term, { desc = "Open terminal in bottom split" })
 
 -- Close terminal and job safely
 vim.api.nvim_create_user_command("CloseTerm", function()
@@ -134,3 +141,5 @@ vim.api.nvim_create_user_command("Test", function()
 	local test_cmd = TestCmd()
 	vim.fn.chansend(terminal_job_id, test_cmd .. "\r")
 end, { desc = "Run project-specific tests" })
+
+return M
