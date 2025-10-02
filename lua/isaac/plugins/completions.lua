@@ -117,8 +117,11 @@ return {
 					["<Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.select_next_item()
-						elseif require("luasnip").expand_or_jumpable() then
-							require("luasnip").expand_or_jump()
+						-- This causes unwanted behaviour for me which some of the snippets just expanded out of nowhere
+						-- elseif require("luasnip").expand_or_jumpable() then
+						-- 	require("luasnip").expand_or_jump()
+						elseif luasnip.jumpable(1) then
+							luasnip.jump(1)
 						else
 							fallback()
 						end
@@ -127,8 +130,8 @@ return {
 					["<S-Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.select_prev_item()
-						elseif require("luasnip").jumpable(-1) then
-							require("luasnip").jump(-1)
+						elseif luasnip.jumpable(-1) then
+							luasnip.jump(-1)
 						else
 							fallback()
 						end
@@ -160,6 +163,7 @@ return {
 							["blade-nav"] = "[Blade]",
 							lazydev = "[LazyDev]",
 							cmp_r = "[CMP-R]",
+							vimtex = vim_item.menu,
 						})[entry.source.name]
 
 						-- You may like to have the symbol at the end,
@@ -181,8 +185,8 @@ return {
 					{ name = "spell" },
 					{ name = "treesitter", keyword_length = 3, max_item_count = 10 },
 					{ name = "calc" },
-					{ name = "latex_symbols" },
-					{ name = "emoji" },
+					-- { name = "latex_symbols" },
+					-- { name = "emoji" },
 					{ name = "render_markdown" },
 					{ name = "BladeNav" },
 					{
@@ -194,12 +198,15 @@ return {
 							loud = true,
 						},
 					},
+					{ name = "lazydev", group_index = 0 },
+					{ name = "cmp_r" },
+					-- { name = "vimtex", priority = 1000 },
 					{
-						name = "lazydev",
-						group_index = 0,
-					},
-					{
-						name = "cmp_r",
+						name = "omni",
+						option = {
+							disable_omnifuncs = { "v:lua.vim.lsp.omnifunc" },
+						},
+						priority = 1000,
 					},
 				},
 				sorting = {
@@ -250,4 +257,8 @@ return {
 			})
 		end,
 	},
+	-- This seems to be not as useful as texlab
+	-- {
+	-- 	"micangl/cmp-vimtex",
+	-- },
 }
