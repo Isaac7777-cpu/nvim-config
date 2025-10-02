@@ -31,7 +31,7 @@ vim.keymap.set(
 )
 
 -- Exiting Terminal
-vim.api.nvim_set_keymap("t", "<Leader><ESC>", "<C-\\><C-n>", { noremap = true })
+-- vim.api.nvim_set_keymap("t", "<Leader><ESC>", "<C-\\><C-n>", { noremap = true })
 
 -- Set rename symbol.
 vim.keymap.set("n", "<leader>cn", vim.lsp.buf.rename, { desc = "Rename symbol" })
@@ -49,7 +49,7 @@ vim.api.nvim_create_user_command("Wrap", function(opts)
 	local start_line = opts.line1
 	local end_line = opts.line2
 	local width = tonumber(opts.fargs[1]) or 90
-  -- print(start_line, end_line)
+	-- print(start_line, end_line)
 	require("isaac.custom-scripts.word-wrap").wrap_range(start_line, end_line, width)
 end, {
 	range = true,
@@ -65,3 +65,40 @@ vim.keymap.set(
 	require("isaac.custom-scripts.word-wrap").auto_wrap_para,
 	{ silent = true, desc = "Auto Wrap with Detected Para." }
 )
+
+-- A smarter resize
+local function resize_left()
+	local win = vim.api.nvim_get_current_win()
+	local col = vim.api.nvim_win_get_position(win)[2]
+	local width = vim.api.nvim_win_get_width(win)
+	local total = vim.o.columns
+
+	-- midpoint of this window
+	local mid = col + width / 2
+	local is_right_half = mid > total / 2
+
+	if is_right_half then
+		vim.cmd("vertical resize +2")
+	else
+		vim.cmd("vertical resize -2")
+	end
+end
+
+local function resize_right()
+	local win = vim.api.nvim_get_current_win()
+	local col = vim.api.nvim_win_get_position(win)[2]
+	local width = vim.api.nvim_win_get_width(win)
+	local total = vim.o.columns
+
+	local mid = col + width / 2
+	local is_right_half = mid > total / 2
+
+	if is_right_half then
+		vim.cmd("vertical resize -2")
+	else
+		vim.cmd("vertical resize +2")
+	end
+end
+
+vim.keymap.set("n", "<S-Left>", resize_left, { silent = true, desc = "Resize smart left" })
+vim.keymap.set("n", "<S-Right>", resize_right, { silent = true, desc = "Resize smart right" })

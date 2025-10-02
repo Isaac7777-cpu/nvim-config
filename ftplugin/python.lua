@@ -19,7 +19,7 @@ vim.keymap.set("n", "<Enter>", function()
 	local cur = vim.api.nvim_win_get_cursor(0)[1]
 	local last = vim.api.nvim_buf_line_count(0)
 	local line = vim.api.nvim_buf_get_lines(0, cur - 1, cur, false)[1] or ""
-	iron.send(nil, { line, "" }) -- bracketed paste will handle multi-lines; "" ensures a newline
+	iron.send_line()
 	-- local nextline = math.min(cur + 1, last)
 	local next_mline = next_meaningful_line(math.min(cur + 1, last))
 	vim.api.nvim_win_set_cursor(0, { next_mline, 0 })
@@ -29,14 +29,11 @@ end, { buffer = 0, silent = true, desc = "Python: run line & move down" })
 vim.keymap.set("x", "<Enter>", function()
 	local iron = require("iron.core")
 	vim.cmd([[ execute "normal! \<ESC>" ]])
-	local s = vim.api.nvim_buf_get_mark(0, "<")[1]
 	local e = vim.api.nvim_buf_get_mark(0, ">")[1]
 	vim.cmd([[ execute "normal! gv" ]])
 	local last = vim.api.nvim_buf_line_count(0)
-	local lines = vim.api.nvim_buf_get_lines(0, s - 1, e, false)
 	-- Ensure a final newline; Iron accepts a list of lines
-	table.insert(lines, "")
-	iron.send(nil, lines)
+	iron.visual_send()
 	-- Leave Visual mode and place cursor on the line after the selection
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
 	-- local target = math.min(e + 1, last)

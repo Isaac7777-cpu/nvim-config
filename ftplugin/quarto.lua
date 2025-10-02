@@ -1,4 +1,5 @@
 -- ##### Custom Plugins ####
+local runner = require("quarto.runner")
 vim.keymap.set("n", "<enter>", function()
 	runner.run_line()
 	vim.cmd("normal! j") -- move cursor down one line

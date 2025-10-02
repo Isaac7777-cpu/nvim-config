@@ -102,9 +102,17 @@ return {
 						python = {
 							-- command = { "python3" }, -- or { "ipython", "--no-autoindent" }
 							command = { "ipython", "--no-autoindent" },
-							format = common.bracketed_paste_python,
+							format = function(lines, extras)
+								result = require("iron.fts.common").bracketed_paste_python(lines, extras) -- *** defacto is cell per line (yes)
+
+								filtered = vim.tbl_filter(function(line)
+									return not string.match(line, "^%s*#")
+								end, result)
+								return filtered
+							end,
 							block_dividers = { "# %%", "#%%" },
 							env = { PYTHON_BASIC_REPL = "1" }, --this is needed for python3.13 and up.
+							ignore_blank_lines = true, -- when sending visual select lines, IIAC to not sumbmit extra prompt lines before/after/between sent commands
 						},
 						-- haskell = {
 						-- 	command = function(meta)
@@ -117,7 +125,7 @@ return {
 					-- bufnr is the buffer id of the REPL and ft is the filetype of the
 					-- language being used for the REPL.
 					repl_filetype = function(bufnr, ft)
-						return ft
+						return "iron"
 						-- or return a string name such as the following
 						-- return "iron"
 					end,
