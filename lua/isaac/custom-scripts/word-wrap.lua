@@ -128,7 +128,7 @@ function M.wrap_range(start_line, end_line, width)
 	return #wrapped
 end
 
----Returns the boundaries of a visual paragraphs. This is characterised by 
+---Returns the boundaries of a visual paragraphs. This is characterised by
 ---having the different indentation of an empty barrier line.
 ---
 ---@return integer?, integer?
@@ -215,6 +215,9 @@ function M.auto_wrap_para(width)
 		local end_line_length = #end_line_content
 		vim.api.nvim_win_set_cursor(0, { wrapped_end, end_line_length })
 	end
+
+	-- Recenter horizontally
+	vim.cmd("normal! 0^")
 end
 
 return M

@@ -58,7 +58,7 @@ end, {
 })
 
 -- Visual mode: select a block then <leader>w to wrap
-vim.keymap.set("x", "<leader>gwr", ":Wrap<CR>", { silent = true, desc = "Wrap selection" })
+vim.keymap.set("x", "<leader>gwr", ":Wrap<CR>0^", { silent = true, desc = "Wrap selection" })
 vim.keymap.set(
 	"n",
 	"<leader>gwr",
