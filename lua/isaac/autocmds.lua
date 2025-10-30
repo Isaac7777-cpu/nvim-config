@@ -27,18 +27,56 @@ vim.api.nvim_command([[
 ]])
 
 -- Activate alpha on empty
-
 local alpha_on_empty = vim.api.nvim_create_augroup("alpha_on_empty", { clear = true })
 
+-- vim.api.nvim_create_autocmd("BufDelete", {
+-- 	group = alpha_on_empty,
+-- 	callback = function()
+-- 		vim.schedule(function()
+-- 			local buf = vim.api.nvim_get_current_buf()
+-- 			local info = vim.fn.getbufinfo(buf)[1]
+--
+-- 			local is_no_name = info.name == "" and info.listed == 1 and info.linecount <= 1
+-- 			local win_amount = #vim.api.nvim_tabpage_list_wins(0)
+-- 			if is_no_name or win_amount > 1 then
+-- 				vim.cmd("Alpha")
+-- 			end
+-- 		end)
+-- 	end,
+-- })
+--
 vim.api.nvim_create_autocmd("BufDelete", {
 	group = alpha_on_empty,
 	callback = function()
 		vim.schedule(function()
-			local buf = vim.api.nvim_get_current_buf()
-			local info = vim.fn.getbufinfo(buf)[1]
+			local cur = vim.api.nvim_get_current_buf()
 
-			local is_no_name = info.name == "" and info.listed == 1 and info.linecount <= 1
-			if is_no_name then
+			-- Gather all listed buffers except the current one
+			local listed = {}
+			for _, b in ipairs(vim.api.nvim_list_bufs()) do
+				if b ~= cur and vim.fn.buflisted(b) == 1 then
+					table.insert(listed, b)
+				end
+			end
+
+			-- Build candidates: listed buffers that are NOT visible in any window
+			local candidates = {}
+			for _, b in ipairs(listed) do
+				if #vim.fn.win_findbuf(b) == 0 then
+					local info = (vim.fn.getbufinfo(b) or {})[1] or {}
+					table.insert(candidates, { bufnr = b, lastused = info.lastused or 0 })
+				end
+			end
+
+			-- Prefer the most recently used hidden buffer
+			table.sort(candidates, function(a, b)
+				return a.lastused > b.lastused
+			end)
+			local target = candidates[1] and candidates[1].bufnr or nil
+
+			if target then
+				pcall(vim.api.nvim_set_current_buf, target)
+			else
 				vim.cmd("Alpha")
 			end
 		end)
