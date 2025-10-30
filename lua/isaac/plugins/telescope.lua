@@ -26,7 +26,9 @@ return {
 			)
 			-- vim.keymap.set("n", "<leader>fg", builtin.live_grep, {}) -- use the multigrep instead.
 			require("isaac.plugins.telescope.multigrep").setup()
-			vim.keymap.set("n", "<leader>fx", builtin.diagnostics, { desc = "Show all diagnostics (errors/warnings)" })
+			vim.keymap.set("n", "<leader>fx", function()
+				builtin.diagnostics({ severity = { min = vim.diagnostic.severity.WARN } })
+			end, { desc = "Show only errors" })
 			vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "Resume searching" })
 		end,
 	},

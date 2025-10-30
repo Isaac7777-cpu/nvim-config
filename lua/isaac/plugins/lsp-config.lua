@@ -49,6 +49,7 @@ return {
 					sh = { "shfmt" },
 					java = { "google-java-format", lsp_format = "fallback" },
 					groovy = { "npm-groovy-lint" },
+					r = { "air", lsp_format = "fallback" },
 				},
 
 				-- Optional: set formatter options (you can add more)

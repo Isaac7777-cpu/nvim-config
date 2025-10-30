@@ -199,7 +199,7 @@ return {
 						},
 					},
 					{ name = "lazydev", group_index = 0 },
-					{ name = "cmp_r" },
+					{ name = "cmp_r", priority = 900 },
 					-- { name = "vimtex", priority = 1000 },
 					{
 						name = "omni",

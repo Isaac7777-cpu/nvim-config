@@ -294,29 +294,65 @@ return {
 			}
 		)
 	),
-
+	s(
+		"commondistribution",
+		fmt(
+			[[ 
+      %%%% Distribution
+      \DeclareMathOperator{{\Bern}}{{Bern}}
+      \DeclareMathOperator{{\Binom}}{{Binomial}}
+      \DeclareMathOperator{{\Normal}}{{\mathcal{{N}}}}
+      \DeclareMathOperator{{\MultivariateNormal}}{{MVN}}
+      \DeclareMathOperator{{\Beta}}{{Beta}}
+      \DeclareMathOperator{{\Gam}}{{Gamma}}
+      \DeclareMathOperator{{\InvGam}}{{Inv-Gamma}}
+      \DeclareMathOperator{{\Unif}}{{Unif}}
+      ]],
+			{}
+		)
+	),
+	s(
+		"distributionmoments",
+		fmt(
+			[[ 
+      %%%% Statistics Symbols
+      \newcommand{{\Prob}}[1]{{\mathbb{{P}}\!\left(#1\right)}}
+      \newcommand{{\Probcond}}[2]{{\mathbb{{P}}\!\left(#1 \middle\vert #2\right)}}
+      \newcommand{{\prob}}[1]{{p\!\left(#1\right)}}
+      \newcommand{{\probcond}}[2]{{p\!\left(#1 \middle\vert #2\right)}}
+      \newcommand{{\Expect}}[1]{{\mathbb{{E}}\!\left(#1\right)}}
+      \newcommand{{\Expectcond}}[2]{{\mathbb{{E}}\!\left(#1 \middle\vert #2\right)}}
+      \newcommand{{\Variance}}[1]{{\mathrm{{Var}}\!\left(#1\right)}}
+      \newcommand{{\Variancecond}}[2]{{\mathrm{{Var}}\!\left(#1 \middle\vert #2\right)}}
+      ]],
+			{}
+		)
+	),
 	s(
 		"starterassign",
 		fmt(
 			[[
       \documentclass[11pt, answers]{{exam}}  % Change to 'noanswers' to hide solutions
       \usepackage{{amssymb, amsmath}} % For maths support
-      \usepackage[
-        pdfpagelabels=true,
-        bookmarks
-      ]{{hyperref}}
+      \usepackage[pdfpagelabels=true,bookmarks]{{hyperref}}
       \usepackage{{bookmark}}
       % \usepackage[authoryear]{{natbib}}
       \usepackage[square, numbers]{{natbib}}
       \usepackage[nameinlink]{{cleveref}}
+      \usepackage{{bbm}}
       \usepackage{{listings, xcolor}} % `listings` for including code, `xcolor`  for syntax highlighting
-      \usepackage{{minted, bbm}}
-      \usepackage{{booktabs}}
+      \usepackage{{minted}}
+      \usepackage{{booktabs, caption, tabularx, xltabular}} % Better tables and captioning
+      \usepackage{{hhline, multirow}}
+      % \usepackage{{adjustbox}}
+      \usepackage{{varwidth}}
+      % \usepackage{{lipsum}}
       \usepackage{{tcolorbox}}
       \usepackage{{footnote}}
       \usepackage{{bm}}
+      \usepackage{{enumitem}}
       %\usepackage{{tikz}} % tikz library is famous for slowing down compilation, uncomment if needed
-      \usepackage{{standalone}}
+      % \usepackage{{standalone}} % For standalone tikz graphs that can be precomputed
       % \usepackage{{physics}} % This package have some very useful macros, but I don't like it.
 
       %%%% Setup lemman as a theorem
@@ -327,6 +363,9 @@ return {
       \DeclareMathOperator{{\interior}}{{int}}
       \DeclareMathOperator{{\LSE}}{{LSE}}
       \DeclareMathOperator{{\minimise}}{{minimise}}
+      \DeclareMathOperator{{\SSR}}{{SSR}}
+      \DeclareMathOperator{{\AND}}{{ and }}
+      \DeclareMathOperator{{\Indicator}}{{\mathds{{1}}}}
 
       %%%% Setup how the link looks
       \hypersetup{{
@@ -359,7 +398,7 @@ return {
       \newcommand{{\set}}[2]{{\left\{{ #1 \; \middle\vert \; #2 \right\}}}}
       \newcommand{{\diag}}{{\mathrm{{diag}}}}
       \newcommand{{\inner}}[2]{{\left\langle #1, #2 \right\rangle}}
-      \newcommand{{\vtr}}[1]{{\mathbf{{#1}}}}
+      \newcommand{{\vtr}}[1]{{\bm{{\mathbf{{#1}}}}}}
       \newcommand{{\algomin}}[1]{{\text{{minimize}} \quad #1}}
       \newcommand{{\gradvec}}[1]{{\nabla_{{\vtr{{#1}}}}}}
       \newcommand{{\prob}}[1]{{\mathbb{{P}}\!\left(#1\right)}}
@@ -448,7 +487,7 @@ return {
 
       \begin{{questions}}
 
-      \question {}
+      \markedquestion {}
       \end{{questions}}
 
       \bibliographystyle{{abbrvnat}}
@@ -462,7 +501,121 @@ return {
 			}
 		)
 	),
+	s(
+		"starterarticle",
+		fmt(
+			[[
+      \documentclass[10pt]{{article}} 
+      \usepackage{{amssymb, amsmath}} % For maths support
+      \usepackage[pdfpagelabels=true,bookmarks]{{hyperref}}
+      \usepackage{{bookmark}}
+      % \usepackage[authoryear]{{natbib}}
+      \usepackage[square, numbers]{{natbib}}
+      \usepackage[nameinlink]{{cleveref}}
+      \usepackage{{bbm}}
+      \usepackage{{listings, xcolor}} % `listings` for including code, `xcolor`  for syntax highlighting
+      \usepackage{{minted}}
+      \usepackage{{booktabs, caption, tabularx, xltabular}} % Better tables and captioning
+      \usepackage{{hhline, multirow}}
+      % \usepackage{{adjustbox}}
+      \usepackage{{varwidth}}
+      % \usepackage{{lipsum}}
+      \usepackage{{tcolorbox}}
+      \usepackage{{footnote}}
+      \usepackage{{bm}}
+      \usepackage{{enumitem}}
+      %\usepackage{{tikz}} % tikz library is famous for slowing down compilation, uncomment if needed
+      % \usepackage{{standalone}} % For standalone tikz graphs that can be precomputed
+      % \usepackage{{physics}} % This package have some very useful macros, but I don't like it.
 
+      %%%% Setup lemman as a theorem
+      \newtheorem{{lemma}}{{Lemma}}
+      
+      %%%% Declare math operator
+      \DeclareMathOperator{{\sign}}{{sign}}
+      \DeclareMathOperator{{\interior}}{{int}}
+      \DeclareMathOperator{{\LSE}}{{LSE}}
+      \DeclareMathOperator{{\minimise}}{{minimise}}
+      \DeclareMathOperator{{\SSR}}{{SSR}}
+      \DeclareMathOperator{{\AND}}{{ and }}
+      \DeclareMathOperator{{\Indicator}}{{\mathds{{1}}}}
+
+      %%%% Setup how the link looks
+      \hypersetup{{
+        colorlinks=true,
+        linkcolor=blue,
+        filecolor=magenta,      
+        urlcolor=cyan,
+        pdftitle={{Overleaf Example}},
+        pdfpagemode=FullScreen,
+      }}
+      \urlstyle{{same}}
+      
+      %%%% Allow hyperref to break links into two lines
+      \hypersetup{{breaklinks=true}}
+      % Allow for footnote in solution
+      \makesavenoteenv{{solution}}
+      
+      %%%% Useful custom command
+      \newcommand{{\abs}}[1]{{\left\lvert #1 \right\rvert}}
+      \newcommand{{\size}}[1]{{\left\lVert #1 \right\rVert}}
+      \newcommand{{\set}}[2]{{\left\{{ #1 \; \middle\vert \; #2 \right\}}}}
+      \newcommand{{\diag}}{{\mathrm{{diag}}}}
+      \newcommand{{\inner}}[2]{{\left\langle #1, #2 \right\rangle}}
+      \newcommand{{\vtr}}[1]{{\bm{{\mathbf{{#1}}}}}}
+      \newcommand{{\algomin}}[1]{{\text{{minimize}} \quad #1}}
+      \newcommand{{\gradvec}}[1]{{\nabla_{{\vtr{{#1}}}}}}
+      \newcommand{{\prob}}[1]{{\mathbb{{P}}\!\left(#1\right)}}
+      \newcommand{{\expect}}[1]{{\mathbb{{E}}\!\left(#1\right)}}
+      \newcommand{{\pdv}}[2]{{\frac{{\partial #1}}{{\partial#2}}}}
+      \newcommand{{\pdvexp}}[2]{{\frac{{\partial}}{{\partial#2}}\!\left(#1\right)}}
+      \newcommand{{\tr}}[1]{{\mathchoice
+        {{\text{{tr}}\!\left(#1\right)}}     % displaystyle
+        {{\text{{tr}}\!\left(#1\right)}}     % textstyle
+        {{\text{{tr}}\left(#1\right)}}       % scriptstyle
+        {{\text{{tr}}\left(#1\right)}}       % scriptscriptstyleleft(#1\right)
+      }}
+      \newcommand\pcref[1]{{(\cref{{#1}})}}
+      \newcommand\pCref[1]{{(\Cref{{#1}})}}
+
+      %%%% Define colors (optional)
+      \definecolor{{bg}}{{rgb}}{{0.95,0.95,0.95}}
+      \definecolor{{mygreen}}{{rgb}}{{0,0.6,0}}
+      \definecolor{{mygray}}{{rgb}}{{0.5,0.5,0.5}}
+      \definecolor{{myblue}}{{rgb}}{{0.2,0.2,0.6}}
+
+      %%%% Set minted default style
+      \usemintedstyle{{default}}
+
+      %%%% Global minted config
+      \setminted{{
+        bgcolor=bg,
+        linenos=true,
+        numbersep=10pt,
+        frame=lines,
+        framesep=2mm,
+        baselinestretch=1.1,
+        fontsize=\footnotesize,
+        tabsize=2,
+        breaklines=true,
+        breakautoindent=true,
+        style=colorful
+      }}
+
+      \begin{{document}}
+
+      \title{{{}}}
+      \author{{Isaac Leong}}
+      \date{{\today}}
+      \maketitle
+
+      \end{{document}}
+      ]],
+			{
+				i(1, "Title"),
+			}
+		)
+	),
 	s(
 		"snippet",
 		fmt(
@@ -471,6 +624,15 @@ return {
               Some code...
             \end{{minted}}
 
+      ]],
+			{}
+		)
+	),
+	s(
+		"AND",
+		fmt(
+			[[
+      \text{{ and }}
       ]],
 			{}
 		)

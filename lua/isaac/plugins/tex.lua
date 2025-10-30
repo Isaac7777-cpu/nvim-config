@@ -10,6 +10,11 @@ return {
 			-- vim.g.vimtex_view_general_viewer = ""
 			vim.g.vimtex_quickfix_open_on_warning = 0
 			vim.g.vimtex_quickfix_mode = 0
+      -- -- In my opinion, this is quite useless...
+			-- vim.g.vimtex_grammar_textidote = {
+			-- 	jar = "~/opt/textidote.jar-0.9.jar",
+			-- 	-- args = "--check en_UK",
+			-- }
 		end,
-},
+	},
 }

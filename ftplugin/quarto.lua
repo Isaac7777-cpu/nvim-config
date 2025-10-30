@@ -90,3 +90,6 @@ vim.api.nvim_create_autocmd({ "ModeChanged", "BufWrite" }, {
 	buffer = buf,
 	callback = highlight_cells,
 })
+
+-- -- Default in wrap
+-- require("isaac.custom-scripts.smart-vim-wrap").smart_wrap()

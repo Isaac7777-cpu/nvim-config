@@ -1,9 +1,10 @@
 vim.b.slime_cell_delimiter = "```"
 
--- -- wrap text, but by word no character
--- -- indent the wrappped line
--- vim.wo.wrap = true
--- vim.wo.linebreak = true
--- vim.wo.breakindent = true
--- vim.wo.showbreak = '|'
-require("isaac.custom-scripts.smart-vim-wrap").smart_wrap()
+-- require("isaac.custom-scripts.smart-vim-wrap").smart_wrap()
+
+-- ~/.config/nvim/ftplugin/markdown.lua
+if pcall(require, "quarto") then
+	print("Activating quarto (markdown)")
+	vim.b.slime_cell_delimiter = "```"
+	require("quarto").activate()
+end

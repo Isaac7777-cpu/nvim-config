@@ -22,3 +22,6 @@ vim.opt.foldenable = false
 
 -- hide the ~ at end of buffer
 vim.opt.fillchars:append({ eob = " " })
+
+-- No fold column
+vim.cmd("set foldcolumn=0")

@@ -291,7 +291,7 @@ vim.keymap.set("n", "<leader>os", get_otter_symbols_lang, { desc = "otter [s]ymb
 -- normal mode with <leader>
 wk.add({
 	{
-		{ "<leader><cr>", send_cell, desc = "run code cell" },
+		-- { "<leader><cr>", send_cell, desc = "run code cell" },
 		{ "<leader>c", group = "[c]ode / [c]ell / [c]hunk" },
 		{ "<leader>sit", new_terminal_ipython, desc = "new [i]python terminal" },
 		{ "<leader>sjt", new_terminal_julia, desc = "new [j]ulia terminal" },
