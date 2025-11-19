@@ -27,59 +27,70 @@ vim.api.nvim_command([[
 ]])
 
 -- Activate alpha on empty
-local alpha_on_empty = vim.api.nvim_create_augroup("alpha_on_empty", { clear = true })
+local grp = vim.api.nvim_create_augroup("alpha_fallback", { clear = true })
 
--- vim.api.nvim_create_autocmd("BufDelete", {
--- 	group = alpha_on_empty,
--- 	callback = function()
--- 		vim.schedule(function()
--- 			local buf = vim.api.nvim_get_current_buf()
--- 			local info = vim.fn.getbufinfo(buf)[1]
---
--- 			local is_no_name = info.name == "" and info.listed == 1 and info.linecount <= 1
--- 			local win_amount = #vim.api.nvim_tabpage_list_wins(0)
--- 			if is_no_name or win_amount > 1 then
--- 				vim.cmd("Alpha")
--- 			end
--- 		end)
--- 	end,
--- })
---
-vim.api.nvim_create_autocmd("BufDelete", {
-	group = alpha_on_empty,
+-- Make Alpha unlisted (use the event arg 'ev', not a global 'args')
+vim.api.nvim_create_autocmd("FileType", {
+	group = grp,
+	pattern = "alpha",
+	callback = function(ev)
+		vim.bo[ev.buf].buflisted = false
+	end,
+})
+
+local function mru_hidden_buf()
+	local infos = vim.fn.getbufinfo({ buflisted = 1 })
+	local hidden = {}
+	for _, i in ipairs(infos) do
+		if #vim.fn.win_findbuf(i.bufnr) == 0 then
+			table.insert(hidden, i)
+		end
+	end
+	table.sort(hidden, function(a, b)
+		return (a.lastused or 0) > (b.lastused or 0)
+	end)
+	return hidden[1] and hidden[1].bufnr or nil, infos
+end
+
+local function mru_hidden_buf()
+	local infos = vim.fn.getbufinfo({ buflisted = 1 })
+	local hidden = {}
+	for _, i in ipairs(infos) do
+		if #vim.fn.win_findbuf(i.bufnr) == 0 then
+			table.insert(hidden, i)
+		end
+	end
+	table.sort(hidden, function(a, b)
+		return (a.lastused or 0) > (b.lastused or 0)
+	end)
+	return hidden[1] and hidden[1].bufnr or nil, infos
+end
+
+vim.api.nvim_create_autocmd("User", {
+	group = grp,
+	pattern = "BDeletePost *",
 	callback = function()
-		vim.schedule(function()
-			local cur = vim.api.nvim_get_current_buf()
+		if vim.bo.filetype == "alpha" then
+			return
+		end
 
-			-- Gather all listed buffers except the current one
-			local listed = {}
-			for _, b in ipairs(vim.api.nvim_list_bufs()) do
-				if b ~= cur and vim.fn.buflisted(b) == 1 then
-					table.insert(listed, b)
-				end
+		-- treat a lone empty [No Name] as none
+		local listed = vim.fn.getbufinfo({ buflisted = 1 })
+		if #listed == 1 then
+			local b = listed[1]
+			if (b.name or "") == "" and vim.bo[b.bufnr].buftype == "" then
+				vim.bo[b.bufnr].buflisted = false
+				listed = {}
 			end
+		end
 
-			-- Build candidates: listed buffers that are NOT visible in any window
-			local candidates = {}
-			for _, b in ipairs(listed) do
-				if #vim.fn.win_findbuf(b) == 0 then
-					local info = (vim.fn.getbufinfo(b) or {})[1] or {}
-					table.insert(candidates, { bufnr = b, lastused = info.lastused or 0 })
-				end
-			end
-
-			-- Prefer the most recently used hidden buffer
-			table.sort(candidates, function(a, b)
-				return a.lastused > b.lastused
-			end)
-			local target = candidates[1] and candidates[1].bufnr or nil
-
-			if target then
-				pcall(vim.api.nvim_set_current_buf, target)
-			else
-				vim.cmd("Alpha")
-			end
-		end)
+		-- prefer MRU hidden; otherwise show Alpha (don’t reuse visible buffers)
+		local target = mru_hidden_buf()
+		if target then
+			vim.api.nvim_set_current_buf(target)
+		elseif #listed == 0 or #vim.fn.win_findbuf(vim.api.nvim_get_current_buf()) > 1 then
+			require("alpha").start(false)
+		end
 	end,
 })
 

@@ -18,7 +18,8 @@ return {
 	},
 	{
 		"ravibrock/spellwarn.nvim",
-		-- event = "VeryLazy",
+		event = "VeryLazy",
+		filetype = { "tex", "markdown", "quarto", "jupyter" },
 		config = function()
 			require("spellwarn").setup({
 				severity = { -- severity for each spelling error type (false to disable diagnostics for that type)

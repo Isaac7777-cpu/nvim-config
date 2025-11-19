@@ -17,7 +17,10 @@ vim.keymap.set({ "n" }, "<leader>aa", "gg<S-V><S-G>", { noremap = true, silent =
 vim.keymap.set({ "i" }, "<S-CR>", "<C-o>o", { noremap = true, silent = true })
 
 -- for quicker closing buffers
-vim.keymap.set({ "n" }, "<leader>bd", "<Cmd>BufferDelete<CR>", { noremap = true, silent = true })
+-- vim.keymap.set({ "n" }, "<leader>bd", "<Cmd>BufferDelete<CR>", { noremap = true, silent = true })
+vim.keymap.set({ "n" }, "<leader>bd", function()
+	require("bufdelete").bufdelete(0, true)
+end, { noremap = true, silent = true })
 vim.keymap.set({ "n" }, "<leader>bad", "<Cmd>%bd<CR>", { noremap = true, silent = true })
 vim.keymap.set({ "n" }, "<leader>bod", "<Cmd>BufferLineCloseOthers<CR>", { noremap = true, silent = false })
 

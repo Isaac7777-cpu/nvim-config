@@ -112,22 +112,27 @@ function M.smart_open_term(shell_entry)
 end
 
 -- Open terminal in bottom split
-vim.keymap.set("n", "<leader>st", M.smart_open_term, { desc = "Open terminal in bottom split" })
+vim.keymap.set(
+	"n",
+	"<leader>st",
+	M.smart_open_term,
+	{ desc = "Open terminal in Split (depends on current window size)" }
+)
 
--- Close terminal and job safely
-vim.api.nvim_create_user_command("CloseTerm", function()
-	if terminal_bufnr and vim.api.nvim_buf_is_valid(terminal_bufnr) then
-		-- Send exit command first to gracefully terminate shell
-		vim.fn.chansend(terminal_job_id, "exit\r")
-
-		-- Wait briefly for process to exit, then force close
-		vim.defer_fn(function()
-			if vim.api.nvim_buf_is_valid(terminal_bufnr) then
-				vim.api.nvim_buf_delete(terminal_bufnr, { force = true })
-			end
-		end, 100)
-	end
-end, { desc = "Close terminal and terminate job" })
+-- -- Close terminal and job safely
+-- vim.api.nvim_create_user_command("CloseTerm", function()
+-- 	if terminal_bufnr and vim.api.nvim_buf_is_valid(terminal_bufnr) then
+-- 		-- Send exit command first to gracefully terminate shell
+-- 		vim.fn.chansend(terminal_job_id, "exit\r")
+--
+-- 		-- Wait briefly for process to exit, then force close
+-- 		vim.defer_fn(function()
+-- 			if vim.api.nvim_buf_is_valid(terminal_bufnr) then
+-- 				vim.api.nvim_buf_delete(terminal_bufnr, { force = true })
+-- 			end
+-- 		end, 100)
+-- 	end
+-- end, { desc = "Close terminal and terminate job" })
 
 -- Enhanced test command
 vim.api.nvim_create_user_command("Test", function()
