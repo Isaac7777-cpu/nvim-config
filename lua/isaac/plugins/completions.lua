@@ -59,6 +59,11 @@ return {
 							Operator = "󰆕",
 							TypeParameter = "",
 							BladeNav = "",
+							["Magic"] = "🪄",
+							["Path"] = "📁",
+							["Dict key"] = "🔑",
+							["Instance"] = "󱃻",
+							["Statement"] = "󱇯",
 						},
 					})
 				end,
@@ -164,6 +169,7 @@ return {
 							lazydev = "[LazyDev]",
 							cmp_r = "[CMP-R]",
 							vimtex = vim_item.menu,
+							neopyter = "[Neopyter]",
 						})[entry.source.name]
 
 						-- You may like to have the symbol at the end,
@@ -208,6 +214,7 @@ return {
 						},
 						priority = 1000,
 					},
+					{ name = "neopyter" },
 				},
 				sorting = {
 					priority_weight = 1,

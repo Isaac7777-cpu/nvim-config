@@ -25,3 +25,6 @@ vim.opt.fillchars:append({ eob = " " })
 
 -- No fold column
 vim.cmd("set foldcolumn=0")
+
+-- Vertical Split Pane Indicator
+vim.cmd("set fillchars=vert:\\|")

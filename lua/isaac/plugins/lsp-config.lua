@@ -11,7 +11,7 @@ return {
 		},
 		opts = {
 			verbose = {
-				no_code_found = false,
+				no_code_found = true,
 			},
 		},
 	},
@@ -52,15 +52,15 @@ return {
 					r = { "air", lsp_format = "fallback" },
 				},
 
-				-- Optional: set formatter options (you can add more)
-				formatters = {
-					sql_formatter = {
-						prepend_args = {
-							"--config",
-							vim.fn.expand("~/.config/sql_formatter/sql_formatter.json"),
-						},
-					},
-				},
+				-- -- Optional: set formatter options (you can add more)
+				-- formatters = {
+				-- 	sql_formatter = {
+				-- 		prepend_args = {
+				-- 			"--config",
+				-- 			vim.fn.expand("~/.config/sql_formatter/sql_formatter.json"),
+				-- 		},
+				-- 	},
+				-- },
 			})
 			-- Customize the "injected" formatter
 			require("conform").formatters.injected = {
@@ -82,6 +82,7 @@ return {
 						python = "py",
 						rust = "rs",
 						typescript = "ts",
+						r = { "air", lsp_format = "fallback" },
 					},
 				},
 			}

@@ -64,9 +64,9 @@ return {
 				-- 	force_ft = "quarto",
 				-- },
 				python = {
-					extension = "md",
-					style = "markdown",
-					force_ft = "markdown", -- you can set whatever filetype you want here
+					extension = "py",
+					style = "percent",
+					-- force_ft = "", -- you can set whatever filetype you want here
 				},
 				r = {
 					extension = "qmd",
