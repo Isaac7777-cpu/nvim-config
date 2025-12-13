@@ -11,6 +11,8 @@ return {
 	},
 	{
 		"hrsh7th/nvim-cmp",
+		-- HACK: Remove this later when figure why the newer version has a weird icon in front
+		commit = "a7bcf1d88069fc67c9ace8a62ba480b8fe879025",
 		dependencies = {
 			{ "roobert/tailwindcss-colorizer-cmp.nvim", config = true },
 			"hrsh7th/cmp-nvim-lsp",
@@ -23,7 +25,6 @@ return {
 			"saadparwaiz1/cmp_luasnip",
 			"f3fora/cmp-spell",
 			"ray-x/cmp-treesitter",
-			"R-nvim/cmp-r",
 			"kdheepak/cmp-latex-symbols",
 			"jmbuhr/cmp-pandoc-references",
 			"L3MON4D3/LuaSnip",
@@ -145,10 +146,16 @@ return {
 				autocomplete = false,
 				formatting = {
 					format = function(entry, vim_item)
-						vim_item.kind = lspkind.presets.default[vim_item.kind]
+						local kind_icon = lspkind.presets.default[vim_item.kind]
 						if entry.source.name == "blade-nav" then
-							vim_item.kind = " "
+							kind_icon = " "
 						end
+						if vim_item.kind == "Comment" then
+							kind_icon = " "
+						end
+
+						vim_item.kind = string.format("%s %s", kind_icon, vim_item.kind) -- This concatenates the icons with the name of the item kind
+
 						vim_item.menu = ({
 							otter = "[🦦]",
 							nvim_lsp = "[LSP]",
@@ -256,14 +263,14 @@ return {
 			})
 		end,
 	},
-	{
-		"R-nvim/cmp-r",
-		config = function()
-			require("cmp_r").setup({
-				quarto_intel = "~/.config/nvim/resources/quarto-yaml-intellegence.json",
-			})
-		end,
-	},
+	-- {
+	-- 	"R-nvim/cmp-r",
+	-- 	config = function()
+	-- 		require("cmp_r").setup({
+	-- 			quarto_intel = "~/.config/nvim/resources/quarto-yaml-intellegence.json",
+	-- 		})
+	-- 	end,
+	-- },
 	-- This seems to be not as useful as texlab
 	-- {
 	-- 	"micangl/cmp-vimtex",
