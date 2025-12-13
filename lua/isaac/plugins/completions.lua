@@ -65,6 +65,7 @@ return {
 							["Dict key"] = "🔑",
 							["Instance"] = "󱃻",
 							["Statement"] = "󱇯",
+							["Comment"] = "",
 						},
 					})
 				end,
@@ -108,11 +109,8 @@ return {
 				},
 				mapping = {
 					-- Disable for reserving the bindings for the tmux navigator
-					-- ["<C-k>"] = cmp.mapping.select_prev_item(),
-					-- ["<C-j>"] = cmp.mapping.select_next_item(),
 					["<C-d>"] = cmp.mapping.scroll_docs(-4),
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
-					-- ["<C-o>"] = cmp.mapping.complete(),
 					["<C-e>"] = cmp.mapping.close(),
 
 					["<CR>"] = cmp.mapping.confirm({
@@ -145,47 +143,31 @@ return {
 				},
 				autocomplete = false,
 				formatting = {
-					format = function(entry, vim_item)
-						local kind_icon = lspkind.presets.default[vim_item.kind]
-						if entry.source.name == "blade-nav" then
-							kind_icon = " "
-						end
-						if vim_item.kind == "Comment" then
-							kind_icon = " "
-						end
-
-						vim_item.kind = string.format("%s %s", kind_icon, vim_item.kind) -- This concatenates the icons with the name of the item kind
-
-						vim_item.menu = ({
-							otter = "[🦦]",
+					format = lspkind.cmp_format({
+						mode = "symbol_text",
+						menu = {
+							otter = "[Otter]",
 							nvim_lsp = "[LSP]",
-							nvim_lsp_signature_help = "[sig]",
+							nvim_lsp_signature_help = "[Sig]",
 							luasnip = "[snip]",
 							buffer = "[buf]",
 							look = "[Dict]",
-							path = "[path]",
-							spell = "[spell]",
-							pandoc_references = "[ref]",
-							tags = "[tag]",
+							path = "[Path]",
+							spell = "[Spell]",
+							pandoc_references = "[Ref]",
+							tags = "[Tag]",
 							treesitter = "[TS]",
-							calc = "[calc]",
+							calc = "[Calc]",
 							latex_symbols = "[TeX]",
-							emoji = "[emoji]",
+							emoji = "[Emoji]",
 							render_markdown = "[MD]",
 							["blade-nav"] = "[Blade]",
 							lazydev = "[LazyDev]",
 							cmp_r = "[CMP-R]",
-							vimtex = vim_item.menu,
+							vimtex = "[VimTex]",
 							neopyter = "[Neopyter]",
-						})[entry.source.name]
-
-						-- You may like to have the symbol at the end,
-						-- but I find it very weird...
-						--
-						-- vim_item.menu, vim_item.kind = vim_item.kind, vim_item.menu
-
-						return vim_item
-					end,
+						},
+					}),
 				},
 				sources = {
 					{ name = "otter" }, -- for code chunks in quarto
@@ -213,7 +195,6 @@ return {
 					},
 					{ name = "lazydev", group_index = 0 },
 					{ name = "cmp_r", priority = 900 },
-					-- { name = "vimtex", priority = 1000 },
 					{
 						name = "omni",
 						option = {
@@ -263,16 +244,4 @@ return {
 			})
 		end,
 	},
-	-- {
-	-- 	"R-nvim/cmp-r",
-	-- 	config = function()
-	-- 		require("cmp_r").setup({
-	-- 			quarto_intel = "~/.config/nvim/resources/quarto-yaml-intellegence.json",
-	-- 		})
-	-- 	end,
-	-- },
-	-- This seems to be not as useful as texlab
-	-- {
-	-- 	"micangl/cmp-vimtex",
-	-- },
 }
