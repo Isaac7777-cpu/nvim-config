@@ -23,4 +23,7 @@ return {
 			{ "<leader>gY", "<cmd>GitLink!<cr>", mode = { "n", "v" }, desc = "Open git link" },
 		},
 	},
+	{
+		"tpope/vim-fugitive",
+	},
 }
