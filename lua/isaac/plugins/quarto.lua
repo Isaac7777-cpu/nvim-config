@@ -52,30 +52,6 @@ return {
 			end, { desc = "run all cells of all languages", silent = true })
 		end,
 	},
-
-	{ -- directly open ipynb files as quarto docuements
-		-- and convert back behind the scenes
-		"GCBallesteros/jupytext.nvim",
-		opts = {
-			custom_language_formatting = {
-				-- python = {
-				-- 	extension = "qmd",
-				-- 	style = "quarto",
-				-- 	force_ft = "quarto",
-				-- },
-				python = {
-					extension = "py",
-					style = "percent",
-					-- force_ft = "", -- you can set whatever filetype you want here
-				},
-				r = {
-					extension = "qmd",
-					style = "quarto",
-					force_ft = "quarto",
-				},
-			},
-		},
-	},
 	{
 		"benlubas/molten-nvim",
 		version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes

@@ -12,6 +12,23 @@ return {
 				ensure_installed = {},
 				ignore_install = {},
 				modules = {},
+				select = {
+					enable = true,
+					lookahead = true,
+					keymaps = {
+						["ajcell"] = { query = "@cell", desc = "Select cell" },
+						["ijcell"] = { query = "@cellcontent", desc = "Select cell content" },
+					},
+				},
+				move = {
+					enable = true,
+					goto_next_start = {
+						["]jcell"] = "@cellseparator",
+					},
+					goto_previous_start = {
+						["[jcell"] = "@cellseparator",
+					},
+				},
 			})
 
 			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
@@ -29,17 +46,6 @@ return {
 					[".*%.blade%.php"] = "blade",
 				},
 			})
-
-			--   -- Let's use the nvim_ufo instead.
-			-- -- Enable Tree-sitter based folding
-			-- vim.o.foldmethod = "expr"
-			-- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
-			--
-			-- -- Optional: control default folding behavior
-			-- vim.o.foldenable = false -- Do not fold by default
-			-- vim.o.foldlevel = 99 -- Allow all folds to be open
-			-- vim.o.foldlevelstart = 99
-			-- vim.o.foldcolumn = "1" -- Show fold column (optional)
 		end,
 	},
 	{

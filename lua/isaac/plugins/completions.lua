@@ -168,6 +168,7 @@ return {
 							cmp_r = "[CMP-R]",
 							vimtex = "[VimTex]",
 							neopyter = "[Neopyter]",
+							jupynium = "[Jupynium]",
 						},
 					}),
 				},
@@ -176,7 +177,7 @@ return {
 					{ name = "path" },
 					{ name = "nvim_lsp_signature_help" },
 					-- { name = "nvim_lsp", max_item_count = 40 },
-					{ name = "nvim_lsp" },
+					{ name = "nvim_lsp", priority = 100 },
 					{ name = "luasnip" },
 					{ name = "pandoc_references" },
 					{ name = "buffer", keyword_length = 3, max_item_count = 10 },
@@ -206,10 +207,12 @@ return {
 						priority = 1000,
 					},
 					{ name = "neopyter" },
+					-- { name = "jupynium", priority = 1000 },
 				},
 				sorting = {
 					priority_weight = 1,
 					comparators = {
+						compare.score,
 						compare.exact,
 						kind_discriminative_comparator,
 						-- compare.recently_used,
@@ -222,7 +225,10 @@ return {
 					},
 				},
 				window = {
-					completion = cmp.config.window.bordered(),
+					completion = cmp.config.window.bordered({
+						max_height = 10,
+						max_width = 40,
+					}),
 					documentation = cmp.config.window.bordered(),
 				},
 			})
@@ -245,6 +251,13 @@ return {
 					{ name = "buffer" },
 				},
 			})
+
+			-- menu item highlight
+			vim.api.nvim_set_hl(0, "CmpItemKindMagic", { bg = "NONE", fg = "#D4D434" })
+			vim.api.nvim_set_hl(0, "CmpItemKindPath", { link = "CmpItemKindFolder" })
+			vim.api.nvim_set_hl(0, "CmpItemKindDictkey", { link = "CmpItemKindKeyword" })
+			vim.api.nvim_set_hl(0, "CmpItemKindInstance", { link = "CmpItemKindVariable" })
+			vim.api.nvim_set_hl(0, "CmpItemKindStatement", { link = "CmpItemKindVariable" })
 		end,
 	},
 }

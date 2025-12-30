@@ -8,54 +8,82 @@
 -- local vue_language_server_path = vim.fn.stdpath('data') .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
 
 local vue_language_server_path = vim.fn.stdpath("data")
-    .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+	.. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
 local vue_plugin = {
-  name = "@vue/typescript-plugin",
-  location = vue_language_server_path,
-  languages = { "vue" },
-  configNamespace = "typescript",
+	name = "@vue/typescript-plugin",
+	location = vue_language_server_path,
+	languages = { "vue" },
+	configNamespace = "typescript",
 }
 local vtsls_config = {
-  settings = {
-    vtsls = {
-      tsserver = {
-        globalPlugins = {
-          vue_plugin,
-        },
-      },
-    },
-  },
-  filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+	settings = {
+		complete_function_calls = true,
+		vtsls = {
+			tsserver = {
+				globalPlugins = {
+					vue_plugin,
+				},
+			},
+			enableMoveToFileCodeAction = true,
+			autoUseWorkspaceTsdk = true,
+			experimental = {
+				maxInlayHintLength = 30,
+				completion = {
+					enableServerSideFuzzyMatch = true,
+				},
+			},
+		},
+		typescript = {
+			updateImportsOnFileMove = { enabled = "always" },
+			suggest = {
+				completeFunctionCalls = true,
+			},
+			inlayHints = {
+				enumMemberValues = { enabled = true },
+				functionLikeReturnTypes = { enabled = true },
+				parameterNames = { enabled = "literals" },
+				parameterTypes = { enabled = true },
+				propertyDeclarationTypes = { enabled = true },
+				variableTypes = { enabled = false },
+			},
+		},
+	},
+	filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
 }
 
 local vue_ls_config = {
-  on_init = function(client)
-    client.handlers["tsserver/request"] = function(_, result, context)
-      local clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = "vtsls" })
-      if #clients == 0 then
-        vim.notify("Could not found `vtsls` lsp client, vue_lsp would not work without it.", vim.log.levels.ERROR)
-        return
-      end
-      local ts_client = clients[1]
+	on_init = function(client)
+		client.handlers["tsserver/request"] = function(_, result, context)
+			local clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = "vtsls" })
+			if #clients == 0 then
+				vim.notify("Could not found `vtsls` lsp client, vue_lsp would not work without it.", vim.log.levels.ERROR)
+				return
+			end
+			local ts_client = clients[1]
 
-      local param = unpack(result)
-      local id, command, payload = unpack(param)
-      ts_client:exec_cmd({
-        title = "vue_request_forward", -- You can give title anything as it's used to represent a command in the UI, `:h Client:exec_cmd`
-        command = "typescript.tsserverRequest",
-        arguments = {
-          command,
-          payload,
-        },
-      }, { bufnr = context.bufnr }, function(_, r)
-        local response_data = { { id, r.body } }
-        ---@diagnostic disable-next-line: param-type-mismatch
-        client:notify("tsserver/response", response_data)
-      end)
-    end
-  end,
+			local param = unpack(result)
+			local id, command, payload = unpack(param)
+			ts_client:exec_cmd({
+				title = "vue_request_forward", -- You can give title anything as it's used to represent a command in the UI, `:h Client:exec_cmd`
+				command = "typescript.tsserverRequest",
+				arguments = {
+					command,
+					payload,
+				},
+			}, { bufnr = context.bufnr }, function(_, r)
+				local response_data = { { id, r.body } }
+				---@diagnostic disable-next-line: param-type-mismatch
+				client:notify("tsserver/response", response_data)
+			end)
+		end
+	end,
 }
 
 vim.lsp.config("vtsls", vtsls_config)
 vim.lsp.config("vue_ls", vue_ls_config)
 vim.lsp.enable({ "vtsls", "vue_ls" })
+
+-- INFO: Other relevant web-dev LSPs
+vim.lsp.config("tailwindcss", {})
+vim.lsp.config("html", {})
+vim.lsp.config("tsserver", {})

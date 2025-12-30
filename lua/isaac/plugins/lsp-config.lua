@@ -119,7 +119,8 @@ return {
 					-- Lua
 					"lua_ls",
 					-- Python
-					"pyright",
+					-- "pyright",
+					-- "pyrefly",
 					"ruff",
 					-- R
 					"r_language_server",
@@ -129,11 +130,12 @@ return {
 					-- Shell Scripts
 					"bashls",
 					-- Web dev
-					"ts_ls",
+					-- "ts_ls",
+					"vtsls",
 					"tailwindcss",
 					"html",
 					-- System
-					"clangd",
+					-- "clangd", -- I think I should use the system clangd
 					"cmake",
 					-- Java
 					"jdtls",
@@ -168,6 +170,9 @@ return {
 			-- 	virtual_text = { current_line = true },
 			--      virtual_lines = { current_line = true }
 			-- })
+
+			vim.lsp.set_log_level("debug")
+
 			vim.diagnostic.config({
 				virtual_text = {
 					severity = {
@@ -207,35 +212,48 @@ return {
 			})
 
 			-- Setup for Python
+			-- -- Wonderful things from Astral...
+      -- -- In favour of that, I have deprecated the setting for pyrefly and pyright
+			vim.lsp.config("ty", {})
 			vim.lsp.config("ruff", {})
-			vim.lsp.config("pyright", {
-				cmd = { "pyright-langserver", "--stdio" },
-				root_dir = vim.fs.root(0, { ".git", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt" }),
-				settings = {
-					python = {
-						checkFrequency = "save",
-						pythonPath = vim.g.python3_host_prog,
-						analysis = {
-							autoSearchPaths = true,
-							useLibraryCodeForTypes = true,
-							diagnosticMode = "workspace",
-						},
-					},
-				},
-			})
-			-- vim.lsp.config("pylint", {})
+			-- -- Others... (pyright and pyrefly)
+			-- local function pyrefly_env()
+			-- 	local env = vim.fn.environ()
+			-- 	local conda = env.CONDA_PREFIX
+			-- 	if conda and conda ~= "" then
+			-- 		env.PATH = conda .. "/bin:" .. (env.PATH or "")
+			-- 	end
+			-- 	return env
+			-- end
+			--
+			-- vim.lsp.config("pyrefly", {
+			-- 	cmd = { vim.fn.stdpath("data") .. "/mason/bin/pyrefly", "lsp" }, -- standard
+			-- 	cmd_env = pyrefly_env(),
+			-- })
+			-- vim.lsp.config("pyright", {
+			-- 	cmd = { "pyright-langserver", "--stdio" },
+			-- 	root_dir = vim.fs.root(0, { ".git", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt" }),
+			-- 	settings = {
+			-- 		python = {
+			-- 			checkFrequency = "save",
+			-- 			pythonPath = vim.g.python3_host_prog,
+			-- 			analysis = {
+			-- 				autoSearchPaths = true,
+			-- 				useLibraryCodeForTypes = true,
+			-- 				diagnosticMode = "workspace",
+			-- 			},
+			-- 		},
+			-- 	},
+			-- })
 
 			-- Setup for Lua
 			vim.lsp.config("lua_ls", {})
-			-- We will also setup the LazyDev package below for better lua lsp
+			-- We will also setup the LazyDev package below for better Lua LSP
 			-- when writing this config which uses lazy to install packages
 
 			-- Setup webdev things
-			vim.lsp.config("ts_ls", {
-				root_dir = vim.fs.root(".git", "tsconfig.json"),
-			})
-			vim.lsp.config("tailwindcss", {})
-			vim.lsp.config("html", {})
+			-- INFO: The setup is already in the following file as it is quite complicated.
+			--       Note that they are also enabled, nothing should be needed to configure in this script.
 			require("isaac.plugins.lsp.vue")
 
 			-- Setup for php
@@ -412,32 +430,53 @@ return {
 
 			-- Enable all configured servers
 			vim.lsp.enable({
-				"pyright",
+				-- Python
+				-- "pyright",
+				-- "pyrefly",
+				"ruff", -- For linting and static type checking
+				"ty", -- For LSP functions
+				-- Lua
 				"lua_ls",
+				-- Typescripts, tailwinds, webdev...
 				"tsserver",
 				"tailwindcss",
+				"html",
+				-- C & C++
 				"clangd",
 				"cmake",
+				-- Docker
 				"dockerls",
+				-- Java (& Groovy)
 				"jdtls",
 				"groovyls",
+				-- Haskle
 				"hls",
-				"html",
+				-- Markdown
 				"marksman",
+				-- Injection
 				"omnisharp",
+				-- C#
 				"csharp_ls",
+				-- R
 				"r_language_server",
-				"yamlls",
-				"ltex",
-				"harper_ls",
-				"sqls",
-				"rust_analyzer",
-				"taplo",
-				"intelephense",
-				"sqls",
+				-- Latex
 				"texlab",
+				-- SQLs
+				"sqls",
+				-- Rust
+				"rust_analyzer",
+				-- YAML
+				"yamlls",
+				-- TOML
+				"taplo",
+				-- PHP
+				"intelephense",
+				-- Shells
 				"shfmt",
 				"bashls",
+				-- General Writing...
+				"ltex",
+				"harper_ls",
 			})
 		end,
 

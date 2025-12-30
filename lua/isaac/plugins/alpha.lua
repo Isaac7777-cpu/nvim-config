@@ -39,7 +39,7 @@ return {
 		local alpha = require("alpha")
 		local dashboard = require("alpha.themes.dashboard")
 
-		vim.g.startuptime = vim.loop.hrtime()
+		-- vim.g.startuptime = vim.loop.hrtime()
 
 		-- Set header
 		dashboard.section.header.val = {
@@ -135,9 +135,9 @@ return {
 				table.insert(aligned_lines, left_padded .. right_padded)
 			end
 
-			-- -- Boot up times
-			-- local stats = require("lazy").stats()
-			-- local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+			-- Boot up times
+			local stats = require("lazy").stats()
+			local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
 			-- local load_time = "Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms"
 
 			-- Now use aligned_lines instead of the original footer lines
