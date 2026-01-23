@@ -266,6 +266,17 @@ local function new_terminal_shell()
 	new_terminal("$SHELL")
 end
 
+local function buffers_delete_picker()
+	require("telescope.builtin").buffers({
+		attach_mappings = function(_, map)
+			local actions = require("telescope.actions")
+			map("i", "<CR>", actions.delete_buffer)
+			map("n", "<CR>", actions.delete_buffer)
+			return true
+		end,
+	})
+end
+
 local function get_otter_symbols_lang()
 	local otterkeeper = require("otter.keeper")
 	local main_nr = vim.api.nvim_get_current_buf()
@@ -306,10 +317,8 @@ wk.add({
 		{ "<leader>fM", "<cmd>Telescope man_pages<cr>", desc = "[M]an pages" },
 		{ "<leader>fb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "[b]uffer fuzzy find" },
 		{ "<leader>fc", "<cmd>Telescope git_commits<cr>", desc = "git [c]ommits" },
-		{ "<leader>fd", "<cmd>Telescope buffers<cr>", desc = "[d] buffers" },
 		{ "<leader>ft", "<cmd>TodoTelescope<cr>", desc = "[t] TODOs and other tags" },
 		{ "<leader>ff", "<cmd>Yazi cwd<cr>", desc = "[f]iles" }, -- We are using yazi for space ff. Try space space to use telescope for finding file instead.
-		-- { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "[g]rep" },
 		{ "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "[h]elp" },
 		{ "<leader>fj", "<cmd>Telescope jumplist<cr>", desc = "[j]umplist" },
 		{ "<leader>fk", "<cmd>Telescope keymaps<cr>", desc = "[k]eymaps" },
@@ -392,7 +401,7 @@ wk.add({
 		-- { "<leader>vm", ":Mason<cr>", desc = "[m]ason software installer" },
 		-- { "<leader>vs", ":e $MYVIMRC | :cd %:p:h | split . | wincmd k<cr>", desc = "[s]ettings, edit vimrc" },
 		-- { "<leader>vt", toggle_light_dark_theme, desc = "[t]oggle light/dark theme" },
-		{ "<leader>x", group = "e[x]ecute" },
-		{ "<leader>xx", ":w<cr>:source %<cr>", desc = "[x] source %" },
+		-- { "<leader>x", group = "e[x]ecute" },
+		-- { "<leader>xx", ":w<cr>:source %<cr>", desc = "[x] source %" },
 	},
 }, { mode = "n" })

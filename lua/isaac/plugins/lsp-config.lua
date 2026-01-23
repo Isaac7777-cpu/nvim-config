@@ -121,7 +121,9 @@ return {
 					-- Python
 					-- "pyright",
 					-- "pyrefly",
-					"ruff",
+					-- -- I tend to want to have ruff and ty isntall just as a standalone tool using uv rather than Mason
+					-- "ruff",
+					-- "ty",
 					-- R
 					"r_language_server",
 					"air",
@@ -161,18 +163,6 @@ return {
 		"neovim/nvim-lspconfig",
 		lazy = true,
 		config = function()
-			-- This file only contains the list of lsp supported.
-			--
-			-- The definition of the required plugins are stated in lsp-config.lua
-			--
-			-- -- Migrate to Neovim 0.11+ using native `vim.lsp.config` and `vim.lsp.enable`
-			-- vim.diagnostic.config({
-			-- 	virtual_text = { current_line = true },
-			--      virtual_lines = { current_line = true }
-			-- })
-
-			vim.lsp.set_log_level("debug")
-
 			vim.diagnostic.config({
 				virtual_text = {
 					severity = {
@@ -195,56 +185,31 @@ return {
 				vim.diagnostic.config({ virtual_lines = new_config })
 			end, { desc = "Toggle diagnostic virtual_lines" })
 
-			-- Common capabilities for all servers
-			vim.lsp.config("*", {
-				capabilities = require("cmp_nvim_lsp").default_capabilities(),
-				on_attach = function(client, bufnr)
-					local excluded_filetypes = {
-						tex = true,
-					}
-					local ft = vim.bo[bufnr].filetype
-					if not excluded_filetypes[ft] then
-						print("LSP attached:", client.name)
-						local opts = { buffer = bufnr, noremap = false, silent = true, desc = "nvim.lsp.buf.format" }
-						-- vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, opts)
-					end
-				end,
-			})
-
 			-- Setup for Python
 			-- -- Wonderful things from Astral...
-      -- -- In favour of that, I have deprecated the setting for pyrefly and pyright
+			-- -- In favour of that, I have deprecated the setting for pyrefly and pyright
 			vim.lsp.config("ty", {})
 			vim.lsp.config("ruff", {})
-			-- -- Others... (pyright and pyrefly)
-			-- local function pyrefly_env()
-			-- 	local env = vim.fn.environ()
-			-- 	local conda = env.CONDA_PREFIX
-			-- 	if conda and conda ~= "" then
-			-- 		env.PATH = conda .. "/bin:" .. (env.PATH or "")
-			-- 	end
-			-- 	return env
-			-- end
-			--
-			-- vim.lsp.config("pyrefly", {
-			-- 	cmd = { vim.fn.stdpath("data") .. "/mason/bin/pyrefly", "lsp" }, -- standard
-			-- 	cmd_env = pyrefly_env(),
-			-- })
-			-- vim.lsp.config("pyright", {
-			-- 	cmd = { "pyright-langserver", "--stdio" },
-			-- 	root_dir = vim.fs.root(0, { ".git", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt" }),
-			-- 	settings = {
-			-- 		python = {
-			-- 			checkFrequency = "save",
-			-- 			pythonPath = vim.g.python3_host_prog,
-			-- 			analysis = {
-			-- 				autoSearchPaths = true,
-			-- 				useLibraryCodeForTypes = true,
-			-- 				diagnosticMode = "workspace",
-			-- 			},
-			-- 		},
-			-- 	},
-			-- })
+			vim.lsp.config("pyrefly", {
+				init_options = {
+					pythonPath = vim.g.python3_host_prog,
+				},
+			})
+			vim.lsp.config("pyright", {
+				cmd = { "pyright-langserver", "--stdio" },
+				root_dir = vim.fs.root(0, { ".git", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt" }),
+				settings = {
+					python = {
+						checkFrequency = "save",
+						pythonPath = vim.g.python3_host_prog,
+						analysis = {
+							autoSearchPaths = true,
+							useLibraryCodeForTypes = true,
+							diagnosticMode = "workspace",
+						},
+					},
+				},
+			})
 
 			-- Setup for Lua
 			vim.lsp.config("lua_ls", {})
@@ -424,21 +389,18 @@ return {
 			vim.lsp.config("bashls", {
 				filetypes = { "sh", "zsh", "bash" },
 			})
-			vim.lsp.config("shfmt", {
-				filetypes = { "sh", "zsh", "bash" },
-			})
 
 			-- Enable all configured servers
 			vim.lsp.enable({
 				-- Python
 				-- "pyright",
-				-- "pyrefly",
+				"pyrefly",
 				"ruff", -- For linting and static type checking
-				"ty", -- For LSP functions
+				-- "ty", -- For LSP functions
 				-- Lua
 				"lua_ls",
 				-- Typescripts, tailwinds, webdev...
-				"tsserver",
+				-- "tsserver",
 				"tailwindcss",
 				"html",
 				-- C & C++
@@ -472,7 +434,6 @@ return {
 				-- PHP
 				"intelephense",
 				-- Shells
-				"shfmt",
 				"bashls",
 				-- General Writing...
 				"ltex",

@@ -1,3 +1,6 @@
+local MAX_COMP_MENU_WIDTH_RATIO = 0.4
+local MAX_COMP_ABBR_HEIGHT_RATIO = 0.3
+
 return {
 	{
 		"hrsh7th/cmp-nvim-lsp",
@@ -84,10 +87,10 @@ return {
 			local kind_score = {
 				-- -- You can add these in so that these will come up on top of the list.
 				-- -- But I like it better with not explictly having these on top.
-				-- Variable = 1,
-				-- Class = 2,
-				-- Method = 3,
-				-- Keyword = 4,
+				Keyword = 1,
+				-- Variable = 2,
+				-- Class = 3,
+				-- Method = 4,
 				Text = 200,
 			}
 
@@ -98,6 +101,8 @@ return {
 
 				return kind1 < kind2
 			end
+
+			local win_width = vim.api.nvim_win_get_width(0)
 
 			cmp.setup({
 				snippet = {
@@ -119,6 +124,9 @@ return {
 						behavior = cmp.ConfirmBehavior.Insert,
 						select = false,
 					}),
+
+					["<Up>"] = cmp.mapping.select_prev_item(),
+					["<Down>"] = cmp.mapping.select_next_item(),
 
 					["<Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
@@ -147,6 +155,15 @@ return {
 				formatting = {
 					format = lspkind.cmp_format({
 						mode = "symbol_text",
+						maxwidth = {
+							-- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+							-- can also be a function to dynamically calculate max width such as
+							-- menu = function() return math.floor(0.45 * vim.o.columns) end,
+							menu = math.floor(win_width * MAX_COMP_MENU_WIDTH_RATIO), -- leading text (labelDetails)
+							abbr = math.floor(win_width * MAX_COMP_ABBR_HEIGHT_RATIO), -- actual suggestion item
+						},
+						ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+						show_labelDetails = true, -- show labelDetails in menu. Disabled by default
 						menu = {
 							otter = "[Otter]",
 							nvim_lsp = "[LSP]",
@@ -212,11 +229,11 @@ return {
 				sorting = {
 					priority_weight = 1,
 					comparators = {
-						compare.score,
-						compare.exact,
 						kind_discriminative_comparator,
+						compare.exact,
+						compare.score,
+						-- compare.length,
 						-- compare.recently_used,
-						compare.length,
 					},
 				},
 				view = {
@@ -225,10 +242,7 @@ return {
 					},
 				},
 				window = {
-					completion = cmp.config.window.bordered({
-						max_height = 10,
-						max_width = 40,
-					}),
+					completion = cmp.config.window.bordered(),
 					documentation = cmp.config.window.bordered(),
 				},
 			})

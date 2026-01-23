@@ -28,3 +28,7 @@ vim.cmd("set foldcolumn=0")
 
 -- Vertical Split Pane Indicator
 vim.cmd("set fillchars=vert:\\|")
+
+-- Allow for Local Configs
+vim.o.exrc = true
+vim.o.secure = true

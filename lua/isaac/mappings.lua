@@ -19,10 +19,26 @@ vim.keymap.set({ "i" }, "<S-CR>", "<C-o>o", { noremap = true, silent = true })
 -- for quicker closing buffers
 -- vim.keymap.set({ "n" }, "<leader>bd", "<Cmd>BufferDelete<CR>", { noremap = true, silent = true })
 vim.keymap.set({ "n" }, "<leader>bd", function()
-	require("bufdelete").bufdelete(0, true)
+	require("bufdelete").bufwipeout(0, false)
 end, { noremap = true, silent = true })
-vim.keymap.set({ "n" }, "<leader>bad", "<Cmd>%bd<CR>", { noremap = true, silent = true })
-vim.keymap.set({ "n" }, "<leader>bod", "<Cmd>BufferLineCloseOthers<CR>", { noremap = true, silent = false })
+vim.keymap.set({ "n" }, "<leader>bad", function()
+	local bd = require("bufdelete")
+
+	local bufs = vim.tbl_filter(function(b)
+		return vim.api.nvim_buf_is_valid(b) and vim.bo[b].buflisted
+	end, vim.api.nvim_list_bufs())
+
+	bd.bufdelete(bufs, true) -- true = force
+end, { noremap = true, silent = true })
+vim.keymap.set({ "n" }, "<leader>bod", function()
+	local bd = require("bufdelete")
+
+	local bufs = vim.tbl_filter(function(b)
+		return vim.api.nvim_buf_is_valid(b) and vim.bo[b].buflisted and b ~= vim.api.nvim_get_current_buf() -- keep current buffer
+	end, vim.api.nvim_list_bufs())
+
+	bd.bufdelete(bufs, true) -- true = force
+end, { noremap = true, silent = false })
 
 -- Map `<leader>w` to toggle wrap
 -- vim.api.nvim_set_keymap("n", "<leader>ew", ":lua ToggleWrap()<CR>", { noremap = true, silent = true })

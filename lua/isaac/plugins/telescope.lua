@@ -16,20 +16,55 @@ return {
 				extensions = {
 					fzf = {},
 				},
+				defaults = {
+					mappings = {
+						n = {
+							["dd"] = require("telescope.actions").delete_buffer, -- Use dd
+						},
+						i = {
+							["<C-d>"] = require("telescope.actions").delete_buffer, -- Use <C-d>
+						},
+					},
+				},
 			})
+			local function rg_files(opts)
+				local ignore = opts.ignore or {}
+
+				local args = {
+					"rg",
+					"--files",
+					"--hidden",
+					"--no-ignore",
+				}
+
+				for _, dir in ipairs(ignore) do
+					args[#args + 1] = "-g"
+					args[#args + 1] = "!" .. dir
+				end
+
+				return args
+			end
 			require("telescope").load_extension("fzf")
 			local builtin = require("telescope.builtin")
-			vim.keymap.set(
-				"n",
-				"<leader><leader>",
-				"<cmd>lua require('telescope.builtin').find_files{ find_command = {'rg', '--files', '--hidden', '--no-ignore', '-g', '!.git', '-g', '!node_modules', '-g', '!target', '-g', '!dist', '-g', '!build' }, layout_config = { height = 0.3 }}<cr>"
-			)
-			-- vim.keymap.set("n", "<leader>fg", builtin.live_grep, {}) -- use the multigrep instead.
-			require("isaac.plugins.telescope.multigrep").setup()
-			vim.keymap.set("n", "<leader>fx", function()
+			vim.keymap.set("n", "<leader><leader>", function()
+				require("telescope.builtin").find_files({
+					find_command = rg_files({
+						ignore = { ".git", "node_modules", "target", "dist", "build", "bin" },
+					}),
+					layout_config = { height = 0.3 },
+				})
+			end)
+			vim.keymap.set("n", "<leader>fxa", function()
+				builtin.diagnostics({ severity = { min = vim.diagnostic.severity.INFO } })
+			end, { desc = "Show all diagnostic message." })
+			vim.keymap.set("n", "<leader>fxw", function()
 				builtin.diagnostics({ severity = { min = vim.diagnostic.severity.WARN } })
-			end, { desc = "Show only errors" })
+			end, { desc = "Show only WARN or above." })
+			vim.keymap.set("n", "<leader>fxx", function()
+				builtin.diagnostics({ severity = { min = vim.diagnostic.severity.ERROR } })
+			end, { desc = "Show only ERROR." })
 			vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "Resume searching" })
+			require("isaac.plugins.telescope.multigrep").setup() -- This set the keymap
 		end,
 	},
 	{
