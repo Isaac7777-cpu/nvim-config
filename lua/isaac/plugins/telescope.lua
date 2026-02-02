@@ -7,6 +7,8 @@ return {
 			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 		},
 		config = function()
+			local actions = require("telescope.actions")
+
 			require("telescope").setup({
 				pickers = {
 					find_files = {
@@ -19,10 +21,18 @@ return {
 				defaults = {
 					mappings = {
 						n = {
-							["dd"] = require("telescope.actions").delete_buffer, -- Use dd
+							["dd"] = actions.delete_buffer,
+							["wv"] = actions.file_vsplit,
+							["wh"] = actions.file_split,
+							["wt"] = actions.file_tab,
 						},
 						i = {
-							["<C-d>"] = require("telescope.actions").delete_buffer, -- Use <C-d>
+							["<C-d>"] = actions.delete_buffer,
+							["<C-v>"] = actions.file_vsplit,
+							["<C-x>"] = actions.file_split,
+							["<C-t>"] = actions.file_tab,
+							["<C-j>"] = actions.move_selection_next,
+							["<C-k>"] = actions.move_selection_previous,
 						},
 					},
 				},
