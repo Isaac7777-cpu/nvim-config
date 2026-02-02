@@ -32,3 +32,7 @@ vim.cmd("set fillchars=vert:\\|")
 -- Allow for Local Configs
 vim.o.exrc = true
 vim.o.secure = true
+
+-- Split below instead
+vim.o.splitbelow = true;
+vim.o.splitright = true;
