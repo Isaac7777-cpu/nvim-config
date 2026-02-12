@@ -195,6 +195,7 @@ return {
 					{ name = "nvim_lsp_signature_help" },
 					-- { name = "nvim_lsp", max_item_count = 40 },
 					{ name = "nvim_lsp", priority = 100 },
+					{ name = "nvim_lsp_signature_help" },
 					{ name = "luasnip" },
 					{ name = "pandoc_references" },
 					{ name = "buffer", keyword_length = 3, max_item_count = 10 },
@@ -229,8 +230,8 @@ return {
 				sorting = {
 					priority_weight = 1,
 					comparators = {
-						kind_discriminative_comparator,
 						compare.exact,
+						kind_discriminative_comparator,
 						compare.score,
 						-- compare.length,
 						-- compare.recently_used,
