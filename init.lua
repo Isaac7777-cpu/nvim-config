@@ -27,6 +27,5 @@ require("isaac.vim-options")
 require("isaac.autocmds")
 require("lazy").setup("isaac.plugins")
 require("isaac.mappings")
-
---- If you don't want to also use quarto kick starter mappings, disable the following line.
 require("isaac.quarto-mappings")
+require("isaac.vim-ui")

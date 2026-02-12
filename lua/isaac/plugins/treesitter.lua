@@ -88,4 +88,21 @@ return {
 			require("telescope").load_extension("hierarchy")
 		end,
 	},
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			require("treesitter-context").setup()
+			vim.keymap.set("n", "[c", function()
+				require("treesitter-context").go_to_context(vim.v.count1)
+			end, { silent = true })
+			local palette = require("catppuccin.palettes").get_palette()
+			vim.api.nvim_set_hl(0, "TreesitterContext", { bg = palette.surface0 })
+			vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { fg = palette.overlay1, bg = palette.surface0 })
+			vim.api.nvim_set_hl(0, "TreesitterContextBottom", {
+				underline = false,
+				sp = palette.overlay0,
+			})
+		end,
+	},
 }
