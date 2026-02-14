@@ -164,10 +164,25 @@ return {
 		lazy = true,
 		config = function()
 			vim.diagnostic.config({
-				virtual_text = {
-					severity = {
-						min = "WARN",
+				-- virtual_text = {
+				-- 	severity = {
+				-- 		min = "WARN",
+				-- 	},
+				-- },
+				float = {
+					border = {
+						{ "╔", "FloatBorder" },
+						{ "═", "FloatBorder" },
+						{ "╗", "FloatBorder" },
+						{ "║", "FloatBorder" },
+						{ "╝", "FloatBorder" },
+						{ "═", "FloatBorder" },
+						{ "╚", "FloatBorder" },
+						{ "║", "FloatBorder" },
 					},
+					source = "always",
+					update_in_insert = true,
+					severity_sort = true,
 				},
 				virtual_lines = {
 					only_current_line = true,
@@ -522,6 +537,16 @@ return {
 				lightbulb = {
 					sign = false,
 				},
+				finder = {
+					methods = {
+						["tyd"] = "textDocument/typeDefinition",
+					},
+					keys = {
+						vsplit = "v",
+						split = "x",
+            toggle_or_open = '<CR>'
+					},
+				},
 				ui = {
 					code_action = " ",
 				},
@@ -530,12 +555,17 @@ return {
 			definition = {
 				edit = "<CR>", -- default jump behavior
 			}
-			vim.keymap.set("n", "gK", "<cmd>Lspsaga hover_doc<CR>", { desc = "Lspsaga Hover Documentation" })
-			vim.keymap.set("n", "<leader>gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "LSP Go to Declaration" })
-			vim.keymap.set("n", "<leader>gd", "<cmd>Lspsaga goto_definition<CR>", { desc = "Lspsaga Go to Definition" })
-			vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "Lspsaga Code Action" })
-			vim.keymap.set("n", "<leader>gp", "<cmd>Lspsaga peek_definition<CR>", { desc = "Peek Definition" })
+			vim.keymap.set("n", "gK", "<cmd>Lspsaga hover_doc<CR>", { desc = "LSP: Lspsaga Hover Documentation" })
+			vim.keymap.set("n", "<leader>gd", "<cmd>Lspsaga goto_definition<CR>", { desc = "LSP: Lspsaga Go to Definition" })
+			vim.keymap.set("n", "<leader>gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "LSP: Go to Declaration" })
+			vim.keymap.set("n", "<leader>gt", "<cmd>Lspsaga finder tyd<CR>", { desc = "LSP: Find Type Definition " })
+			vim.keymap.set("n", "<leader>gi", "<cmd>Lspsaga finder imp<CR>", { desc = "LSP: Find Implementation " })
+			vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "LSP: Lspsaga Code Action" })
+			vim.keymap.set("n", "<leader>gp", "<cmd>Lspsaga peek_definition<CR>", { desc = "LSP: Peek Definition" })
+			vim.keymap.set("n", "<leader>gr", "<cmd>Lspsaga finder ref<CR>", { desc = "LSP: Find references" })
 			vim.keymap.set("n", "grpn", "<cmd>Lspsaga project_replace<CR>", { desc = "Lspsaga Project Wise Rename" })
+
+			-- The following is disabled because I am using Tree-sitter instead
 			-- vim.keymap.set("n", "gsi", "<cmd>Lspsaga incoming_calls<CR>", { desc = "Lspsaga Show Incoming Call Stacks" })
 			-- vim.keymap.set("n", "gso", "<cmd>Lspsaga outgoing_calls<CR>", { desc = "Lspsaga Show Outgoing Call Stacks" })
 		end,
