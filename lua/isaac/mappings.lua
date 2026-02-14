@@ -127,3 +127,7 @@ end
 
 vim.keymap.set("n", "<S-Left>", resize_left, { silent = true, desc = "Resize smart left" })
 vim.keymap.set("n", "<S-Right>", resize_right, { silent = true, desc = "Resize smart right" })
+
+vim.keymap.set("n", "<leader>dd", function()
+	vim.diagnostic.open_float(nil, { focus = false, max_width = 80 })
+end, { silent = true, desc = "Showing diagnostic in floating window" })

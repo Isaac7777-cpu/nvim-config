@@ -170,21 +170,6 @@ local function new_terminal_julia()
 	new_terminal("julia")
 end
 
-local function new_terminal_shell()
-	new_terminal("$SHELL")
-end
-
-local function buffers_delete_picker()
-	require("telescope.builtin").buffers({
-		attach_mappings = function(_, map)
-			local actions = require("telescope.actions")
-			map("i", "<CR>", actions.delete_buffer)
-			map("n", "<CR>", actions.delete_buffer)
-			return true
-		end,
-	})
-end
-
 local function get_otter_symbols_lang()
 	local otterkeeper = require("otter.keeper")
 	local main_nr = vim.api.nvim_get_current_buf()
@@ -255,26 +240,6 @@ wk.add({
 			":lua require('telescope').extensions.git_worktree.git_worktrees()<cr>",
 			desc = "worktree switch",
 		},
-		{ "<leader>h", group = "[h]elp / [h]ide / debug" },
-		{ "<leader>hc", group = "[c]onceal" },
-		{ "<leader>hch", ":set conceallevel=1<cr>", desc = "[h]ide/conceal" },
-		{ "<leader>hcs", ":set conceallevel=0<cr>", desc = "[s]how/unconceal" },
-		{ "<leader>ht", group = "[t]reesitter" },
-		{ "<leader>htt", vim.treesitter.inspect_tree, desc = "show [t]ree" },
-		{ "<leader>i", group = "[i]mage" },
-		{ "<leader>l", group = "[l]anguage/lsp" },
-		{ "<leader>la", vim.lsp.buf.code_action, desc = "code [a]ction" },
-		{ "<leader>ld", group = "[d]iagnostics" },
-		{
-			"<leader>ldd",
-			function()
-				vim.diagnostic.enable(false)
-			end,
-			desc = "[d]isable",
-		},
-		{ "<leader>lde", vim.diagnostic.enable, desc = "[e]nable" },
-		{ "<leader>le", vim.diagnostic.open_float, desc = "diagnostics (show hover [e]rror)" },
-		{ "<leader>lg", ":Neogen<cr>", desc = "neo[g]en docstring" },
 		{ "<leader>o", group = "[o]tter & c[o]de" },
 		{ "<leader>oa", require("otter").activate, desc = "otter [a]ctivate" },
 		{ "<leader>ob", insert_bash_chunk, desc = "[b]ash code chunk" },
