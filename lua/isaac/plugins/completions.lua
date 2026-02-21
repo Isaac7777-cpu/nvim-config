@@ -224,7 +224,7 @@ return {
 						},
 						priority = 1000,
 					},
-					{ name = "neopyter" },
+					{ name = "neopyter" }, -- I find this to be quite repetitive to the LSP, so maybe you don't need it.
 					-- { name = "jupynium", priority = 1000 },
 				},
 				sorting = {

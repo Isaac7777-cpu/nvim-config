@@ -9,6 +9,9 @@ return {
 		---@type render.md.UserConfig
 		opts = {
 			completions = { lsp = { enabled = true } },
+			latex = {
+				converter = { "utftex", "latex2text" },
+			},
 		},
 	},
 	{
@@ -17,9 +20,9 @@ return {
 		ft = { "markdown", "quarto" },
 		config = function()
 			require("image").setup({
-				backend = "sixel", -- or "ueberzug" or "sixel"
+				backend = "kitty", -- or "ueberzug" or "sixel"
 				processor = "magick_cli", -- or "magick_rock"
-        kitty_method = "normal",
+				kitty_method = "normal",
 				integrations = {
 					markdown = {
 						enabled = true,

@@ -46,33 +46,33 @@ return {
 			end,
 		},
 	},
-	-- {
-	-- 	"GCBallesteros/jupytext.nvim",
-	-- 	lazy = false,
-	-- 	opts = {
-	-- 		-- default conversion style
-	-- 		format = "py:percent", -- use the "percent" Python script style
-	--
-	-- 		-- per-language overrides
-	-- 		custom_language_formatting = {
-	-- 			python = {
-	-- 				-- convert Python notebooks to .ju.py
-	-- 				extension = "ju.py", -- use .ju.py extension
-	-- 				style = "percent", -- match py:percent format
-	-- 				force_ft = "python", -- ensure filetype is Python
-	-- 			},
-	-- 			r = {
-	-- 				-- R notebooks still convert to Quarto markdown
-	-- 				extension = "qmd",
-	-- 				style = "quarto",
-	-- 				force_ft = "quarto",
-	-- 			},
-	-- 		},
-	--
-	-- 		-- always keep .ipynb paired
-	-- 		autosync = true, -- convert back on save and keep sync
-	-- 	},
-	-- },
+	{
+		"GCBallesteros/jupytext.nvim",
+		lazy = false,
+		opts = {
+			-- default conversion style
+			format = "py:percent", -- use the "percent" Python script style
+
+			-- per-language overrides
+			custom_language_formatting = {
+				python = {
+					-- convert Python notebooks to .ju.py
+					extension = "ju.py", -- use .ju.py extension
+					style = "percent", -- match py:percent format
+					force_ft = "python", -- ensure filetype is Python
+				},
+				r = {
+					-- R notebooks still convert to Quarto markdown
+					extension = "qmd",
+					style = "quarto",
+					force_ft = "quarto",
+				},
+			},
+
+			-- always keep .ipynb paired
+			autosync = true, -- convert back on save and keep sync
+		},
+	},
 	-- {
 	-- 	"kiyoon/jupynium.nvim",
 	-- 	build = "pip install .",

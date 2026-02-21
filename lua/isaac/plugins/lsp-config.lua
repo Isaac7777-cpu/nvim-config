@@ -184,18 +184,18 @@ return {
 					update_in_insert = true,
 					severity_sort = true,
 				},
-				virtual_lines = {
-					only_current_line = true,
-					severity = {
-						min = "ERROR",
-					},
-				},
+				-- virtual_lines = {
+				-- only_current_line = true,
+				-- severity = {
+				-- 	min = "ERROR",
+				-- },
+				-- },
 				signs = true,
 				underline = true,
 				update_in_insert = true,
 			})
 
-			vim.keymap.set("n", "gK", function()
+			vim.keymap.set("n", "<leader>ldl", function()
 				local new_config = not vim.diagnostic.config().virtual_lines
 				vim.diagnostic.config({ virtual_lines = new_config })
 			end, { desc = "Toggle diagnostic virtual_lines" })
@@ -317,6 +317,9 @@ return {
 				},
 			})
 
+			-- Setup for TOML
+			vim.lsp.config("taplo", {})
+
 			-- Setup for Latex
 			vim.lsp.config("texlab", {
 				filetype = { "tex" },
@@ -394,8 +397,25 @@ return {
 			vim.lsp.config("sql-formatter", {})
 
 			-- Setup for Rust
-			vim.lsp.config("rust_analyzer", {})
-			vim.lsp.config("taplo", {})
+			vim.lsp.config("rust_analyzer", {
+				settings = {
+					["rust-analyzer"] = {
+						diagnostics = {
+							enable = false, -- use bacon-ls
+						},
+						checkOnSave = {
+							enable = false,
+						},
+					},
+				},
+			})
+			vim.lsp.config("bacon_ls", {
+				init_options = {
+					updateOnSave = true,
+					updateOnSaveWaitMillis = 100,
+					update_in_insert = true,
+				},
+			})
 
 			-- Setup for Zig
 			vim.lsp.config("zls", {})
@@ -442,6 +462,7 @@ return {
 				"sqls",
 				-- Rust
 				"rust_analyzer",
+				"bacon_ls",
 				-- YAML
 				"yamlls",
 				-- TOML
@@ -530,50 +551,50 @@ return {
 		ft = "lua", -- only load on lua files
 		opts = {},
 	},
-	{
-		"nvimdev/lspsaga.nvim",
-		config = function()
-			require("lspsaga").setup({
-				lightbulb = {
-					sign = false,
-				},
-				finder = {
-					methods = {
-						["tyd"] = "textDocument/typeDefinition",
-					},
-					keys = {
-						vsplit = "v",
-						split = "x",
-            toggle_or_open = '<CR>'
-					},
-				},
-				ui = {
-					code_action = " ",
-				},
-			})
-
-			definition = {
-				edit = "<CR>", -- default jump behavior
-			}
-			vim.keymap.set("n", "gK", "<cmd>Lspsaga hover_doc<CR>", { desc = "LSP: Lspsaga Hover Documentation" })
-			vim.keymap.set("n", "<leader>gd", "<cmd>Lspsaga goto_definition<CR>", { desc = "LSP: Lspsaga Go to Definition" })
-			vim.keymap.set("n", "<leader>gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "LSP: Go to Declaration" })
-			vim.keymap.set("n", "<leader>gt", "<cmd>Lspsaga finder tyd<CR>", { desc = "LSP: Find Type Definition " })
-			vim.keymap.set("n", "<leader>gi", "<cmd>Lspsaga finder imp<CR>", { desc = "LSP: Find Implementation " })
-			vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "LSP: Lspsaga Code Action" })
-			vim.keymap.set("n", "<leader>gp", "<cmd>Lspsaga peek_definition<CR>", { desc = "LSP: Peek Definition" })
-			vim.keymap.set("n", "<leader>gr", "<cmd>Lspsaga finder ref<CR>", { desc = "LSP: Find references" })
-			vim.keymap.set("n", "grpn", "<cmd>Lspsaga project_replace<CR>", { desc = "Lspsaga Project Wise Rename" })
-
-			-- The following is disabled because I am using Tree-sitter instead
-			-- vim.keymap.set("n", "gsi", "<cmd>Lspsaga incoming_calls<CR>", { desc = "Lspsaga Show Incoming Call Stacks" })
-			-- vim.keymap.set("n", "gso", "<cmd>Lspsaga outgoing_calls<CR>", { desc = "Lspsaga Show Outgoing Call Stacks" })
-		end,
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter", -- optional
-			"nvim-tree/nvim-web-devicons", -- optional
-		},
-	},
+	-- {
+	-- 	"nvimdev/lspsaga.nvim",
+	-- 	config = function()
+	-- 		require("lspsaga").setup({
+	-- 			lightbulb = {
+	-- 				sign = false,
+	-- 			},
+	-- 			finder = {
+	-- 				methods = {
+	-- 					["tyd"] = "textDocument/typeDefinition",
+	-- 				},
+	-- 				keys = {
+	-- 					vsplit = "v",
+	-- 					split = "x",
+	-- 					toggle_or_open = "<CR>",
+	-- 				},
+	-- 			},
+	-- 			ui = {
+	-- 				code_action = " ",
+	-- 			},
+	-- 		})
+	--
+	-- 		definition = {
+	-- 			edit = "<CR>", -- default jump behavior
+	-- 		}
+	-- 		vim.keymap.set("n", "gK", "<cmd>Lspsaga hover_doc<CR>", { desc = "LSP: Lspsaga Hover Documentation" })
+	-- 		vim.keymap.set("n", "<leader>gd", "<cmd>Lspsaga goto_definition<CR>", { desc = "LSP: Lspsaga Go to Definition" })
+	-- 		vim.keymap.set("n", "<leader>gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "LSP: Go to Declaration" })
+	-- 		vim.keymap.set("n", "<leader>gt", "<cmd>Lspsaga finder tyd<CR>", { desc = "LSP: Find Type Definition " })
+	-- 		vim.keymap.set("n", "<leader>gi", "<cmd>Lspsaga finder imp<CR>", { desc = "LSP: Find Implementation " })
+	-- 		vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "LSP: Lspsaga Code Action" })
+			-- vim.keymap.set("n", "<leader>gp", "<cmd>Lspsaga peek_definition<CR>", { desc = "LSP: Peek Definition" })
+	-- 		vim.keymap.set("n", "<leader>gr", "<cmd>Lspsaga finder ref<CR>", { desc = "LSP: Find references" })
+	-- 		vim.keymap.set("n", "grpn", "<cmd>Lspsaga project_replace<CR>", { desc = "Lspsaga Project Wise Rename" })
+	--
+	-- 		-- The following is disabled because I am using Tree-sitter instead
+	-- 		-- vim.keymap.set("n", "gsi", "<cmd>Lspsaga incoming_calls<CR>", { desc = "Lspsaga Show Incoming Call Stacks" })
+	-- 		-- vim.keymap.set("n", "gso", "<cmd>Lspsaga outgoing_calls<CR>", { desc = "Lspsaga Show Outgoing Call Stacks" })
+	-- 	end,
+	-- 	dependencies = {
+	-- 		"nvim-treesitter/nvim-treesitter", -- optional
+	-- 		"nvim-tree/nvim-web-devicons", -- optional
+	-- 	},
+	-- },
 	{
 		"mfussenegger/nvim-jdtls",
 	},

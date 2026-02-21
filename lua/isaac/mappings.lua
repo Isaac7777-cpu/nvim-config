@@ -30,6 +30,7 @@ vim.keymap.set({ "n" }, "<leader>bad", function()
 
 	bd.bufdelete(bufs, true) -- true = force
 end, { noremap = true, silent = true })
+
 vim.keymap.set({ "n" }, "<leader>bod", function()
 	local bd = require("bufdelete")
 
@@ -128,6 +129,13 @@ end
 vim.keymap.set("n", "<S-Left>", resize_left, { silent = true, desc = "Resize smart left" })
 vim.keymap.set("n", "<S-Right>", resize_right, { silent = true, desc = "Resize smart right" })
 
-vim.keymap.set("n", "<leader>dd", function()
-	vim.diagnostic.open_float(nil, { focus = false, max_width = 80 })
-end, { silent = true, desc = "Showing diagnostic in floating window" })
+-- LSP related binding
+-- stylua: ignore start
+vim.keymap.set("n", "<leader>dd", function() vim.diagnostic.open_float(nil, { focus = false }) end, { silent = true, desc = "Showing diagnostic in floating window" })
+vim.keymap.set( "n", "<leader>gd", vim.lsp.buf.definition, { noremap = true, silent = true, desc = "LSP: Go to Definition" })
+vim.keymap.set( "n", "<leader>gD", vim.lsp.buf.declaration, { noremap = true, silent = true, desc = "LSP: Go to Declaration" })
+vim.keymap.set( "n", "<leader>gt", vim.lsp.buf.type_definition, { noremap = true, silent = true, desc = "LSP: Type Definition" })
+vim.keymap.set( "n", "<leader>gi", vim.lsp.buf.implementation, { noremap = true, silent = true, desc = "LSP: Implementation" })
+vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, { noremap = true, silent = true, desc = "LSP: References" })
+vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { noremap = true, silent = true, desc = "LSP: Code Action" })
+-- stylua: ignore end
