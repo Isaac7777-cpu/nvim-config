@@ -1,4 +1,6 @@
 return {
-	"kmontocam/nvim-conda",
-	dependencies = { "nvim-lua/plenary.nvim" },
+	-- {
+	-- 	"kmontocam/nvim-conda",
+	-- 	dependencies = { "nvim-lua/plenary.nvim" },
+	-- },
 }

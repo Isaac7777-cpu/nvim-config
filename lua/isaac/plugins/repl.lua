@@ -35,8 +35,8 @@ return {
 	{
 		"R-nvim/R.nvim",
 		-- Only required if you also set defaults.lazy = true
-		-- lazy = false,
-		ft = { "R", "rmd" },
+		lazy = false,
+		ft = { "R", "rmd", "quarto" },
 		-- R.nvim is still young and we may make some breaking changes from time
 		-- to time (but also bug fixes all the time). If configuration stability
 		-- is a high priority for you, pin to the latest minor version, but unpin
@@ -82,7 +82,7 @@ return {
 	},
 	{
 		"Vigemus/iron.nvim",
-		ft = { "python", "haskell", "quarto", "sh", "lua" },
+		ft = { "python", "haskell", "sh", "lua", "matlab" },
 		config = function()
 			local iron = require("iron.core")
 			local view = require("iron.view")
@@ -114,6 +114,10 @@ return {
 							env = { PYTHON_BASIC_REPL = "1" }, --this is needed for python3.13 and up.
 							ignore_blank_lines = true, -- when sending visual select lines, IIAC to not sumbmit extra prompt lines before/after/between sent commands
 						},
+						matlab = {
+							command = { "matlab", "-nodesktop", "-nosplash" },
+							block_dividers = { "% %%", "%%" },
+						},
 						-- haskell = {
 						-- 	command = function(meta)
 						-- 		local filename = vim.api.nvim_buf_get_name(meta.current_bufnr)
@@ -126,8 +130,6 @@ return {
 					-- language being used for the REPL.
 					repl_filetype = function(bufnr, ft)
 						return "iron"
-						-- or return a string name such as the following
-						-- return "iron"
 					end,
 					-- Send selections to the DAP repl if an nvim-dap session is running.
 					-- dap_integration = true,
@@ -162,7 +164,8 @@ return {
 					visual_send = "<localleader>sc",
 					send_file = "<localleader>sf",
 					send_line = "<localleader>sl",
-					send_paragraph = "<localleader>sp",
+					-- send_paragraph = "<localleader>sp",
+					send_paragraph = "<CR>",
 					send_until_cursor = "<localleader>su",
 					send_mark = "<localleader>sm",
 					send_code_block = "<localleader>sb",
@@ -185,7 +188,7 @@ return {
 
 			-- You can just use tmux navigation motion to move around
 			-- -- iron also has a list of commands, see :h iron-commands for all available commands
-			vim.keymap.set("n", "<Enter>", "<cmd>IronFocus<cr>")
+			-- vim.keymap.set("n", "<Enter>", "<cmd>IronFocus<cr>")
 			vim.keymap.set("n", "<space>rh", "<cmd>IronHide<cr>")
 		end,
 	},

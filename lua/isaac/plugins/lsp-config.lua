@@ -33,12 +33,12 @@ return {
 					typescript = { "prettier" },
 					css = { "prettier" },
 					scss = { "prettier" },
-					html = { "prettier" },
+					html = { "prettier", "injected" },
 					json = { "prettier" },
 					yaml = { "prettier" },
-					markdown = { "prettier" },
-					md = { "prettier" },
-					quarto = { "prettier" },
+					markdown = { "prettier", "injected" },
+					md = { "prettier", "injected" },
+					quarto = { "injected" },
 					txt = { "prettier" },
 					blade = { "blade-formatter" },
 					php = { "blade-formatter" },
@@ -50,6 +50,7 @@ return {
 					java = { "google-java-format", lsp_format = "fallback" },
 					groovy = { "npm-groovy-lint" },
 					r = { "air", lsp_format = "fallback" },
+					matlab = { "mh_style", lsp_format = "fallback" },
 				},
 
 				-- -- Optional: set formatter options (you can add more)
@@ -79,6 +80,7 @@ return {
 						javascript = "js",
 						latex = "tex",
 						markdown = "md",
+						quarto = "md",
 						python = "py",
 						rust = "rs",
 						typescript = "ts",
@@ -155,6 +157,8 @@ return {
 					-- Data File
 					"yamlls",
 					"jsonls",
+					-- matlab
+					"matlab_ls@v1.3.5",
 				},
 			})
 		end,
@@ -304,6 +308,15 @@ return {
 
 			-- Setup for R
 			vim.lsp.config("r_language_server", {})
+
+			-- Setup for Matlab
+			vim.lsp.config("matlab_ls", {
+				settings = {
+					MATLAB = {
+						installPath = "/Applications/MATLAB_R2025b.app",
+					},
+				},
+			})
 
 			-- Setup for YAML
 			vim.lsp.config("yamlls", {
@@ -456,6 +469,9 @@ return {
 				"csharp_ls",
 				-- R
 				"r_language_server",
+				-- Matlab
+				"matlab_ls",
+				-- "miss_hit",
 				-- Latex
 				"texlab",
 				-- SQLs
@@ -551,6 +567,34 @@ return {
 		ft = "lua", -- only load on lua files
 		opts = {},
 	},
+	{
+		"mfussenegger/nvim-jdtls",
+	},
+	{
+		"stevearc/aerial.nvim",
+		-- Optional dependencies
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-tree/nvim-web-devicons",
+		},
+		-- Matlab is doing something weird that is breaking the plugin
+		config = function()
+			require("aerial").setup({
+				-- optionally use on_attach to set keymaps when aerial has attached to a buffer
+				on_attach = function(bufnr)
+					-- Jump forwards/backwards with '{' and '}'
+					vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
+					vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
+				end,
+				backends = {
+					["_"] = { "treesitter", "lsp", "markdown", "asciidoc", "man" },
+					matlab = {}, -- no backend
+				},
+			})
+		end,
+		-- You probably also want to set a keymap to toggle aerial
+		vim.keymap.set("n", "<leader>at", "<cmd>AerialToggle!<CR>"),
+	},
 	-- {
 	-- 	"nvimdev/lspsaga.nvim",
 	-- 	config = function()
@@ -582,7 +626,7 @@ return {
 	-- 		vim.keymap.set("n", "<leader>gt", "<cmd>Lspsaga finder tyd<CR>", { desc = "LSP: Find Type Definition " })
 	-- 		vim.keymap.set("n", "<leader>gi", "<cmd>Lspsaga finder imp<CR>", { desc = "LSP: Find Implementation " })
 	-- 		vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "LSP: Lspsaga Code Action" })
-			-- vim.keymap.set("n", "<leader>gp", "<cmd>Lspsaga peek_definition<CR>", { desc = "LSP: Peek Definition" })
+	-- vim.keymap.set("n", "<leader>gp", "<cmd>Lspsaga peek_definition<CR>", { desc = "LSP: Peek Definition" })
 	-- 		vim.keymap.set("n", "<leader>gr", "<cmd>Lspsaga finder ref<CR>", { desc = "LSP: Find references" })
 	-- 		vim.keymap.set("n", "grpn", "<cmd>Lspsaga project_replace<CR>", { desc = "Lspsaga Project Wise Rename" })
 	--
@@ -595,7 +639,4 @@ return {
 	-- 		"nvim-tree/nvim-web-devicons", -- optional
 	-- 	},
 	-- },
-	{
-		"mfussenegger/nvim-jdtls",
-	},
 }

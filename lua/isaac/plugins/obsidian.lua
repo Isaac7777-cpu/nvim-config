@@ -28,6 +28,13 @@ return {
 				-- 	path = "~/vaults/work",
 				-- },
 			},
+			-- attachments = {
+			-- 	img_text_func = function(path)
+			-- 		local name = vim.fs.basename(tostring(path))
+			-- 		local encoded_name = require("obsidian.util").urlencode(name)
+			-- 		return string.format("![%s](%s)", name, encoded_name)
+			-- 	end,
+			-- },
 		},
 	},
 }

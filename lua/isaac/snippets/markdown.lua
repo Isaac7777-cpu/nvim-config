@@ -7,6 +7,9 @@ local rep = require("luasnip.extras").rep
 
 return {
 	-- arrows
-	s("->", fmt("$\\rightarrow$ ", {}), {}),
-	s("<-", fmt("$\\leftarrow$ ", {}), {}),
+	s("->", fmt("$\\rightarrow$", {}), {}),
+	s("<-", fmt("$\\leftarrow$", {}), {}),
+
+	-- inline math
+	s("inline", fmt("${}$", { i(1) })),
 }

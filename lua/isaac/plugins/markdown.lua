@@ -10,10 +10,41 @@ return {
 		opts = {
 			completions = { lsp = { enabled = true } },
 			latex = {
+				enabled = true,
+				render_modes = { "n", "i", "c", "t" },
 				converter = { "utftex", "latex2text" },
+				-- converter = {},
 			},
 		},
 	},
+	-- -- lazy.nvim
+	-- {
+	-- 	"folke/snacks.nvim",
+	-- 	---@type snacks.Config
+	-- 	opts = {
+	-- 		image = {
+	-- 			-- your image configuration comes here
+	-- 			-- or leave it empty to use the default settings
+	-- 			-- refer to the configuration section below
+	-- 			force = true,
+	-- 			convert = {
+	-- 				notify = true,
+	-- 			},
+	-- 			img_dirs = {},
+	-- 			math = {
+	-- 				latex = {
+	-- 					font_size = "small",
+	-- 				},
+	-- 			},
+	-- 			resolve = function(path, src)
+	-- 				local api = require("obsidian.api")
+	-- 				if api.path_is_note(path) then
+	-- 					return api.resolve_attachment_path(src)
+	-- 				end
+	-- 			end,
+	-- 		},
+	-- 	},
+	-- },
 	{
 		"3rd/image.nvim",
 		build = false, -- so that it doesn't build the rock https://github.com/3rd/image.nvim/issues/91#issuecomment-2453430239
@@ -31,7 +62,7 @@ return {
 						only_render_image_at_cursor = true,
 						only_render_image_at_cursor_mode = "popup", -- or "inline"
 						floating_windows = false, -- if true, images will be rendered in floating markdown windows
-						filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
+						filetypes = { "markdown", "vimwiki", "quarto" }, -- markdown extensions (ie. quarto) can go here
 					},
 					neorg = {
 						enabled = true,

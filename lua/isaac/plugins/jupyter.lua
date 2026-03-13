@@ -1,6 +1,6 @@
 return {
 	{
-	-- WARNING: This plugin was very buggy last time I tried, had to swtich to jupynium to fix the issue
+		-- WARNING: This plugin was very buggy last time I tried, had to swtich to jupynium to fix the issue
 
 		"SUSTech-data/neopyter",
 		dependencies = {
@@ -67,6 +67,12 @@ return {
 					style = "quarto",
 					force_ft = "quarto",
 				},
+				-- -- MATLAB notebooks -> .m files
+				-- matlab = {
+				-- 	extension = "ju.m",
+				-- 	style = "percent",
+				-- 	force_ft = "matlab",
+				-- },
 			},
 
 			-- always keep .ipynb paired
