@@ -69,7 +69,7 @@ return {
 						filetypes = { "norg" },
 					},
 					typst = {
-						enabled = true,
+						enabled = false,
 						filetypes = { "typst" },
 					},
 					html = {

@@ -51,6 +51,7 @@ return {
 					groovy = { "npm-groovy-lint" },
 					r = { "air", lsp_format = "fallback" },
 					matlab = { "mh_style", lsp_format = "fallback" },
+					typst = { "typstyle", "injected", lsp_format = "fallback" },
 				},
 
 				-- -- Optional: set formatter options (you can add more)
@@ -74,17 +75,19 @@ return {
 						bash = "sh",
 						zsh = "sh",
 					},
-					lang_to_formatters = {
-						json = { "jq" },
+					lang_to_ext = {
 						bash = "sh",
+						c_sharp = "cs",
+						elixir = "exs",
 						javascript = "js",
+						julia = "jl",
 						latex = "tex",
 						markdown = "md",
-						quarto = "md",
 						python = "py",
+						ruby = "rb",
 						rust = "rs",
+						teal = "tl",
 						typescript = "ts",
-						r = { "air", lsp_format = "fallback" },
 					},
 				},
 			}
@@ -206,7 +209,7 @@ return {
 
 			-- Setup for Python
 			-- -- Wonderful things from Astral...
-			-- -- In favour of that, I have deprecated the setting for pyrefly and pyright
+			-- -- However, I found that pyrefly seems to work better, so I will switch to pyrefly...
 			vim.lsp.config("ty", {})
 			vim.lsp.config("ruff", {})
 			vim.lsp.config("pyrefly", {
@@ -338,6 +341,21 @@ return {
 				filetype = { "tex" },
 			})
 
+			-- Setup for Typst
+			vim.lsp.config("tinymist", {
+				settings = {
+					formatterMode = "typstyle",
+					formatterIndentSize = 2,
+					exportPdf = "onSave",
+					exportTarget = "paged",
+					lint = {
+						enabled = true,
+						when = "onType",
+					},
+					outputPath = "$dir/$name",
+				},
+			})
+
 			-- Text Editing Support
 			vim.lsp.config("marksman", {
 				filetypes = { "markdown", "quarto" },
@@ -390,6 +408,7 @@ return {
 					"dart",
 					"bashls",
 					"tex",
+					"typst",
 				},
 				settings = {
 					["harper-ls"] = {
@@ -442,9 +461,9 @@ return {
 			vim.lsp.enable({
 				-- Python
 				-- "pyright",
-				"pyrefly",
+				-- "pyrefly",
 				"ruff", -- For linting and static type checking
-				-- "ty", -- For LSP functions
+				"ty", -- For LSP functions
 				-- Lua
 				"lua_ls",
 				-- Typescripts, tailwinds, webdev...
@@ -474,6 +493,8 @@ return {
 				-- "miss_hit",
 				-- Latex
 				"texlab",
+				-- Typst
+				"tinymist",
 				-- SQLs
 				"sqls",
 				-- Rust

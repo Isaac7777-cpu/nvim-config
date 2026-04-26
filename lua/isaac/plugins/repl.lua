@@ -165,7 +165,7 @@ return {
 					send_file = "<localleader>sf",
 					send_line = "<localleader>sl",
 					-- send_paragraph = "<localleader>sp",
-					send_paragraph = "<CR>",
+					send_paragraph = "<C-CR>",
 					send_until_cursor = "<localleader>su",
 					send_mark = "<localleader>sm",
 					send_code_block = "<localleader>sb",

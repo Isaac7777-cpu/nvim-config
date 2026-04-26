@@ -75,9 +75,9 @@ return {
 			vim.keymap.set("n", "<leader><leader>", function()
 				require("telescope.builtin").find_files({
 					find_command = rg_files({
-						ignore = { ".git", "node_modules", "target", "dist", "build", "bin" },
+						ignore = { ".git", "node_modules", "target", "dist", "build", "bin", ".venv" },
 					}),
-					layout_config = { height = 0.3 },
+					layout_config = { height = 0.3 }
 				})
 			end)
 			vim.keymap.set("n", "<leader>fxa", function()
