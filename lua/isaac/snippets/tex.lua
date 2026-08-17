@@ -8,6 +8,17 @@ local rep = require("luasnip.extras").rep
 return {
 	-- inline math
 	s("inline", fmt("\\( {} \\)", { i(1) })),
+	s(
+		"display",
+		fmt(
+			[[ 
+      \[ 
+        {}
+      \] 
+    ]],
+			{ i(1) }
+		)
+	),
 
 	-- Piecewise functions expanded
 	s(

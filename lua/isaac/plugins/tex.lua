@@ -7,10 +7,13 @@ return {
 			-- VimTeX configuration goes here, e.g.
 			-- I recommend using tdf to view the pdf right in the terminal
 			vim.g.vimtex_view_method = "skim" -- Disable PDF viewer
+			vim.g.vimtex_view_skim_sync = 0 -- forward-search after successful compilation
+			vim.g.vimtex_view_skim_reading_bar = 0 -- visibly highlight the matched PDF line
+			vim.g.vimtex_view_skim_activate = 0 -- optional: focus Skim
 			-- vim.g.vimtex_view_general_viewer = ""
 			vim.g.vimtex_quickfix_open_on_warning = 0
 			vim.g.vimtex_quickfix_mode = 0
-      -- -- In my opinion, this is quite useless...
+			-- -- In my opinion, this is quite useless...
 			-- vim.g.vimtex_grammar_textidote = {
 			-- 	jar = "~/opt/textidote.jar-0.9.jar",
 			-- 	-- args = "--check en_UK",

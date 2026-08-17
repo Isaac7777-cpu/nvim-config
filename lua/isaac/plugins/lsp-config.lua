@@ -52,18 +52,19 @@ return {
 					r = { "air", lsp_format = "fallback" },
 					matlab = { "mh_style", lsp_format = "fallback" },
 					typst = { "typstyle", "injected", lsp_format = "fallback" },
+					odin = { "odinfmt" },
 				},
 
-				-- -- Optional: set formatter options (you can add more)
-				-- formatters = {
-				-- 	sql_formatter = {
-				-- 		prepend_args = {
-				-- 			"--config",
-				-- 			vim.fn.expand("~/.config/sql_formatter/sql_formatter.json"),
-				-- 		},
-				-- 	},
-				-- },
+				formatters = {
+					odinfmt = {
+						-- Change where to find the command if it isn't in your path.
+						command = "odinfmt",
+						args = { "-stdin" },
+						stdin = true,
+					},
+				},
 			})
+
 			-- Customize the "injected" formatter
 			require("conform").formatters.injected = {
 				-- Set the options field
@@ -161,7 +162,9 @@ return {
 					"yamlls",
 					"jsonls",
 					-- matlab
-					"matlab_ls@v1.3.5",
+					-- "matlab_ls@v1.3.5",
+					-- odin
+					"ols",
 				},
 			})
 		end,
@@ -452,6 +455,9 @@ return {
 			-- Setup for Zig
 			vim.lsp.config("zls", {})
 
+			-- Setup for Odin
+			vim.lsp.config("ols", {})
+
 			-- Setup for shell script
 			vim.lsp.config("bashls", {
 				filetypes = { "sh", "zsh", "bash" },
@@ -500,6 +506,8 @@ return {
 				-- Rust
 				"rust_analyzer",
 				"bacon_ls",
+				-- Odin
+				"ols",
 				-- YAML
 				"yamlls",
 				-- TOML

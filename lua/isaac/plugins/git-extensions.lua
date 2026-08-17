@@ -10,8 +10,8 @@ return {
 				},
 			})
 
-			vim.keymap.set("n", "<leader>gih", ":Gitsigns preview_hunk<CR>", {})
-			vim.keymap.set("n", "<leader>git", ":Gitsigns toggle_current_line_blame<CR>", {})
+			vim.keymap.set("n", "<leader>gth", ":Gitsigns preview_hunk<CR>", {})
+			vim.keymap.set("n", "<leader>gtt", ":Gitsigns toggle_current_line_blame<CR>", {})
 		end,
 	},
 	{
@@ -19,8 +19,8 @@ return {
 		cmd = "GitLink",
 		opts = {},
 		keys = {
-			{ "<leader>gy", "<cmd>GitLink<cr>", mode = { "n", "v" }, desc = "Yank git link" },
-			{ "<leader>gY", "<cmd>GitLink!<cr>", mode = { "n", "v" }, desc = "Open git link" },
+			{ "<leader>gty", "<cmd>GitLink<cr>", mode = { "n", "v" }, desc = "Yank git link" },
+			{ "<leader>gtY", "<cmd>GitLink!<cr>", mode = { "n", "v" }, desc = "Open git link" },
 		},
 	},
 	{

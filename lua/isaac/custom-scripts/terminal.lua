@@ -74,20 +74,26 @@ local CELL_WH_RATIO = vim.g.char_cell_wh_ratio or 0.56
 function M.smart_open_term(shell_entry)
 	local ui = vim.api.nvim_list_uis()[1]
 	-- Fallback if UI info is missing
-	local cols = (ui and ui.width) or vim.o.columns
-	local rows = (ui and ui.height) or vim.o.lines
+	-- local cols = (ui and ui.width) or vim.o.columns
+	-- local rows = (ui and ui.height) or vim.o.lines
+	-- Use the window height and width instead
+	local cols = vim.api.nvim_win_get_height(0)
+	local rows = vim.api.nvim_win_get_width(0)
 	-- Approximate physical width/height:
 	local approx_phys_width = cols * CELL_WH_RATIO
 	local approx_phys_height = rows * 1.0
 
 	local cmd
 	if approx_phys_width > approx_phys_height then
-		-- Prefer a right vsplit (~33% of total columns)
+		-- Split the current pane vertically,
+		-- terminal stays on the right of this pane.
 		local target = math.floor(cols * 0.33)
-		cmd = string.format("botright vsplit | vertical resize %d | terminal", target)
+		cmd = string.format("rightbelow vsplit | vertical resize %d | terminal", target)
 	else
-		-- Prefer a bottom split (12 lines)
-		cmd = "botright 12split | terminal"
+		-- Split the current pane horizontally,
+		-- terminal stays below this pane.
+		local target = math.min(12, math.floor(rows * 0.33))
+		cmd = string.format("belowright %dsplit | terminal", target)
 	end
 
 	if shell_entry ~= nil then

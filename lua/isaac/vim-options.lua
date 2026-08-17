@@ -36,3 +36,6 @@ vim.o.secure = true
 -- Split below instead
 vim.o.splitbelow = true;
 vim.o.splitright = true;
+
+-- Use Absolute line numbers
+vim.o.relativenumber = false;

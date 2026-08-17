@@ -5,7 +5,6 @@ vim.api.nvim_create_autocmd({ "UIEnter", "BufReadPost", "BufNewFile" }, {
 		local ft = vim.api.nvim_buf_get_option(args.buf, "filetype")
 		if ft ~= "alpha" then
 			vim.wo.number = true
-			vim.wo.relativenumber = true
 		end
 	end,
 })
@@ -99,7 +98,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	pattern = "alpha",
 	callback = function()
 		vim.wo.number = false
-		vim.wo.relativenumber = false
 	end,
 })
 
