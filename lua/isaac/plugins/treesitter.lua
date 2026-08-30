@@ -1,38 +1,15 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
+		branch = "main",
+		lazy = false,
 		build = ":TSUpdate",
 		config = function()
-			local config = require("nvim-treesitter.configs")
-			config.setup({
-				auto_install = true,
-				highlight = { enable = true },
-				indent = { enable = true },
-				sync_install = false,
-				ensure_installed = {},
-				ignore_install = {},
-				modules = {},
-				select = {
-					enable = true,
-					lookahead = true,
-					keymaps = {
-						["ajcell"] = { query = "@cell", desc = "Select cell" },
-						["ijcell"] = { query = "@cellcontent", desc = "Select cell content" },
-					},
-				},
-				move = {
-					enable = true,
-					goto_next_start = {
-						["]jcell"] = "@cellseparator",
-					},
-					goto_previous_start = {
-						["[jcell"] = "@cellseparator",
-					},
-				},
+			require("nvim-treesitter").setup({
+				install_dir = vim.fn.stdpath("data") .. "/site",
 			})
 
-			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-			parser_config.blade = {
+			require("nvim-treesitter.parsers").blade = {
 				install_info = {
 					url = "https://github.com/EmranMR/tree-sitter-blade",
 					files = { "src/parser.c" },
@@ -46,6 +23,48 @@ return {
 					[".*%.blade%.php"] = "blade",
 				},
 			})
+		end,
+	},
+	{
+		"MeanderingProgrammer/treesitter-modules.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		opts = {
+			auto_install = true,
+			sync_install = false,
+			ensure_installed = {},
+			ignore_install = {},
+			highlight = { enable = true },
+			indent = { enable = true },
+			fold = { enable = false },
+		},
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		branch = "main",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			require("nvim-treesitter-textobjects").setup({
+				select = { lookahead = true },
+				move = { set_jumps = true },
+			})
+
+			for _, mode in ipairs({ "x", "o" }) do
+				vim.keymap.set(mode, "ajcell", function()
+					require("nvim-treesitter-textobjects.select").select_textobject("@cell", "textobjects")
+				end, { desc = "Select cell" })
+				vim.keymap.set(mode, "ijcell", function()
+					require("nvim-treesitter-textobjects.select").select_textobject("@cellcontent", "textobjects")
+				end, { desc = "Select cell content" })
+			end
+
+			for _, mode in ipairs({ "n", "x", "o" }) do
+				vim.keymap.set(mode, "]jcell", function()
+					require("nvim-treesitter-textobjects.move").goto_next_start("@cellseparator", "textobjects")
+				end, { desc = "Next cell" })
+				vim.keymap.set(mode, "[jcell", function()
+					require("nvim-treesitter-textobjects.move").goto_previous_start("@cellseparator", "textobjects")
+				end, { desc = "Previous cell" })
+			end
 		end,
 	},
 	{
