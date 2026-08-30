@@ -9,6 +9,17 @@
 -- terminal
 vim.keymap.set("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
+local pane_focus = require("isaac.custom-scripts.pane-focus")
+
+vim.keymap.set("n", "<C-w>z", pane_focus.toggle_tab, {
+	silent = true,
+	desc = "Toggle pane focus in tab",
+})
+vim.keymap.set("n", "<C-w>Z", pane_focus.toggle_popup, {
+	silent = true,
+	desc = "Toggle pane focus popup",
+})
+
 -- Delete without pasting (sending to the black hole register)
 vim.keymap.set({ "n", "v" }, "<leader>'", '"_', { noremap = true, silent = true })
 

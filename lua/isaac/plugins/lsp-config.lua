@@ -70,7 +70,7 @@ return {
 				-- Set the options field
 				options = {
 					-- Set to true to ignore errors
-					ignore_errors = false,
+					ignore_errors = true,
 					-- Map of treesitter language to filetype
 					lang_to_ft = {
 						bash = "sh",

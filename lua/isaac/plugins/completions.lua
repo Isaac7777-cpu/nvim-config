@@ -246,6 +246,9 @@ return {
 					completion = cmp.config.window.bordered(),
 					documentation = cmp.config.window.bordered(),
 				},
+        performance = {
+          max_view_entries = 10,
+        },
 			})
 
 			-- for friendly snippets
