@@ -8,21 +8,6 @@ return {
 			require("nvim-treesitter").setup({
 				install_dir = vim.fn.stdpath("data") .. "/site",
 			})
-
-			require("nvim-treesitter.parsers").blade = {
-				install_info = {
-					url = "https://github.com/EmranMR/tree-sitter-blade",
-					files = { "src/parser.c" },
-					branch = "main",
-				},
-				filetype = "blade",
-			}
-
-			vim.filetype.add({
-				pattern = {
-					[".*%.blade%.php"] = "blade",
-				},
-			})
 		end,
 	},
 	{

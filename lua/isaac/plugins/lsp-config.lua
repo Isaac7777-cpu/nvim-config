@@ -40,8 +40,6 @@ return {
 					md = { "prettier", "injected" },
 					quarto = { "injected" },
 					txt = { "prettier" },
-					blade = { "blade-formatter" },
-					php = { "blade-formatter" },
 					sql = { "sql_formatter" },
 					tex = { "tex-fmt", "latexindent", stop_after_first = true },
 					rust = { "rustfmt", lsp_format = "fallback" },
@@ -246,21 +244,6 @@ return {
 			--       Note that they are also enabled, nothing should be needed to configure in this script.
 			require("isaac.plugins.lsp.vue")
 
-			-- Setup for php
-			vim.lsp.config("intelephense", {
-				filetypes = { "php", "blade", "php_only" },
-				settings = {
-					intelephense = {
-						filetypes = { "php", "blade", "php_only" },
-						files = {
-							associations = { "*.php", "*.blade.php" }, -- Associating .blade.php files as well
-							maxSize = 5000000,
-						},
-					},
-				},
-			})
-			vim.lsp.config("blade-formatter", {})
-
 			-- Setup C and C++
 			vim.lsp.config("clangd", {})
 			vim.lsp.config("cmake", {})
@@ -407,7 +390,6 @@ return {
 					"haskell",
 					"cmake",
 					"typst",
-					"php",
 					"dart",
 					"bashls",
 					"tex",
@@ -512,8 +494,6 @@ return {
 				"yamlls",
 				-- TOML
 				"taplo",
-				-- PHP
-				"intelephense",
 				-- Shells
 				"bashls",
 				-- General Writing...
@@ -521,38 +501,6 @@ return {
 				"harper_ls",
 			})
 		end,
-
-		dependencies = {
-			"ricardoramirezr/blade-nav.nvim",
-			dependencies = {
-				"hrsh7th/nvim-cmp",
-			},
-			ft = { "blade", "php" },
-			opts = {
-				-- This applies for `nvim-cmp`, for blink refer to the configuration of this plugin
-				close_tag_on_complete = true,
-			},
-
-			config = function()
-				-- local kind_icons = {
-				-- 	BladeNav = " ",
-				-- }
-				--
-				-- local cmp = require("cmp")
-				--
-				-- cmp.setup({
-				-- 	formatting = {
-				-- 		format = function(entry, item)
-				-- 			if kind_icons[item.kind] then
-				-- 				item.kind = string.format("%s %s", kind_icons[item.kind], item.kind)
-				-- 			end
-				--
-				-- 			return item
-				-- 		end,
-				-- 	},
-				-- })
-			end,
-		},
 	},
 	{
 		"folke/trouble.nvim",

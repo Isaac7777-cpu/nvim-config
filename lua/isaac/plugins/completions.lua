@@ -62,7 +62,6 @@ return {
 							Event = "",
 							Operator = "󰆕",
 							TypeParameter = "",
-							BladeNav = "",
 							["Magic"] = "󱡄",
 							["Path"] = "",
 							["Dict key"] = "󱏅",
@@ -180,7 +179,6 @@ return {
 							latex_symbols = "[TeX]",
 							emoji = "[Emoji]",
 							render_markdown = "[MD]",
-							["blade-nav"] = "[Blade]",
 							lazydev = "[LazyDev]",
 							cmp_r = "[CMP-R]",
 							vimtex = "[VimTex]",
@@ -205,7 +203,6 @@ return {
 					-- { name = "latex_symbols" },
 					-- { name = "emoji" },
 					{ name = "render_markdown" },
-					{ name = "BladeNav" },
 					{
 						name = "look",
 						keyword_length = 2,
